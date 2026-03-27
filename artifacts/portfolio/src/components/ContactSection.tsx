@@ -84,9 +84,10 @@ export function ContactSection() {
           <div className="pt-2">
             <MagneticButton
               variant="outline"
-              href="/cv.pdf"
+              href="/cv"
+              target="_blank"
             >
-              Download CV
+              View CV
             </MagneticButton>
           </div>
         </motion.div>

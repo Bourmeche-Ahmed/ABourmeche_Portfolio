@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronDown, Download, ArrowRight } from "lucide-react";
+import { ChevronDown, ExternalLink, ArrowRight } from "lucide-react";
 import { HeroVisual } from "./HeroVisual";
 import { smoothScrollTo } from "@/lib/utils";
 import { MagneticButton } from "./MagneticButton";
@@ -84,9 +84,10 @@ export function HeroSection() {
               </MagneticButton>
               <MagneticButton
                 variant="ghost"
-                href="/cv.pdf"
+                href="/cv"
+                target="_blank"
               >
-                <Download className="w-4 h-4" /> Download CV
+                <ExternalLink className="w-4 h-4" /> View CV
               </MagneticButton>
             </motion.div>
 
