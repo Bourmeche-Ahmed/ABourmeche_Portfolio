@@ -1,24 +1,65 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Send, Github, Linkedin, Mail, CheckCircle } from "lucide-react";
+import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle } from "lucide-react";
+import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
 import { MagneticButton } from "./MagneticButton";
+
+// EmailJS Configuration - Replace with your own credentials
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
 
 export function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Initialize EmailJS on component mount
+  useEffect(() => {
+    if (EMAILJS_PUBLIC_KEY) {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // Validate that EmailJS is configured
+    if (!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID) {
+      setError(
+        "EmailJS is not configured. Please check your environment variables."
+      );
+      return;
+    }
+
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setLoading(false);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name: form.name,
+        from_email: form.email,
+        message: form.message,
+        reply_to: form.email,
+      });
+
+      setSubmitted(true);
       setForm({ name: "", email: "", message: "" });
-    }, 4000);
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 4000);
+    } catch (err) {
+      console.error("EmailJS Error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to send message. Please try again later."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const socials = [
@@ -106,8 +147,27 @@ export function ContactSection() {
             >
               <CheckCircle className="w-12 h-12 text-green-400" />
               <div>
-                <p className="font-semibold text-green-400 text-lg">Message queued</p>
-                <p className="text-sm text-muted-foreground mt-1">(Demo mode — no data is sent)</p>
+                <p className="font-semibold text-green-400 text-lg">Message sent successfully!</p>
+                <p className="text-sm text-muted-foreground mt-1">I'll get back to you as soon as possible.</p>
+              </div>
+            </motion.div>
+          ) : error ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-start justify-center gap-4 p-6 rounded-2xl border border-red-500/30 bg-red-500/5"
+            >
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-red-400 text-sm">{error}</p>
+                  <button
+                    onClick={() => setError(null)}
+                    className="text-xs text-red-400/70 hover:text-red-400 mt-2 underline"
+                  >
+                    Dismiss
+                  </button>
+                </div>
               </div>
             </motion.div>
           ) : (
