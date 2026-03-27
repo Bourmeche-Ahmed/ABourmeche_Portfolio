@@ -48,6 +48,35 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 - `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages that define it
 - `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
 
+## Artifacts
+
+### `artifacts/portfolio` (`@workspace/portfolio`)
+
+Premium one-page interactive portfolio for Ahmed BOURMECHE. Built with React + Vite + TypeScript + Tailwind CSS.
+
+**Features:**
+- Sticky nav with scroll progress indicator and active section highlight
+- Hero with interactive PID Response Playground (canvas animation + sliders)
+- Projects section with filter chips, search, tilt-on-hover cards, and Framer Motion case study modals
+- Skills section with Recharts radar and bar charts
+- Animated timeline section
+- Contact form with toast feedback
+- Dark/light mode with system preference + toggle (blue/cyan theme)
+
+**Tech stack:** React, TypeScript, Tailwind CSS, Framer Motion, Recharts, Lucide Icons
+
+**Key files:**
+- `src/App.tsx` — main layout
+- `src/data/projects.ts` — all 8 project records with strong TypeScript types
+- `src/components/PidPlayground.tsx` — interactive PID simulation widget
+- `src/components/ProjectCard.tsx` — tilt + glow card with language bars
+- `src/components/ProjectModal.tsx` — Framer Motion case study modal
+- `src/components/SkillCharts.tsx` — Recharts radar + bar charts
+- `src/components/NavBar.tsx` — sticky nav with scroll progress
+- `src/components/TimelineSection.tsx` — animated timeline
+- `src/components/ContactSection.tsx` — contact form with toast
+- `src/index.css` — blue/cyan theme variables (light + dark)
+
 ## Packages
 
 ### `artifacts/api-server` (`@workspace/api-server`)
