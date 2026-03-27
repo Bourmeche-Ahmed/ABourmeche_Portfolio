@@ -150,7 +150,7 @@ export const projects: Project[] = [
       "STEP'ACT 2026 is a comprehensive event registration and management platform for a major annual trail running marathon. Built with a modern TypeScript stack, it provides seamless participant registration, detailed event information, and direct contact capabilities. The platform showcases both frontend elegance and backend reliability for handling high-volume event registrations.",
     category: "Web Apps",
     repo: "stepact-lionsclub",
-    githubUrl: "https://github.com/Bourmeche-Ahmed/stepact-lionsclub",
+    githubUrl: "https://stepact.lions.tn",
     languages: [
       { name: "TypeScript", percentage: 65, color: "#3178C6" },
       { name: "React", percentage: 25, color: "#61DAFB" },
@@ -181,42 +181,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: "step-act-2026",
-    title: "STEP-ACT 2026 Frontend Showcase",
-    description:
-      "A premium static frontend engineering showcase — demonstrating advanced TypeScript UI patterns, component architecture, and polished production-ready build output.",
-    longDescription:
-      "STEP-ACT 2026 Frontend showcases high-quality static rendering that serves as a demonstration of premium UI engineering capabilities. Built entirely in TypeScript, it demonstrates component composition patterns, advanced animation techniques, and a production-optimized asset pipeline — reflecting the kind of frontend craftsmanship applicable to SaaS products and marketing sites.",
-    category: "Web Apps",
-    repo: "STEP-ACT_2026",
-    githubUrl: "https://github.com/Bourmeche-Ahmed/STEP-ACT_2026",
-    languages: [
-      { name: "TypeScript", percentage: 92.9, color: "#3178C6" },
-      { name: "HTML", percentage: 4, color: "#E44D26" },
-      { name: "CSS", percentage: 2.1, color: "#563D7C" },
-      { name: "Other", percentage: 1, color: "#6e7681" },
-    ],
-    techBadges: ["TypeScript", "Vite", "Static Build", "Component Architecture"],
-    highlights: [
-      "100% TypeScript codebase with strict type safety",
-      "Advanced component composition and reusability patterns",
-      "Production-optimized static build with Vite",
-      "Performance-focused asset management and code splitting",
-      "Deployable on any static hosting platform",
-    ],
-    architecture: "TypeScript Components → Vite Build Pipeline → Static Assets",
-    challenges:
-      "Achieving pixel-perfect design fidelity while maintaining zero runtime dependencies required creative use of CSS custom properties and Vite's asset handling.",
-    learned:
-      "Reinforced best practices in static-first frontend architecture, TypeScript strict mode patterns, and production build optimization.",
-    keyFeatures: [
-      "Zero-runtime-dependency component library",
-      "Type-safe theming system",
-      "Optimized production bundle",
-      "Live demo deployment",
-    ],
-  },
-  {
     id: "testcybernexus3",
     title: "CyberNexus UI Lab",
     description:
@@ -225,7 +189,7 @@ export const projects: Project[] = [
       "CyberNexus UI Lab is a frontend engineering sandbox built to prototype and stress-test advanced UI concepts. With a 93% TypeScript codebase, it focuses on exploring interaction primitives, complex state management patterns, animated transitions, and accessibility edge cases — generating reusable insights and patterns for production projects.",
     category: "Experimental",
     repo: "testcybernexus3",
-    githubUrl: "https://github.com/Bourmeche-Ahmed/testcybernexus3",
+    githubUrl: "https://cybernexus.tn",
     languages: [
       { name: "TypeScript", percentage: 93, color: "#3178C6" },
       { name: "JavaScript", percentage: 4, color: "#F1E05A" },
@@ -296,7 +260,7 @@ export const projects: Project[] = [
       "A professional organizational website built for an IEEE student branch, delivering a polished public-facing presence with event listings, member showcases, and publication archives. The project features a maintainable SCSS component architecture, PHP-powered dynamic content, and responsive layouts optimized for all device sizes.",
     category: "Web Apps",
     repo: "ieeeweb",
-    githubUrl: "https://github.com/Bourmeche-Ahmed/ieeeweb",
+    githubUrl: "https://nrtf.ieee.tn",
     languages: [
       { name: "HTML", percentage: 65, color: "#E44D26" },
       { name: "SCSS", percentage: 21.5, color: "#C6538C" },
