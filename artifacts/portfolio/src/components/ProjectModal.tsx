@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Github, Link, Check } from "lucide-react";
+import { X, Github, Link, Check, ExternalLink } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { copyToClipboard } from "@/lib/utils";
+
+const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
 
 interface ProjectModalProps {
   project: Project | null;
@@ -193,29 +195,43 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:brightness-110 transition-all"
-                  >
-                    <Github className="w-4 h-4" />
-                    GitHub Repo
-                  </a>
-                  <button
-                    onClick={handleCopy}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-cyan-500/30 text-cyan-400 font-semibold text-sm hover:bg-cyan-500/10 transition-all"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-4 h-4" /> Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Link className="w-4 h-4" /> Copy Repo Link
-                      </>
-                    )}
-                  </button>
+                  {WEBSITE_PROJECTS.includes(project.id) ? (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:brightness-110 transition-all"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Go to Website
+                    </a>
+                  ) : (
+                    <>
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:brightness-110 transition-all"
+                      >
+                        <Github className="w-4 h-4" />
+                        GitHub Repo
+                      </a>
+                      <button
+                        onClick={handleCopy}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-cyan-500/30 text-cyan-400 font-semibold text-sm hover:bg-cyan-500/10 transition-all"
+                      >
+                        {copied ? (
+                          <>
+                            <Check className="w-4 h-4" /> Copied!
+                          </>
+                        ) : (
+                          <>
+                            <Link className="w-4 h-4" /> Copy Repo Link
+                          </>
+                        )}
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

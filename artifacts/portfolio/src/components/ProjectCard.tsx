@@ -3,6 +3,8 @@ import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/data/projects";
 
+const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
+
 interface ProjectCardProps {
   project: Project;
   onClick: () => void;
@@ -142,9 +144,13 @@ export function ProjectCard({ project, onClick, index }: ProjectCardProps) {
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="GitHub repo"
+              aria-label={WEBSITE_PROJECTS.includes(project.id) ? "Go to website" : "GitHub repo"}
             >
-              <Github className="w-3.5 h-3.5" />
+              {WEBSITE_PROJECTS.includes(project.id) ? (
+                <ExternalLink className="w-3.5 h-3.5" />
+              ) : (
+                <Github className="w-3.5 h-3.5" />
+              )}
             </a>
           </div>
         </div>
