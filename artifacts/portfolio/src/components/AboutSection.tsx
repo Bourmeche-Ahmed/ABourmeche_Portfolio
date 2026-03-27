@@ -97,31 +97,30 @@ export function AboutSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative"
+          className="relative flex justify-center"
         >
-          <div className="aspect-square max-w-xs mx-auto rounded-2xl border border-white/10 bg-gradient-to-br from-blue-900/30 to-cyan-900/20 overflow-hidden flex items-center justify-center relative">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `linear-gradient(rgba(34,211,238,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.05) 1px, transparent 1px)`,
-              backgroundSize: "24px 24px",
-            }} />
-            <div className="relative z-10 text-center p-8">
-              <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-cyan-300 mb-2">
-                AB
-              </div>
-              <div className="text-sm text-cyan-400 font-mono">Full-Stack Engineer</div>
-              <div className="mt-4 flex flex-col gap-1.5">
-                {[
-                  "React + TypeScript",
-                  "Python + Flask",
-                  "ESP32 / Embedded C",
-                  "MATLAB / Simulink",
-                  "IIoT Systems",
-                ].map((s) => (
-                  <span key={s} className="text-xs text-muted-foreground bg-white/5 px-3 py-1 rounded-full border border-white/8">
-                    {s}
-                  </span>
-                ))}
-              </div>
+          <div className="relative w-80 rounded-2xl overflow-hidden">
+            {/* Animated glow border */}
+            <motion.div
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-cyan-500/40 to-blue-500/40 blur-xl -z-10"
+            />
+
+            {/* Picture frame with border */}
+            <div className="relative rounded-2xl border-2 border-cyan-500/30 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-0.5">
+              <motion.img
+                src="/ABourmeche.jpg"
+                alt="Ahmed Bourmeche"
+                className="w-full h-auto object-cover rounded-2xl"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-slate-950/40 via-transparent to-cyan-500/10 pointer-events-none" />
             </div>
           </div>
         </motion.div>
