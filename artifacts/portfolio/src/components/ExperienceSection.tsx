@@ -14,7 +14,6 @@ const experiences = [
       "Co-founded CyberNexus, a technology company building digital products at the intersection of sports data and web engineering. As CTO, I lead all technical strategy, architecture decisions, and product development.",
     highlights: [
       "Define and own the full technical stack and architecture across all products",
-      "Lead development of ElTachkila Football Hub — a flagship sports data platform combining TypeScript frontend with Python backend",
       "Build and manage the engineering team culture, workflows, and delivery processes",
       "Drive company's technical vision: real-time data, interactive dashboards, and scalable APIs",
     ],

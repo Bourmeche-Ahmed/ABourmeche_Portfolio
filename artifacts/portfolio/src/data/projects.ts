@@ -142,12 +142,51 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "stepact-2026-marathon",
+    title: "STEP'ACT 2026 Marathon",
+    description:
+      "Event registration platform for STEP'ACT 2026 — a prestigious multi-distance trail running event held annually. Features participant registration, event information management, and contact submissions.",
+    longDescription:
+      "STEP'ACT 2026 is a comprehensive event registration and management platform for a major annual trail running marathon. Built with a modern TypeScript stack, it provides seamless participant registration, detailed event information, and direct contact capabilities. The platform showcases both frontend elegance and backend reliability for handling high-volume event registrations.",
+    category: "Web Apps",
+    repo: "stepact-lionsclub",
+    githubUrl: "https://github.com/Bourmeche-Ahmed/stepact-lionsclub",
+    languages: [
+      { name: "TypeScript", percentage: 65, color: "#3178C6" },
+      { name: "React", percentage: 25, color: "#61DAFB" },
+      { name: "CSS", percentage: 7, color: "#563D7C" },
+      { name: "Other", percentage: 3, color: "#6e7681" },
+    ],
+    techBadges: ["TypeScript", "React", "Vite", "PostgreSQL", "Express", "REST API"],
+    highlights: [
+      "Full-stack event registration system with real-time validation",
+      "Responsive design optimized for mobile registration flow",
+      "Participant dashboard with registration confirmation and tracking",
+      "Admin contact management and email notification system",
+      "Multi-distance event categorization and tier management",
+      "RESTful API with comprehensive error handling and rate limiting",
+    ],
+    architecture: "React SPA + Vite ↔ Express API ↔ PostgreSQL Database",
+    challenges:
+      "Handling concurrent registrations during peak event windows while maintaining data consistency required implementing robust queue management and transaction handling at the database layer.",
+    learned:
+      "Gained practical experience with event-driven architecture, real-time notification systems, and scalable REST API design for high-demand scenarios.",
+    keyFeatures: [
+      "Instant registration confirmation",
+      "Email notifications for registrants",
+      "Race category selection and tier management",
+      "Contact form submissions with email routing",
+      "Real-time participant count tracking",
+      "Admin dashboard for registrations management",
+    ],
+  },
+  {
     id: "step-act-2026",
-    title: "STEP-ACT 2026",
+    title: "STEP-ACT 2026 Frontend Showcase",
     description:
       "A premium static frontend engineering showcase — demonstrating advanced TypeScript UI patterns, component architecture, and polished production-ready build output.",
     longDescription:
-      "STEP-ACT 2026 is a high-quality static frontend build that serves as a demonstration of premium UI engineering capabilities. Built entirely in TypeScript, it showcases component composition patterns, advanced animation techniques, and a production-optimized asset pipeline — reflecting the kind of frontend craftsmanship applicable to SaaS products and marketing sites.",
+      "STEP-ACT 2026 Frontend showcases high-quality static rendering that serves as a demonstration of premium UI engineering capabilities. Built entirely in TypeScript, it demonstrates component composition patterns, advanced animation techniques, and a production-optimized asset pipeline — reflecting the kind of frontend craftsmanship applicable to SaaS products and marketing sites.",
     category: "Web Apps",
     repo: "STEP-ACT_2026",
     githubUrl: "https://github.com/Bourmeche-Ahmed/STEP-ACT_2026",

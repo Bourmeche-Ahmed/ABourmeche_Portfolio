@@ -26,14 +26,7 @@ const timelineItems = [
     tags: ["Chrome Extension", "JavaScript", "AI", "MV3"],
     dot: "bg-violet-400",
   },
-  {
-    period: "2023 — 2024",
-    title: "Football Data Platform — ElTachkila",
-    description:
-      "Built a TypeScript + Python football intelligence platform with real-time match tracking, player analytics, and comparative team statistics.",
-    tags: ["TypeScript", "Python", "REST API", "Data Viz"],
-    dot: "bg-green-400",
-  },
+
   {
     period: "2023",
     title: "IEEE Student Branch Website",
