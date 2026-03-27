@@ -84,10 +84,10 @@ export function HeroSection() {
               </MagneticButton>
               <MagneticButton
                 variant="ghost"
-                href="/cv"
-                target="_blank"
+                href="/cv/AhmedBourmeche_CV.pdf"
+                download="AhmedBourmeche_CV.pdf"
               >
-                <ExternalLink className="w-4 h-4" /> View CV
+                <ExternalLink className="w-4 h-4" /> Download CV
               </MagneticButton>
             </motion.div>
 
