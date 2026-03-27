@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { smoothScrollTo } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Linkedin } from "lucide-react";
 
 const navLinks = [
   { href: "home", label: "Home" },
@@ -58,13 +58,9 @@ export function NavBar() {
         <nav className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <button
             onClick={() => handleNav("home")}
-            className="font-bold text-base tracking-tight text-foreground hover:opacity-80 transition-opacity flex items-center gap-2"
+            className="font-bold text-lg tracking-tight text-foreground hover:opacity-80 transition-opacity flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white"
           >
-            <img
-              src="/logo-portfolio.png"
-              alt="Portfolio"
-              className="h-16 w-16 object-contain"
-            />
+            AB
           </button>
 
           <div className="hidden md:flex items-center gap-1">
@@ -91,6 +87,15 @@ export function NavBar() {
           </div>
 
           <div className="flex items-center gap-2">
+            <a
+              href="https://www.linkedin.com/in/ahmed-bourmeche/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="LinkedIn profile"
+            >
+              <Linkedin className="w-5 h-5" />
+            </a>
             <ThemeToggle />
             <button
               className="md:hidden p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
