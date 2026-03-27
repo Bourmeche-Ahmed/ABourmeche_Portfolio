@@ -3,6 +3,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { smoothScrollTo } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import logoPortfolio from "../../public/logo-portfolio.png";
 
 const navLinks = [
   { href: "home", label: "Home" },
@@ -58,11 +59,13 @@ export function NavBar() {
         <nav className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <button
             onClick={() => handleNav("home")}
-            className="font-bold text-base tracking-tight text-foreground hover:text-cyan-400 transition-colors"
+            className="font-bold text-base tracking-tight text-foreground hover:opacity-80 transition-opacity flex items-center gap-2"
           >
-            <span className="text-cyan-400">&lt;</span>
-            AB
-            <span className="text-cyan-400">/&gt;</span>
+            <img
+              src={logoPortfolio}
+              alt="Portfolio"
+              className="h-10 w-10 object-contain"
+            />
           </button>
 
           <div className="hidden md:flex items-center gap-1">
