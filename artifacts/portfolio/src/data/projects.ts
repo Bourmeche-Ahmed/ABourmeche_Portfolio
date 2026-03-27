@@ -104,42 +104,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: "eltachkila-football-hub",
-    title: "ElTachkila Football Hub",
-    description:
-      "A modern football data platform combining TypeScript frontend with a Python backend — delivering team stats, match data, and interactive visualizations in a clean, fan-first interface.",
-    longDescription:
-      "ElTachkila is a football intelligence platform built for fans and analysts. It integrates curated football data with a TypeScript-powered frontend and Python backend to deliver real-time match tracking, team statistics, player performance analytics, and community discussion features — all wrapped in a polished, sports-grade UI.",
-    category: "Web Apps",
-    repo: "eltachkila-football-hub",
-    githubUrl: "https://github.com/Bourmeche-Ahmed/eltachkila-football-hub",
-    languages: [
-      { name: "TypeScript", percentage: 53.6, color: "#3178C6" },
-      { name: "Python", percentage: 41.4, color: "#3572A5" },
-      { name: "Shell", percentage: 3.7, color: "#89E051" },
-      { name: "Other", percentage: 1.3, color: "#6e7681" },
-    ],
-    techBadges: ["TypeScript", "Python", "REST API", "Data Viz", "Football API"],
-    highlights: [
-      "Live match tracking with real-time score updates",
-      "Team and player statistics with comparative analytics",
-      "Interactive data visualizations for performance metrics",
-      "Python backend handling data aggregation and caching",
-      "Fan-optimized UX with mobile-first responsive layouts",
-    ],
-    architecture: "TypeScript SPA ↔ Python REST API ↔ Football Data Sources",
-    challenges:
-      "Modeling and normalizing football data from multiple sources while maintaining query performance required careful schema design and caching strategies.",
-    learned:
-      "Developed strong patterns for data-intensive applications, sports analytics UX design, and efficient client-server data synchronization.",
-    keyFeatures: [
-      "Live match scoreboard",
-      "Season statistics tables with filters",
-      "Head-to-head team comparison views",
-      "Player performance heatmaps",
-    ],
-  },
-  {
     id: "linkedin-optimizer",
     title: "LinkedIn Optimizer",
     description:
