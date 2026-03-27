@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ChevronDown, Download, ArrowRight } from "lucide-react";
-import { PidPlayground } from "./PidPlayground";
+import { HeroVisual } from "./HeroVisual";
 import { smoothScrollTo } from "@/lib/utils";
 import { MagneticButton } from "./MagneticButton";
 
@@ -59,9 +59,9 @@ export function HeroSection() {
             >
               Full‑Stack Engineer —{" "}
               <span className="text-foreground font-medium">
-                React/TypeScript Dashboards · Python/Flask APIs
-              </span>{" "}
-              · Embedded IoT (ESP32 · MATLAB/Simulink) · IIoT & Real‑Time Systems
+                React/TypeScript · Python/Flask
+              </span>
+              {" "}· Real‑Time Dashboards · IIoT Systems
             </motion.p>
 
             <motion.div
@@ -117,7 +117,7 @@ export function HeroSection() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="flex justify-center lg:justify-end"
           >
-            <PidPlayground />
+            <HeroVisual />
           </motion.div>
         </div>
 
