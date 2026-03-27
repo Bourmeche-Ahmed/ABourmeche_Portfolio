@@ -59,9 +59,9 @@ export function HeroSection() {
             >
               Full‑Stack Engineer —{" "}
               <span className="text-foreground font-medium">
-                React/TypeScript Dashboards + Python/Flask APIs
+                React/TypeScript Dashboards · Python/Flask APIs
               </span>{" "}
-              • IIoT & Real‑Time Systems
+              · Embedded IoT (ESP32 · MATLAB/Simulink) · IIoT & Real‑Time Systems
             </motion.p>
 
             <motion.div

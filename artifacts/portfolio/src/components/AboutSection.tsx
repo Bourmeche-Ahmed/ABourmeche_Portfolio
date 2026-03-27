@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
-import { Code2, Cpu, LineChart, Zap } from "lucide-react";
+import { Code2, Cpu, LineChart, Zap, CircuitBoard } from "lucide-react";
 
 const cards = [
   {
@@ -11,23 +11,30 @@ const cards = [
     bg: "bg-cyan-500/10",
   },
   {
+    icon: CircuitBoard,
+    title: "Embedded & IoT Systems",
+    desc: "Designing firmware in C on ESP32/ESP-IDF, integrating industrial protocols (RS485, NB-IoT, LoRa, CAN) and multi-sensor hardware for real industrial deployments.",
+    color: "text-orange-400",
+    bg: "bg-orange-500/10",
+  },
+  {
     icon: Cpu,
-    title: "IIoT & Real-time Systems",
-    desc: "Designing dashboards that interface with industrial control systems, sensor telemetry streams, and MATLAB digital twins.",
+    title: "IIoT & Control Systems",
+    desc: "Interfacing web dashboards with MATLAB Simulink digital twins, PID controllers, and sensor telemetry streams for real-time industrial supervision.",
     color: "text-blue-400",
     bg: "bg-blue-500/10",
   },
   {
     icon: LineChart,
     title: "Data Visualization",
-    desc: "Turning complex data into clear, interactive charts and dashboards that help engineers and operators make faster decisions.",
+    desc: "Turning complex sensor data and ML outputs into clear, interactive dashboards that help engineers and operators make faster decisions.",
     color: "text-violet-400",
     bg: "bg-violet-500/10",
   },
   {
     icon: Zap,
-    title: "API Design",
-    desc: "Building clean Python/Flask REST APIs that power real-time frontends, ML model integrations, and IoT data pipelines.",
+    title: "Backend & APIs",
+    desc: "Building Python/Flask REST APIs that bridge real-time frontends, ML inference engines, and IoT data pipelines with clean, validated contracts.",
     color: "text-green-400",
     bg: "bg-green-500/10",
   },
@@ -38,8 +45,8 @@ export function AboutSection() {
     <section id="about" className="py-24 max-w-6xl mx-auto px-4 sm:px-6">
       <SectionHeader
         tag="About"
-        title="Engineering at the intersection of web and industry"
-        subtitle="I build interactive dashboards and real-time systems that bridge modern web stacks with industrial engineering environments."
+        title="From embedded firmware to interactive dashboards"
+        subtitle="I work across the full hardware-to-browser stack — designing IoT nodes, writing bare-metal firmware, and building the real-time web interfaces that make sense of the data."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
@@ -51,31 +58,37 @@ export function AboutSection() {
           className="space-y-4 text-muted-foreground leading-relaxed"
         >
           <p>
-            I'm a Full-Stack Engineer with a focus on{" "}
+            I'm an engineer who operates across the full vertical —{" "}
+            <span className="text-foreground font-medium">
+              from bare-metal ESP32 firmware
+            </span>{" "}
+            and PCB design, up through Python APIs, all the way to{" "}
             <span className="text-foreground font-medium">
               React/TypeScript dashboards
-            </span>{" "}
-            and{" "}
-            <span className="text-foreground font-medium">
-              Python/Flask APIs
-            </span>{" "}
-            for industrial and real-time applications. My work sits at the crossroads
-            of web engineering and control systems — where millisecond latency matters
-            and data needs to tell a clear story.
-          </p>
-          <p>
-            I've built PID control interfaces synchronized with MATLAB Simulink digital
-            twins, IIoT predictive maintenance platforms, and AI-powered browser
-            extensions — always prioritizing{" "}
-            <span className="text-foreground font-medium">
-              clean architecture, real performance, and operator-first UX
             </span>
-            .
+            . That full-stack reach lets me build systems where every layer actually talks to every other.
           </p>
           <p>
-            Outside of production work, I explore advanced UI patterns, TypeScript
-            generics for component systems, and the boundaries of browser-native APIs
-            through experimental projects.
+            On the embedded side, I've designed industrial IoT nodes integrating RS485, NB-IoT, LoRa, and CAN — writing firmware in C under ESP-IDF for sensor acquisition, anomaly detection, and long-range telemetry. On the web side, I've built PID control dashboards synchronized live with{" "}
+            <span className="text-foreground font-medium">
+              MATLAB Simulink digital twins
+            </span>
+            , IIoT predictive maintenance platforms, and AI-powered browser tools.
+          </p>
+          <p>
+            I'm a co-founder and CTO at{" "}
+            <a
+              href="https://cybernexus.tn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-cyan-400 hover:underline font-medium"
+            >
+              CyberNexus
+            </a>
+            , where I lead technical strategy and product development. The thread connecting everything is a preference for systems that are{" "}
+            <span className="text-foreground font-medium">
+              precise, real-time, and genuinely useful to engineers.
+            </span>
           </p>
         </motion.div>
 
@@ -97,7 +110,13 @@ export function AboutSection() {
               </div>
               <div className="text-sm text-cyan-400 font-mono">Full-Stack Engineer</div>
               <div className="mt-4 flex flex-col gap-1.5">
-                {["React + TypeScript", "Python + Flask", "IIoT Systems"].map((s) => (
+                {[
+                  "React + TypeScript",
+                  "Python + Flask",
+                  "ESP32 / Embedded C",
+                  "MATLAB / Simulink",
+                  "IIoT Systems",
+                ].map((s) => (
                   <span key={s} className="text-xs text-muted-foreground bg-white/5 px-3 py-1 rounded-full border border-white/8">
                     {s}
                   </span>
@@ -108,14 +127,14 @@ export function AboutSection() {
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {cards.map((card, i) => (
           <motion.div
             key={card.title}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
+            transition={{ delay: i * 0.08, duration: 0.5 }}
             className="rounded-xl border border-white/8 bg-card/40 backdrop-blur-sm p-5 hover:border-cyan-500/25 transition-all group"
           >
             <div className={`w-9 h-9 rounded-xl ${card.bg} flex items-center justify-center mb-4`}>

@@ -167,7 +167,7 @@ export function PidPlayground() {
             PID Response Playground
           </p>
           <p className="text-[10px] text-muted-foreground mt-0.5">
-            Adjust parameters to see system response
+            Closed-loop simulation · MATLAB/Simulink digital twin
           </p>
         </div>
         <div className="flex items-center gap-1.5">
@@ -190,7 +190,7 @@ export function PidPlayground() {
       </div>
 
       <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-white/5">
-        {["Real-time UI", "Control Systems", "Dashboards"].map((tag) => (
+        {["MATLAB/Simulink", "Control Systems", "Real-time UI"].map((tag) => (
           <span
             key={tag}
             className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
