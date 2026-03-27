@@ -3,7 +3,6 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { smoothScrollTo } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
-import logoPortfolio from "../../public/logo-portfolio.png";
 
 const navLinks = [
   { href: "home", label: "Home" },
@@ -62,7 +61,7 @@ export function NavBar() {
             className="font-bold text-base tracking-tight text-foreground hover:opacity-80 transition-opacity flex items-center gap-2"
           >
             <img
-              src={logoPortfolio}
+              src="/logo-portfolio.png"
               alt="Portfolio"
               className="h-10 w-10 object-contain"
             />
