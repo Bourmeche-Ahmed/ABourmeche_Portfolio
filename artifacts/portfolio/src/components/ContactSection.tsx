@@ -37,7 +37,7 @@ export function ContactSection() {
     {
       icon: Mail,
       label: "Email",
-      href: "mailto:bourmeche.ahmed@email.com",
+      href: "mailto:ahmed.bourmeche.eng@gmail.com",
       color: "hover:text-cyan-400",
     },
   ];
