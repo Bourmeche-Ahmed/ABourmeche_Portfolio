@@ -4,6 +4,7 @@ import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle } from "lucide-r
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
 import { MagneticButton } from "./MagneticButton";
+import { ASSET_PATHS } from "@/lib/paths";
 
 // EmailJS Configuration - Replace with your own credentials
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
@@ -125,7 +126,7 @@ export function ContactSection() {
           <div className="pt-2">
             <MagneticButton
               variant="outline"
-              href="/cv/AhmedBourmeche_CV.pdf"
+              href={ASSET_PATHS.cv()}
               download="AhmedBourmeche_CV.pdf"
             >
               Download CV

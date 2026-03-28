@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
 import { Code2, Cpu, LineChart, Zap, CircuitBoard } from "lucide-react";
+import { ASSET_PATHS } from "@/lib/paths";
 
 const cards = [
   {
@@ -110,7 +111,7 @@ export function AboutSection() {
             {/* Picture frame with border */}
             <div className="relative rounded-2xl border-2 border-cyan-500/30 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-0.5">
               <motion.img
-                src="/ABourmeche.jpg"
+                src={ASSET_PATHS.photo()}
                 alt="Ahmed Bourmeche"
                 className="w-full h-auto object-cover rounded-2xl"
                 initial={{ opacity: 0, scale: 0.95 }}

@@ -3,6 +3,7 @@ import { ChevronDown, ExternalLink, ArrowRight } from "lucide-react";
 import { HeroVisual } from "./HeroVisual";
 import { smoothScrollTo } from "@/lib/utils";
 import { MagneticButton } from "./MagneticButton";
+import { ASSET_PATHS } from "@/lib/paths";
 
 export function HeroSection() {
   return (
@@ -84,7 +85,7 @@ export function HeroSection() {
               </MagneticButton>
               <MagneticButton
                 variant="ghost"
-                href="/cv/AhmedBourmeche_CV.pdf"
+                href={ASSET_PATHS.cv()}
                 download="AhmedBourmeche_CV.pdf"
               >
                 <ExternalLink className="w-4 h-4" /> Download CV
