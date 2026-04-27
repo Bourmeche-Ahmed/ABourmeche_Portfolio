@@ -34,11 +34,8 @@ Your EmailJS credentials need to be stored securely as GitHub Secrets so they ca
 
 1. Go to your repository: https://github.com/Bourmeche-Ahmed/ABourmeche_Portfolio
 2. Click **Settings** → **Pages**
-3. Under **Source**, select **Deploy from a branch** (if not already selected)
-4. Under **Branch**, select:
-   - Branch: `main`
-   - Folder: `/ (root)`
-5. Click **Save**
+3. Under **Source**, select **GitHub Actions**
+4. Click **Save**
 
 **Note:** When your first deployment completes, you'll get a GitHub Pages URL. Keep this handy.
 
@@ -159,7 +156,7 @@ If you see a warning about SSL, wait 5-10 minutes and refresh.
 ### Site not loading?
 
 1. Check GitHub Pages status in Settings → Pages
-2. Verify build output is in `artifacts/portfolio/dist/public`
+2. Verify workflow uploads `artifacts/portfolio/dist/public` as Pages artifact
 3. Check for 404 errors in browser console
 4. Try clearing browser cache (Ctrl+Shift+Delete)
 
