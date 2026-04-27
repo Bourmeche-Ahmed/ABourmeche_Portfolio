@@ -11,5 +11,5 @@ export function getAssetPath(path: string): string {
  */
 export const ASSET_PATHS = {
   cv: () => getAssetPath('cv/AhmedBourmeche_CV.pdf'),
-  photo: () => getAssetPath('ABourmeche.jpg'),
+  photo: () => getAssetPath('ABourmeche.jpeg'),
 } as const;
