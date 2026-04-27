@@ -269,7 +269,7 @@ export const projects: Project[] = [
       "STEP'ACT 2026 is a comprehensive event registration and management platform for a major annual trail running marathon. Built with a modern TypeScript stack, it provides seamless participant registration, detailed event information, and direct contact capabilities. The platform showcases both frontend elegance and backend reliability for handling high-volume event registrations.",
     category: "Web Apps",
     repo: "stepact-lionsclub",
-    githubUrl: "https://stepact.lions.tn",
+    githubUrl: "https://stepact.lionsinsat.tn",
     languages: [
       { name: "TypeScript", percentage: 65, color: "#3178C6" },
       { name: "React", percentage: 25, color: "#61DAFB" },

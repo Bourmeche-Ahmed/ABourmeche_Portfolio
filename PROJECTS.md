@@ -108,7 +108,7 @@ Mastered Chrome Extension Manifest V3 architecture, content script injection pat
 ## 4. STEP'ACT 2026 Marathon
 
 **Category:** Web Apps  
-**Website:** [https://stepact.lions.tn](https://stepact.lions.tn)  
+**Website:** [https://stepact.lionsinsat.tn](https://stepact.lionsinsat.tn)  
 **Languages:** TypeScript (65%), React (25%), CSS (7%), Other (3%)  
 **Tech Stack:** TypeScript, React, Vite, PostgreSQL, Express, REST API
 
