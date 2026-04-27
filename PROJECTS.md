@@ -244,6 +244,117 @@ Strengthened SCSS component system design skills and gained practical experience
 
 ---
 
+## 8. Autonomous Mobile Robot (PFA)
+
+**Category:** Embedded Systems / Robotics  
+**Repository:** Private (to be published)  
+**Languages:** C (70%), KiCad (20%), Python (10%)  
+**Tech Stack:** STM32, Embedded C, KiCad, SolidWorks, IoT, PCB Design, ESP32, UART
+
+### Overview
+Designed and built from scratch as a 4th-year end-of-year engineering project at INSAT. The robot navigates autonomously in an unknown environment using fused redundant sensor input, an embedded finite state machine, and a custom hardware stack.
+
+### Architecture
+STM32 Firmware (FSM + PWM/PID) ↔ Sensor Fusion Layer ↔ Custom PCB + Actuators ↔ ESP32 UART/WiFi Bridge ↔ Web Dashboard
+
+### Key Highlights
+- Built around STM32 Blue Pill (STM32F103C8T6) with direct peripheral-level control
+- Redundant obstacle detection via 2x ToF and 2x ultrasonic sensors (front/rear fusion)
+- Finite state machine navigation: Move → Detect → Stop → Rotate 90deg → Resume
+- Custom KiCad PCB for motor driving, sensor interfacing, and regulated power delivery
+- Optional ESP32 WiFi bridge streams telemetry to a live dashboard
+- Dashboard supervision includes real-time pose (x, y, theta), obstacle map, and trajectory trace
+
+### Challenges
+Main challenge was making autonomous behavior reliable with low-cost sensors in noisy conditions. This was addressed through redundant front/rear sensing, carefully tuned threshold logic, and deterministic FSM transitions to avoid unstable oscillation near obstacles.
+
+### What I Learned
+Strengthened end-to-end embedded system engineering: STM32 low-level peripherals, FSM-based autonomy, PWM/PID motor control, PCB design in KiCad, and serial-to-WiFi telemetry architecture with ESP32.
+
+### Key Features
+- Autonomous obstacle avoidance in unknown environments
+- Sensor-fusion-based obstacle confidence decisions
+- Finite state machine motion planner
+- PWM motor speed control with optional PID regulation
+- Custom PCB hardware stack
+- Optional IoT telemetry dashboard
+
+---
+
+## 9. Quarter Car Suspension System
+
+**Category:** Control Systems / Simulation  
+**Repository:** Private (to be published)  
+**Languages:** C (55%), LabVIEW (35%), Other (10%)  
+**Tech Stack:** LabVIEW, Proteus, ATmega328P, Embedded C, PD Control, HIL, Serial COM, Euler Integration
+
+### Overview
+A hardware-in-the-loop benchmark that couples Proteus and LabVIEW through virtual serial COM ports for real-time suspension testing. Proteus simulates an ATmega328P running an Euler integrator (dt = 1e-4 s) that solves the 2-DOF quarter-car differential equations continuously. LabVIEW acts as the operator and control interface, reading live states and injecting control actions.
+
+### Architecture
+LabVIEW Control/Monitor UI ↔ Virtual COM Serial Bridge ↔ Proteus Simulation ↔ ATmega328P C Firmware (Euler Solver)
+
+### Key Highlights
+- 2-DOF quarter-car model solved in real time on ATmega328P via Euler integration
+- Virtual COM bridge between Proteus and LabVIEW for HIL-style experimentation
+- Open-loop passive campaign across masses and excitation amplitudes
+- Measured non-linearity: superposition principle violated with 33% error
+- Active PD control (Kp=-2000, Kd=-800) achieved 87% peak displacement suppression
+- Full oscillation damping reached in about 40 seconds
+
+### Challenges
+Synchronizing numerical integration timing and virtual serial exchange while keeping the control loop stable required strict timestep discipline, bounded packet formats, and careful gain tuning to prevent numeric drift and control chatter.
+
+### What I Learned
+Built strong practical intuition in control implementation: translating continuous models into discrete embedded loops, validating non-linearity experimentally, and tuning PD gains in a hardware-in-the-loop workflow.
+
+### Key Features
+- Real-time 2-DOF suspension simulation
+- Embedded Euler solver on ATmega328P
+- LabVIEW live visualization and command injection
+- Open-loop non-linearity validation
+- Active PD suspension control
+- HIL-ready serial communication pipeline
+
+---
+
+## 10. Hand Gesture-Controlled Maze Game
+
+**Category:** Computer Vision / HCI  
+**Repository:** Private (to be published)  
+**Languages:** Python (90%), Other (10%)  
+**Tech Stack:** Python, OpenCV, MediaPipe, Tkinter, Computer Vision, HCI, Gesture Recognition
+
+### Overview
+An accessibility-focused HCI prototype that removes keyboard and mouse interaction completely. OpenCV captures webcam frames, MediaPipe Hands extracts 21 landmarks per frame, and custom geometric classification logic maps landmarks and angles to directional commands (Up, Down, Left, Right). Commands drive maze navigation in a Tkinter-rendered interface, enabling fully touchless gameplay and validating a low-latency real-time gesture interaction loop.
+
+### Architecture
+Webcam Stream (OpenCV) → Hand Landmarks (MediaPipe) → Gesture Classifier → Command Mapper → Tkinter Maze Engine
+
+### Key Highlights
+- No keyboard or mouse: gameplay is fully gesture-driven
+- MediaPipe Hands tracking with 21 landmarks per frame
+- Landmark-angle based command classification for directional control
+- OpenCV pipeline for live frame acquisition and preprocessing
+- Tkinter GUI for maze rendering and player state updates
+- Accessibility-first interaction model with real-time response
+
+### Challenges
+The hardest part was maintaining robust gesture detection under real-world variability (lighting, hand orientation, camera angle). This was handled with landmark normalization and conservative classification thresholds to minimize false directional triggers.
+
+### What I Learned
+Improved expertise in real-time computer vision pipelines, landmark-based gesture feature design, and HCI prototyping for accessible input alternatives.
+
+### Key Features
+- Live webcam-based gesture control
+- Landmark-driven directional command mapping
+- Low-latency frame-to-action pipeline
+- Tkinter maze rendering and state updates
+- Accessibility-centered control design
+- Extensible gesture classification logic
+
+---
+
 ## Project Categories Summary
 
 | Category | Projects |
@@ -252,6 +363,9 @@ Strengthened SCSS component system design skills and gained practical experience
 | **IIoT / Analytics** | IIoT Predictive Maintenance Dashboard |
 | **Web Apps** | STEP'ACT 2026 Marathon, IEEE Student Branch Website |
 | **Browser Extension** | LinkedIn Optimizer |
+| **Embedded Systems / Robotics** | Autonomous Mobile Robot (PFA) |
+| **Control Systems / Simulation** | Quarter Car Suspension System |
+| **Computer Vision / HCI** | Hand Gesture-Controlled Maze Game |
 | **Experimental** | CyberNexus UI Lab, YTB Voice & Gesture Control |
 
 ## Technical Skills Summary

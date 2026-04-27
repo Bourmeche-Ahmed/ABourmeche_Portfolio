@@ -3,6 +3,9 @@ export type ProjectCategory =
   | "IIoT / Analytics"
   | "Web Apps"
   | "Browser Extension"
+  | "Embedded Systems / Robotics"
+  | "Control Systems / Simulation"
+  | "Computer Vision / HCI"
   | "Experimental";
 
 export interface Language {
@@ -29,6 +32,122 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: "autonomous-mobile-robot-pfa",
+    title: "Autonomous Mobile Robot (PFA)",
+    description:
+      "Year-end engineering project: a fully autonomous STM32 Blue Pill robot using redundant sensor fusion, finite-state navigation, custom KiCad PCB design, and optional ESP32 WiFi supervision.",
+    longDescription:
+      "Designed and built from scratch as a 4th-year end-of-year engineering project at INSAT. The robot navigates autonomously in an unknown environment using fused redundant sensor input, an embedded finite state machine, and a custom hardware stack. Hardware includes an STM32F103C8T6 (Blue Pill), dual ToF and ultrasonic sensors for robust obstacle detection, N20 DC motors with PWM control, a custom KiCad PCB for motor/sensor/power management, and a SolidWorks-modeled chassis. Firmware covers low-level STM32 peripheral setup (GPIO, PWM, timers, UART, external interrupts), FSM path logic, and optional PID speed regulation. An optional IoT extension uses ESP32 as a WiFi bridge to stream telemetry to a dashboard with position, obstacles, and trajectory trace.",
+    category: "Embedded Systems / Robotics",
+    repo: "private-repo-pending-publication",
+    githubUrl: "https://github.com/Bourmeche-Ahmed?tab=repositories",
+    languages: [
+      { name: "C", percentage: 70, color: "#555555" },
+      { name: "KiCad", percentage: 20, color: "#2F77D0" },
+      { name: "Python", percentage: 10, color: "#3572A5" },
+    ],
+    techBadges: ["STM32", "Embedded C", "KiCad", "SolidWorks", "IoT", "PCB Design", "ESP32", "UART"],
+    highlights: [
+      "Built around STM32 Blue Pill (STM32F103C8T6) with direct peripheral-level control",
+      "Redundant obstacle detection via 2x ToF and 2x ultrasonic sensors (front/rear fusion)",
+      "Finite state machine navigation: Move -> Detect -> Stop -> Rotate 90deg -> Resume",
+      "Custom KiCad PCB for motor driving, sensor interfacing, and regulated power delivery",
+      "Optional ESP32 WiFi bridge streams telemetry to a live dashboard",
+      "Dashboard supervision includes real-time pose (x, y, theta), obstacle map, and trajectory trace",
+    ],
+    architecture:
+      "STM32 Firmware (FSM + PWM/PID) ↔ Sensor Fusion Layer ↔ Custom PCB + Actuators ↔ ESP32 UART/WiFi Bridge ↔ Web Dashboard",
+    challenges:
+      "Main challenge was making autonomous behavior reliable with low-cost sensors in noisy conditions. This was addressed through redundant front/rear sensing, carefully tuned threshold logic, and deterministic FSM transitions to avoid unstable oscillation near obstacles.",
+    learned:
+      "Strengthened end-to-end embedded system engineering: STM32 low-level peripherals, FSM-based autonomy, PWM/PID motor control, PCB design in KiCad, and serial-to-WiFi telemetry architecture with ESP32.",
+    keyFeatures: [
+      "Autonomous obstacle avoidance in unknown environments",
+      "Sensor-fusion-based obstacle confidence decisions",
+      "Finite state machine motion planner",
+      "PWM motor speed control with optional PID regulation",
+      "Custom PCB hardware stack",
+      "Optional IoT telemetry dashboard",
+    ],
+  },
+  {
+    id: "quarter-car-suspension-system",
+    title: "Quarter Car Suspension System",
+    description:
+      "Hardware-in-the-loop 2-DOF quarter-car simulation coupling Proteus (ATmega328P Euler solver) and LabVIEW over virtual COM, with active PD control reaching 87% peak displacement reduction.",
+    longDescription:
+      "A hardware-in-the-loop benchmark that couples Proteus and LabVIEW through virtual serial COM ports for real-time suspension testing. Proteus simulates an ATmega328P running an Euler integrator (dt = 1e-4 s) that solves the 2-DOF quarter-car differential equations continuously. LabVIEW acts as the operator and control interface, reading live states and injecting control actions. Open-loop passive tests across varied sprung masses and excitation amplitudes confirmed non-linearity through superposition failure (33% error). An active PD controller (Kp = -2000 N/m, Kd = -800 N.s/m) reduced peak displacement by 87% and suppressed oscillations in approximately 40 seconds.",
+    category: "Control Systems / Simulation",
+    repo: "private-repo-pending-publication",
+    githubUrl: "https://github.com/Bourmeche-Ahmed?tab=repositories",
+    languages: [
+      { name: "C", percentage: 55, color: "#555555" },
+      { name: "LabVIEW", percentage: 35, color: "#F7B500" },
+      { name: "Other", percentage: 10, color: "#6e7681" },
+    ],
+    techBadges: ["LabVIEW", "Proteus", "ATmega328P", "Embedded C", "PD Control", "HIL", "Serial COM", "Euler Integration"],
+    highlights: [
+      "2-DOF quarter-car model solved in real time on ATmega328P via Euler integration",
+      "Virtual COM bridge between Proteus and LabVIEW for HIL-style experimentation",
+      "Open-loop passive campaign across masses and excitation amplitudes",
+      "Measured non-linearity: superposition principle violated with 33% error",
+      "Active PD control (Kp=-2000, Kd=-800) achieved 87% peak displacement suppression",
+      "Full oscillation damping reached in about 40 seconds",
+    ],
+    architecture:
+      "LabVIEW Control/Monitor UI ↔ Virtual COM Serial Bridge ↔ Proteus Simulation ↔ ATmega328P C Firmware (Euler Solver)",
+    challenges:
+      "Synchronizing numerical integration timing and virtual serial exchange while keeping the control loop stable required strict timestep discipline, bounded packet formats, and careful gain tuning to prevent numeric drift and control chatter.",
+    learned:
+      "Built strong practical intuition in control implementation: translating continuous models into discrete embedded loops, validating non-linearity experimentally, and tuning PD gains in a hardware-in-the-loop workflow.",
+    keyFeatures: [
+      "Real-time 2-DOF suspension simulation",
+      "Embedded Euler solver on ATmega328P",
+      "LabVIEW live visualization and command injection",
+      "Open-loop non-linearity validation",
+      "Active PD suspension control",
+      "HIL-ready serial communication pipeline",
+    ],
+  },
+  {
+    id: "hand-gesture-controlled-maze-game",
+    title: "Hand Gesture-Controlled Maze Game",
+    description:
+      "Real-time maze game controlled entirely by hand gestures using webcam input, MediaPipe landmark tracking, OpenCV gesture classification, and a Tkinter GUI.",
+    longDescription:
+      "An accessibility-focused HCI prototype that removes keyboard and mouse interaction completely. OpenCV captures webcam frames, MediaPipe Hands extracts 21 landmarks per frame, and custom geometric classification logic maps landmarks and angles to directional commands (Up, Down, Left, Right). Commands drive maze navigation in a Tkinter-rendered interface, enabling fully touchless gameplay and validating a low-latency real-time gesture interaction loop.",
+    category: "Computer Vision / HCI",
+    repo: "private-repo-pending-publication",
+    githubUrl: "https://github.com/Bourmeche-Ahmed?tab=repositories",
+    languages: [
+      { name: "Python", percentage: 90, color: "#3572A5" },
+      { name: "Other", percentage: 10, color: "#6e7681" },
+    ],
+    techBadges: ["Python", "OpenCV", "MediaPipe", "Tkinter", "Computer Vision", "HCI", "Gesture Recognition"],
+    highlights: [
+      "No keyboard or mouse: gameplay is fully gesture-driven",
+      "MediaPipe Hands tracking with 21 landmarks per frame",
+      "Landmark-angle based command classification for directional control",
+      "OpenCV pipeline for live frame acquisition and preprocessing",
+      "Tkinter GUI for maze rendering and player state updates",
+      "Accessibility-first interaction model with real-time response",
+    ],
+    architecture:
+      "Webcam Stream (OpenCV) → Hand Landmarks (MediaPipe) → Gesture Classifier → Command Mapper → Tkinter Maze Engine",
+    challenges:
+      "The hardest part was maintaining robust gesture detection under real-world variability (lighting, hand orientation, camera angle). This was handled with landmark normalization and conservative classification thresholds to minimize false directional triggers.",
+    learned:
+      "Improved expertise in real-time computer vision pipelines, landmark-based gesture feature design, and HCI prototyping for accessible input alternatives.",
+    keyFeatures: [
+      "Live webcam-based gesture control",
+      "Landmark-driven directional command mapping",
+      "Low-latency frame-to-action pipeline",
+      "Tkinter maze rendering and state updates",
+      "Accessibility-centered control design",
+      "Extensible gesture classification logic",
+    ],
+  },
   {
     id: "pid-control-dashboard",
     title: "PID Control Dashboard",
@@ -291,6 +410,9 @@ export const projects: Project[] = [
 ];
 
 export const categories: ProjectCategory[] = [
+  "Embedded Systems / Robotics",
+  "Control Systems / Simulation",
+  "Computer Vision / HCI",
   "Real-time / Control",
   "IIoT / Analytics",
   "Web Apps",

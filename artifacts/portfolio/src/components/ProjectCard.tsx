@@ -39,6 +39,9 @@ export function ProjectCard({ project, onClick, index }: ProjectCardProps) {
     "IIoT / Analytics": "text-blue-400 bg-blue-500/10 border-blue-500/20",
     "Web Apps": "text-violet-400 bg-violet-500/10 border-violet-500/20",
     "Browser Extension": "text-green-400 bg-green-500/10 border-green-500/20",
+    "Embedded Systems / Robotics": "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    "Control Systems / Simulation": "text-teal-400 bg-teal-500/10 border-teal-500/20",
+    "Computer Vision / HCI": "text-fuchsia-400 bg-fuchsia-500/10 border-fuchsia-500/20",
     "Experimental": "text-orange-400 bg-orange-500/10 border-orange-500/20",
   };
 

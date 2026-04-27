@@ -45,6 +45,9 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     "IIoT / Analytics": "text-blue-400 border-blue-500/30 bg-blue-500/10",
     "Web Apps": "text-violet-400 border-violet-500/30 bg-violet-500/10",
     "Browser Extension": "text-green-400 border-green-500/30 bg-green-500/10",
+    "Embedded Systems / Robotics": "text-amber-400 border-amber-500/30 bg-amber-500/10",
+    "Control Systems / Simulation": "text-teal-400 border-teal-500/30 bg-teal-500/10",
+    "Computer Vision / HCI": "text-fuchsia-400 border-fuchsia-500/30 bg-fuchsia-500/10",
     "Experimental": "text-orange-400 border-orange-500/30 bg-orange-500/10",
   };
 
