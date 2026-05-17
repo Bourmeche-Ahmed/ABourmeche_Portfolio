@@ -10,6 +10,6 @@ export function getAssetPath(path: string): string {
  * Common asset paths
  */
 export const ASSET_PATHS = {
-  cv: () => getAssetPath('cv/AhmedBourmeche_CV.pdf'),
+  cv: () => getAssetPath('cv/Ahmed_Bourmeche_RESUME.pdf'),
   photo: () => getAssetPath('ABourmeche.jpeg'),
 } as const;
