@@ -57,13 +57,13 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
-            >
-              Full‑Stack Engineer —{" "}
-              <span className="text-foreground font-medium">
-                React/TypeScript · Python/Flask
-              </span>
-              {" "}· Real‑Time Dashboards · IIoT Systems
-            </motion.p>
+           >
+  Building hardware that talks to the real world —{" "}
+  <span className="text-foreground font-medium">
+    Embedded Systems · Industrial IoT · PCB Design
+  </span>
+  {" "}· Automation · Full‑Stack
+</motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
