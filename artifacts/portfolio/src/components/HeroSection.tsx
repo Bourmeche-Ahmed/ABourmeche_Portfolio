@@ -86,7 +86,7 @@ export function HeroSection() {
               <MagneticButton
                 variant="ghost"
                 href={ASSET_PATHS.cv()}
-                download="AhmedBourmeche_CV.pdf"
+                download="Ahmed_Bourmeche_RESUME.pdf"
               >
                 <ExternalLink className="w-4 h-4" /> Download CV
               </MagneticButton>
