@@ -1,6 +1,7 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, ExternalLink, ArrowRight } from "lucide-react";
-import { HeroVisual } from "./HeroVisual";
+import { CircuitHero } from "./CircuitHero";
 import { smoothScrollTo } from "@/lib/utils";
 import { MagneticButton } from "./MagneticButton";
 import { ASSET_PATHS } from "@/lib/paths";
@@ -83,13 +84,17 @@ export function HeroSection() {
               >
                 Contact
               </MagneticButton>
-              <MagneticButton
-                variant="ghost"
+              <a
                 href={ASSET_PATHS.cv()}
                 download="Ahmed_Bourmeche_RESUME.pdf"
+                className="inline-block"
               >
-                <ExternalLink className="w-4 h-4" /> Download CV
-              </MagneticButton>
+                <motion.div
+                  className="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 cursor-pointer select-none text-muted-foreground hover:text-foreground hover:bg-white/5"
+                >
+                  <ExternalLink className="w-4 h-4" /> Download CV
+                </motion.div>
+              </a>
             </motion.div>
 
             <motion.div
@@ -119,7 +124,7 @@ export function HeroSection() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="flex justify-center lg:justify-end"
           >
-            <HeroVisual />
+            <CircuitHero />
           </motion.div>
         </div>
 
