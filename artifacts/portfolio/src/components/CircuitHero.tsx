@@ -222,7 +222,7 @@ export function CircuitHero() {
             </pattern>
           </defs>
 
-          <rect width="400" height="400" fill="#050a12" />
+          <rect width="400" height="400" fill="transparent" />
           <rect width="400" height="400" fill="url(#dotGrid)" />
 
           {/* PCB Traces - Inactive */}
