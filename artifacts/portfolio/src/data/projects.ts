@@ -67,7 +67,7 @@ export const projects: Project[] = [
       "Sensor-fusion-based obstacle confidence decisions",
       "Finite state machine motion planner",
       "PWM motor speed control with optional PID regulation",
-      "Custom PCB hardware stack",
+      "Hardware stack with custom PCB for motor/sensor/power management",
       "Optional IoT telemetry dashboard",
     ],
   },
@@ -152,7 +152,7 @@ export const projects: Project[] = [
     id: "pid-control-dashboard",
     title: "PID Control Dashboard",
     description:
-      "Full-stack real-time PID control system — React dashboard connected to a Flask API and a MATLAB Simulink digital twin. Engineers tune Kp, Ki, Kd live and watch the simulated system response update instantly.",
+      "Real-time PID control system — React dashboard connected to a Flask API and a MATLAB Simulink digital twin. Engineers tune Kp, Ki, Kd live and watch the simulated system response update instantly.",
     longDescription:
       "A complete industrial control engineering platform that tightly couples a modern web stack with MATLAB Simulink simulation. The React dashboard lets engineers interactively tune PID gain parameters (Kp, Ki, Kd) and visualize the closed-loop system response in real time. A Flask REST API bridges the web layer to a MATLAB Simulink digital twin model running the actual control loop simulation — changes made in the browser propagate to Simulink, and simulation telemetry streams back to the dashboard within milliseconds.",
     category: "Real-time / Control",
@@ -278,7 +278,7 @@ export const projects: Project[] = [
     ],
     techBadges: ["TypeScript", "React", "Vite", "PostgreSQL", "Express", "REST API"],
     highlights: [
-      "Full-stack event registration system with real-time validation",
+      "Full-stack event registration platform with real-time validation",
       "Responsive design optimized for mobile registration flow",
       "Participant dashboard with registration confirmation and tracking",
       "Admin contact management and email notification system",

@@ -59,11 +59,11 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
            >
-  Building hardware that talks to the real world —{" "}
-  <span className="text-foreground font-medium">
-    Embedded Systems · Industrial IoT · PCB Design
-  </span>
-  {" "}· Automation · Full‑Stack
+Building hardware that talks to the real world —{" "}
+   <span className="text-foreground font-medium">
+     Embedded Systems · Industrial IoT · PCB Design
+   </span>
+   {" "}· Automation · Real-Time Systems
 </motion.p>
 
             <motion.div

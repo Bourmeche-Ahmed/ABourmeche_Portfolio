@@ -119,7 +119,7 @@ STEP'ACT 2026 is a comprehensive event registration and management platform for 
 React SPA + Vite ↔ Express API ↔ PostgreSQL Database
 
 ### Key Highlights
-- Full-stack event registration system with real-time validation
+- Real-time event registration platform with real-time validation
 - Responsive design optimized for mobile registration flow
 - Participant dashboard with registration confirmation and tracking
 - Admin contact management and email notification system
@@ -252,7 +252,7 @@ Strengthened SCSS component system design skills and gained practical experience
 **Tech Stack:** STM32, Embedded C, KiCad, SolidWorks, IoT, PCB Design, ESP32, UART
 
 ### Overview
-Designed and built from scratch as a 4th-year end-of-year engineering project at INSAT. The robot navigates autonomously in an unknown environment using fused redundant sensor input, an embedded finite state machine, and a custom hardware stack.
+Designed and built from scratch as a 4th-year end-of-year engineering project at INSAT. The robot navigates autonomously in an unknown environment using fused redundant sensor input, an embedded finite state machine, and a custom hardware platform.
 
 ### Architecture
 STM32 Firmware (FSM + PWM/PID) ↔ Sensor Fusion Layer ↔ Custom PCB + Actuators ↔ ESP32 UART/WiFi Bridge ↔ Web Dashboard
@@ -276,7 +276,7 @@ Strengthened end-to-end embedded system engineering: STM32 low-level peripherals
 - Sensor-fusion-based obstacle confidence decisions
 - Finite state machine motion planner
 - PWM motor speed control with optional PID regulation
-- Custom PCB hardware stack
+- Hardware stack with custom PCB for motor/sensor/power management
 - Optional IoT telemetry dashboard
 
 ---

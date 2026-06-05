@@ -67,7 +67,7 @@ export function AboutSection() {
             <span className="text-foreground font-medium">
               React/TypeScript dashboards
             </span>
-            . That full-stack reach lets me build systems where every layer actually talks to every other.
+            . That hardware-to-cloud integration lets me build systems where every layer actually talks to every other.
           </p>
           <p>
             On the embedded side, I've designed industrial IoT nodes integrating RS485, NB-IoT, LoRa, and CAN — writing firmware in C under ESP-IDF for sensor acquisition, anomaly detection, and long-range telemetry. On the web side, I've built PID control dashboards synchronized live with{" "}

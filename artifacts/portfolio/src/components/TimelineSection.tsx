@@ -6,7 +6,7 @@ const timelineItems = [
     period: "2024 — Present",
     title: "Real-time Control Dashboard Development",
     description:
-      "Built a full-stack PID control system with React, Flask, and MATLAB Simulink digital twin — enabling live parameter tuning and signal visualization for engineering applications.",
+      "Built a PID control system with React, Flask, and MATLAB Simulink digital twin — enabling live parameter tuning and signal visualization for engineering applications.",
     tags: ["React", "Flask", "MATLAB", "WebSocket"],
     dot: "bg-cyan-400",
   },
