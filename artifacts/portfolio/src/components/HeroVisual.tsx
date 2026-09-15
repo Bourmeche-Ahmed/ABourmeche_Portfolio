@@ -3,34 +3,34 @@ import { useState, useRef } from "react";
 
 const float = {
   y: [0, -10, 0],
-  transition: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+  transition: { duration: 4, repeat: Infinity, ease: "easeInOut" as const },
 };
 
 const blink = {
   scaleY: [1, 0.08, 1, 1, 1],
-  transition: { duration: 3.5, repeat: Infinity, ease: "easeInOut", times: [0, 0.15, 0.3, 0.6, 1] },
+  transition: { duration: 3.5, repeat: Infinity, ease: "easeInOut" as const, times: [0, 0.15, 0.3, 0.6, 1] },
 };
 
 const pulse = {
   opacity: [0.4, 1, 0.4],
   scale: [0.95, 1.05, 0.95],
-  transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+  transition: { duration: 2, repeat: Infinity, ease: "easeInOut" as const },
 };
 
 const orbitA = {
   rotate: [0, 360],
-  transition: { duration: 14, repeat: Infinity, ease: "linear" },
+  transition: { duration: 14, repeat: Infinity, ease: "linear" as const },
 };
 
 const orbitB = {
   rotate: [360, 0],
-  transition: { duration: 9, repeat: Infinity, ease: "linear" },
+  transition: { duration: 9, repeat: Infinity, ease: "linear" as const },
 };
 
 const glowPulse = {
   opacity: [0.15, 0.35, 0.15],
   scale: [1, 1.12, 1],
-  transition: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+  transition: { duration: 3, repeat: Infinity, ease: "easeInOut" as const },
 };
 
 const BADGES = [

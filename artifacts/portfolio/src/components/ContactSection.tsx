@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Download, Copy, Check, ExternalLink } from "lucide-react";
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
-import { ASSET_PATHS } from "@/lib/paths";
+import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
 import { copyToClipboard } from "@/lib/utils";
 
 const TARGET_EMAIL = "ahmed.bourmeche@insat.ucar.tn";
