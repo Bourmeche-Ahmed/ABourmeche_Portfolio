@@ -21,35 +21,58 @@ export function getAssetPath(path: string): string {
  * Common asset paths
  */
 export const ASSET_PATHS = {
-  cv: () => getAssetPath('cv/Ahmed_BOURMECHE_RESUME.pdf'),
-  cvFallback: () => getAssetPath('Ahmed_BOURMECHE_RESUME.pdf'),
+  cv: () => getAssetPath('cv/Ahmed_Bourmeche_RESUME.pdf'),
+  cvUpper: () => getAssetPath('cv/Ahmed_BOURMECHE_RESUME.pdf'),
+  cvRoot: () => getAssetPath('Ahmed_BOURMECHE_RESUME.pdf'),
+  cvRootAlt: () => getAssetPath('Ahmed_Bourmeche_RESUME.pdf'),
   photo: () => getAssetPath('ABourmeche.jpeg'),
 } as const;
 
 /**
- * Robust programmatic resume downloader that fetches the binary blob
+ * Robust programmatic resume downloader that verifies the binary PDF header
  * and triggers a native browser file save with exact filename
  */
 export async function triggerResumeDownload(e?: React.MouseEvent) {
   if (e) e.preventDefault();
-  const pdfUrl = ASSET_PATHS.cv();
-  try {
-    const res = await fetch(pdfUrl);
-    if (!res.ok) {
-      // Try fallback URL in root public
-      const fallbackUrl = ASSET_PATHS.cvFallback();
-      const fallbackRes = await fetch(fallbackUrl);
-      if (!fallbackRes.ok) throw new Error('Asset fetch failed');
-      const blob = await fallbackRes.blob();
+
+  const candidateUrls = [
+    ASSET_PATHS.cv(),
+    ASSET_PATHS.cvUpper(),
+    ASSET_PATHS.cvRoot(),
+    ASSET_PATHS.cvRootAlt(),
+    './cv/Ahmed_Bourmeche_RESUME.pdf',
+    './cv/Ahmed_BOURMECHE_RESUME.pdf',
+    './Ahmed_BOURMECHE_RESUME.pdf',
+    './Ahmed_Bourmeche_RESUME.pdf',
+  ];
+
+  for (const url of candidateUrls) {
+    try {
+      const res = await fetch(url, { cache: 'no-cache' });
+      if (!res.ok) continue;
+
+      const contentType = res.headers.get('content-type') || '';
+      // If server returned HTML fallback (SPA 404), skip it
+      if (contentType.includes('text/html')) continue;
+
+      const blob = await res.blob();
+      // Verify minimum size for real PDF (avoid corrupted 1-2kb HTML responses)
+      if (blob.size < 5000) continue;
+
+      // Verify PDF magic header %PDF
+      const headerBuffer = await blob.slice(0, 5).text();
+      if (!headerBuffer.startsWith('%PDF')) continue;
+
       downloadBlob(blob, 'Ahmed_Bourmeche_RESUME.pdf');
-      return;
+      return true;
+    } catch {
+      // Continue to next candidate
     }
-    const blob = await res.blob();
-    downloadBlob(blob, 'Ahmed_Bourmeche_RESUME.pdf');
-  } catch (err) {
-    console.warn('Blob download fallback, opening direct URL:', err);
-    window.open(pdfUrl, '_blank');
   }
+
+  // Fallback: open directly in new tab
+  window.open(ASSET_PATHS.cv(), '_blank');
+  return false;
 }
 
 function downloadBlob(blob: Blob, filename: string) {
@@ -57,11 +80,12 @@ function downloadBlob(blob: Blob, filename: string) {
   const link = document.createElement('a');
   link.href = blobUrl;
   link.download = filename;
+  link.setAttribute('download', filename);
   link.style.display = 'none';
   document.body.appendChild(link);
   link.click();
   setTimeout(() => {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(blobUrl);
-  }, 100);
+  }, 300);
 }

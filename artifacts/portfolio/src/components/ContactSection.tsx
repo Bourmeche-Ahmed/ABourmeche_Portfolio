@@ -43,28 +43,33 @@ export function ContactSection() {
     // If EmailJS credentials exist, transmit via EmailJS service
     if (EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
       try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          to_email: TARGET_EMAIL,
-          email_to: TARGET_EMAIL,
-          recipient: TARGET_EMAIL,
-          user_email: TARGET_EMAIL,
-          to_name: "Ahmed Bourmeche",
-          from_name: form.name,
-          from_email: form.email,
-          message: form.message,
-          reply_to: form.email,
-        });
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            to_email: TARGET_EMAIL,
+            email_to: TARGET_EMAIL,
+            recipient: TARGET_EMAIL,
+            user_email: TARGET_EMAIL,
+            to_name: "Ahmed Bourmeche",
+            from_name: form.name,
+            from_email: form.email,
+            message: form.message,
+            reply_to: form.email,
+          },
+          EMAILJS_PUBLIC_KEY
+        );
 
         setSubmitted(true);
         setForm({ name: "", email: "", message: "" });
         setTimeout(() => setSubmitted(false), 5000);
-      } catch (err) {
+      } catch (err: any) {
         console.error("EmailJS Error:", err);
-        // Fallback directly to mailto
+        const errDetail = err?.text || err?.message || "";
+        setError(
+          `Email service notification: ${errDetail ? `"${errDetail}"` : "Service unreachable"}. Opening direct email to ${TARGET_EMAIL}...`
+        );
         window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
-        setSubmitted(true);
-        setForm({ name: "", email: "", message: "" });
-        setTimeout(() => setSubmitted(false), 5000);
       } finally {
         setLoading(false);
       }
@@ -119,13 +124,15 @@ export function ContactSection() {
               </p>
               
               <div className="pt-2 flex flex-col gap-2">
-                <button
+                <a
+                  href={ASSET_PATHS.cv()}
+                  download="Ahmed_Bourmeche_RESUME.pdf"
                   onClick={triggerResumeDownload}
-                  className="btn-primary w-full text-center inline-flex items-center justify-center gap-2"
+                  className="btn-primary w-full text-center inline-flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Download className="w-4 h-4 text-signal" />
                   <span>Download Resume (PDF)</span>
-                </button>
+                </a>
 
                 <button
                   onClick={handleCopyEmail}

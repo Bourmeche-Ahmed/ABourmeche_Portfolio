@@ -53,13 +53,15 @@ export function HeroSection() {
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
-              <button
+              <a
+                href={ASSET_PATHS.cv()}
+                download="Ahmed_Bourmeche_RESUME.pdf"
                 onClick={triggerResumeDownload}
-                className="btn-secondary inline-flex items-center gap-1.5"
+                className="btn-secondary inline-flex items-center gap-1.5 cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5 text-signal" />
                 <span>Download Resume</span>
-              </button>
+              </a>
             </div>
 
             {/* Spec tags */}
