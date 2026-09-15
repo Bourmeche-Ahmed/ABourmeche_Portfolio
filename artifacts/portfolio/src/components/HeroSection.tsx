@@ -1,96 +1,113 @@
-import { useState, useEffect } from "react";
 import { smoothScrollTo } from "@/lib/utils";
 import { ASSET_PATHS } from "@/lib/paths";
+import { Download, ArrowRight, Mail, Sparkles } from "lucide-react";
 
 export function HeroSection() {
-  const [mounted, setMounted] = useState(false);
-  const [isReducedMotion, setIsReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setIsReducedMotion(mediaQuery.matches);
-
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 50);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <section id="home" className="pt-28 pb-16 border-b border-rule">
+    <section id="home" className="pt-24 sm:pt-28 pb-16 sm:pb-20 border-b border-rule">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="max-w-3xl">
-          {/* Availability line */}
-          <div className="flex items-center gap-2.5 mb-6 text-sm text-ink-soft font-sans">
-            <span
-              className="w-2.5 h-2.5 bg-signal shrink-0 rounded-[2px]"
-              aria-hidden="true"
-            />
-            <span>
-              Available for a final-year internship (PFE) from February 2027 · open to relocation
-            </span>
-          </div>
-
-          {/* Name */}
-          <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink mb-3 leading-[1.05]">
-            Ahmed Bourmeche
-          </h1>
-
-          {/* Role / Positioning */}
-          <p className="font-sans text-lg sm:text-xl text-ink-soft leading-relaxed mb-8 max-w-2xl">
-            Industrial Automation, Embedded Systems & Industrial IoT Engineer.
-            Building field-configurable edge gateways, bare-metal firmware, Modbus/RS-485 networks, and real-time control stacks.
-          </p>
-
-          {/* Actions */}
-          <div className="flex flex-wrap items-center gap-3 mb-10">
-            <button
-              onClick={() => smoothScrollTo("contact")}
-              className="btn-primary"
-            >
-              Contact
-            </button>
-            <button
-              onClick={() => smoothScrollTo("projects")}
-              className="btn-secondary"
-            >
-              Projects
-            </button>
-            <a
-              href={ASSET_PATHS.cv()}
-              download="Ahmed_Bourmeche_RESUME.pdf"
-              className="btn-secondary no-custom-link"
-            >
-              Download CV
-            </a>
-          </div>
-
-          {/* Measured Stat Centerpiece */}
-          <div className="border border-rule bg-panel-raised p-5 sm:p-6 rounded-[2px] mt-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm font-sans mb-3">
-              <span className="text-ink font-medium">RS-485 polling cycle, per device</span>
-              <span className="font-mono text-xs sm:text-sm">
-                <span className="text-ink-soft mr-2">4.5 s</span>
-                <span className="text-ink-soft mr-2 font-sans font-normal">→</span>
-                <span className="text-signal font-semibold">350 ms</span>
-                <span className="text-ink-soft ml-1.5">(13x)</span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column: Bio & Core Info */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Availability line */}
+            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 bg-signal/10 border border-signal/30 rounded-[2px] text-xs sm:text-sm font-sans text-ink">
+              <span
+                className="w-2 h-2 bg-signal shrink-0 rounded-[1px] animate-pulse"
+                aria-hidden="true"
+              />
+              <span className="font-medium">
+                Seeking Final-Year Engineering Internship (PFE) — Feb 2027
               </span>
             </div>
 
-            <div className="w-full h-3 bg-panel-sunk border border-rule relative overflow-hidden rounded-[2px]">
-              <div
-                className="h-full bg-signal"
-                style={{
-                  width: isReducedMotion ? "7.8%" : mounted ? "7.8%" : "100%",
-                  transition: isReducedMotion ? "none" : "width 900ms cubic-bezier(0.16, 1, 0.3, 1)",
-                }}
-              />
+            {/* Name */}
+            <div>
+              <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink leading-[1.02]">
+                Ahmed Bourmeche
+              </h1>
+              <p className="font-sans text-lg sm:text-xl text-signal font-semibold mt-2">
+                Industrial Automation, Embedded Systems & Industrial IoT Engineer
+              </p>
             </div>
 
-            <div className="flex justify-between text-[11px] font-mono text-ink-soft mt-2">
-              <span>Unoptimized polling baseline (4.5 s)</span>
-              <span>Dynamic register pruning (350 ms)</span>
+            {/* Concise positioning */}
+            <p className="font-sans text-sm sm:text-base text-ink-soft leading-relaxed max-w-xl">
+              Engineering bare-metal firmware in C (<span className="text-ink font-medium">ESP-IDF, STM32</span>), multi-protocol edge gateways (<span className="text-ink font-medium">Modbus RTU, RS-485, BACnet, OCPP, MQTT</span>), closed-loop control systems, and real-time operator dashboards.
+            </p>
+
+            {/* Actions */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <button
+                onClick={() => smoothScrollTo("contact")}
+                className="btn-primary"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>Contact Me</span>
+              </button>
+
+              <button
+                onClick={() => smoothScrollTo("projects")}
+                className="btn-secondary"
+              >
+                <span>View Projects</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+
+              <a
+                href={ASSET_PATHS.cv()}
+                download="Ahmed_Bourmeche_RESUME.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary no-custom-link inline-flex items-center gap-1.5"
+              >
+                <Download className="w-3.5 h-3.5 text-signal" />
+                <span>Download Resume</span>
+              </a>
+            </div>
+
+            {/* Spec tags */}
+            <div className="pt-2 flex flex-wrap gap-1.5 text-xs font-mono text-ink-soft">
+              <span className="tech-chip text-[11px] py-0.5 px-2">INSAT Engineering</span>
+              <span className="tech-chip text-[11px] py-0.5 px-2">Embedded C / ESP-IDF</span>
+              <span className="tech-chip text-[11px] py-0.5 px-2">RS-485 & Modbus</span>
+              <span className="tech-chip text-[11px] py-0.5 px-2">MATLAB / Simulink</span>
+              <span className="tech-chip text-[11px] py-0.5 px-2">TypeScript & Python</span>
+            </div>
+          </div>
+
+          {/* Right Column: Hero Profile Picture Frame */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="w-full max-w-[290px] border border-rule bg-panel-raised p-3 rounded-[2px] shadow-sm">
+              {/* Top status bar */}
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-rule font-mono text-[10px] text-ink-soft">
+                <span className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-signal rounded-[1px]" />
+                  <span>SYS.ID // A_BOURMECHE</span>
+                </span>
+                <span className="text-signal font-semibold">ONLINE</span>
+              </div>
+
+              {/* Photo Frame */}
+              <div className="border border-rule overflow-hidden rounded-[2px] bg-panel-sunk relative">
+                <img
+                  src={ASSET_PATHS.photo()}
+                  alt="Ahmed Bourmeche"
+                  className="w-full h-auto object-cover contrast-105"
+                />
+              </div>
+
+              {/* Caption */}
+              <div className="pt-3 text-center">
+                <p className="font-heading font-bold text-lg text-ink tracking-wide">
+                  AHMED BOURMECHE
+                </p>
+                <p className="font-mono text-xs text-signal font-medium">
+                  INSAT · University of Carthage
+                </p>
+                <p className="font-sans text-[11px] text-ink-soft mt-0.5">
+                  Industrial Automation & Real-Time IoT
+                </p>
+              </div>
             </div>
           </div>
         </div>

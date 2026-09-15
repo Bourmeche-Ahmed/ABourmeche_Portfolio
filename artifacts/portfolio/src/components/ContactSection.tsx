@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
-import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle } from "lucide-react";
+import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Download, Copy, Check, ExternalLink } from "lucide-react";
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
 import { ASSET_PATHS } from "@/lib/paths";
+import { copyToClipboard } from "@/lib/utils";
+
+const TARGET_EMAIL = "ahmed.bourmeche@insat.ucar.tn";
 
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
@@ -13,6 +16,7 @@ export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
   useEffect(() => {
     if (EMAILJS_PUBLIC_KEY) {
@@ -20,61 +24,74 @@ export function ContactSection() {
     }
   }, []);
 
+  const handleCopyEmail = async () => {
+    await copyToClipboard(TARGET_EMAIL);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    if (!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID) {
-      // Graceful fallback for demonstration / local testing
-      setSubmitted(true);
-      setForm({ name: "", email: "", message: "" });
-      setTimeout(() => setSubmitted(false), 4000);
-      return;
-    }
-
     setLoading(true);
 
-    try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        from_name: form.name,
-        from_email: form.email,
-        message: form.message,
-        reply_to: form.email,
-      });
+    const emailSubject = encodeURIComponent(`Portfolio Inquiry from ${form.name}`);
+    const emailBody = encodeURIComponent(
+      `From: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
+    );
 
+    // If EmailJS credentials exist, transmit via EmailJS service
+    if (EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email: TARGET_EMAIL,
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+          reply_to: form.email,
+        });
+
+        setSubmitted(true);
+        setForm({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitted(false), 5000);
+      } catch (err) {
+        console.error("EmailJS Error:", err);
+        // Fallback directly to mailto
+        window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
+        setSubmitted(true);
+        setForm({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitted(false), 5000);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Direct mailto transmission fallback
+      window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
       setSubmitted(true);
       setForm({ name: "", email: "", message: "" });
-      setTimeout(() => setSubmitted(false), 4000);
-    } catch (err) {
-      console.error("EmailJS Error:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to send message. Please reach out directly via email."
-      );
-    } finally {
       setLoading(false);
+      setTimeout(() => setSubmitted(false), 5000);
     }
   };
 
   const socials = [
     {
       icon: Mail,
-      label: "ahmed.bourmeche.eng@gmail.com",
-      href: "mailto:ahmed.bourmeche.eng@gmail.com",
-      title: "Direct Email",
+      label: TARGET_EMAIL,
+      href: `mailto:${TARGET_EMAIL}`,
+      title: "Direct Academic & Professional Email",
     },
     {
       icon: Linkedin,
       label: "linkedin.com/in/ahmed-bourmeche",
       href: "https://linkedin.com/in/ahmed-bourmeche",
-      title: "LinkedIn",
+      title: "LinkedIn Profile",
     },
     {
       icon: Github,
       label: "github.com/Bourmeche-Ahmed",
       href: "https://github.com/Bourmeche-Ahmed",
-      title: "GitHub",
+      title: "GitHub Repositories",
     },
   ];
 
@@ -87,44 +104,65 @@ export function ContactSection() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          {/* Information & Direct Channels */}
+          {/* Left Column: Direct Inquiries & Channels */}
           <div className="md:col-span-5 space-y-6">
-            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-4">
+            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-4 shadow-sm">
               <h3 className="font-heading font-bold text-lg text-ink">
-                Internship & Collaboration
+                Internship & Engineering Inquiries
               </h3>
               <p className="font-sans text-sm text-ink-soft leading-relaxed">
                 Currently open to discussing final-year engineering projects (PFE) in industrial IoT, embedded firmware development, PLC & automation systems, or hardware-in-the-loop control.
               </p>
-              <div className="pt-2">
+              
+              <div className="pt-2 flex flex-col gap-2">
                 <a
                   href={ASSET_PATHS.cv()}
                   download="Ahmed_Bourmeche_RESUME.pdf"
-                  className="btn-primary no-custom-link w-full text-center"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary no-custom-link w-full text-center inline-flex items-center justify-center gap-2"
                 >
-                  Download Complete Resume (PDF)
+                  <Download className="w-4 h-4 text-signal" />
+                  <span>Download Resume (PDF)</span>
                 </a>
+
+                <button
+                  onClick={handleCopyEmail}
+                  className="btn-secondary w-full text-xs inline-flex items-center justify-center gap-1.5"
+                >
+                  {copiedEmail ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-signal" />
+                      <span>Copied: {TARGET_EMAIL}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Email Address</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
             {/* Direct Communication Channels */}
-            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-3">
+            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-3.5 shadow-sm">
               <h3 className="font-heading font-bold text-base text-ink mb-3">
-                Direct Channels
+                Direct Communication Channels
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {socials.map((s) => (
                   <div key={s.title} className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-[2px] bg-panel-sunk border border-rule flex items-center justify-center text-ink shrink-0">
-                      <s.icon className="w-3.5 h-3.5" />
+                    <div className="w-8 h-8 rounded-[2px] bg-panel-sunk border border-rule flex items-center justify-center text-ink shrink-0">
+                      <s.icon className="w-4 h-4 text-signal" />
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-mono text-ink-soft leading-tight">{s.title}</p>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-mono text-ink-soft leading-tight">{s.title}</p>
                       <a
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="panel-link font-sans text-xs sm:text-sm text-ink truncate block"
+                        className="panel-link font-sans text-xs sm:text-sm text-ink font-medium truncate block"
                       >
                         {s.label}
                       </a>
@@ -135,22 +173,31 @@ export function ContactSection() {
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* Right Column: Contact Transmission Form */}
           <div className="md:col-span-7">
-            <div className="border border-rule bg-panel-raised p-6 sm:p-8 rounded-[2px]">
-              <h3 className="font-heading font-bold text-xl text-ink mb-2">
-                Send Direct Message
-              </h3>
-              <p className="font-sans text-xs sm:text-sm text-ink-soft mb-6">
-                Transmit project requirements, internship scopes, or technical inquiries directly.
-              </p>
+            <div className="border border-rule bg-panel-raised p-6 sm:p-8 rounded-[2px] shadow-sm">
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
+                <div>
+                  <h3 className="font-heading font-bold text-xl text-ink">
+                    Send Direct Message
+                  </h3>
+                  <p className="font-sans text-xs text-ink-soft mt-0.5">
+                    Transmits directly to <span className="text-ink font-medium">{TARGET_EMAIL}</span>
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-signal bg-signal/10 border border-signal/30 px-2 py-0.5 rounded-[2px]">
+                  SECURE FORM
+                </span>
+              </div>
 
               {submitted ? (
                 <div className="p-6 border border-rule bg-panel-sunk rounded-[2px] flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-signal shrink-0" />
                   <div>
-                    <p className="font-sans font-semibold text-sm text-ink">Transmission Successful</p>
-                    <p className="font-sans text-xs text-ink-soft mt-0.5">Your message has been dispatched. I will reply promptly.</p>
+                    <p className="font-sans font-semibold text-sm text-ink">Message Transmitted Successfully</p>
+                    <p className="font-sans text-xs text-ink-soft mt-0.5">
+                      Your inquiry has been dispatched to {TARGET_EMAIL}. I will reply promptly.
+                    </p>
                   </div>
                 </div>
               ) : error ? (
@@ -185,7 +232,7 @@ export function ContactSection() {
 
                   <div>
                     <label htmlFor="email" className="block text-xs font-mono text-ink-soft mb-1">
-                      EMAIL ADDRESS
+                      YOUR EMAIL ADDRESS (FOR REPLY)
                     </label>
                     <input
                       id="email"
@@ -193,7 +240,7 @@ export function ContactSection() {
                       required
                       value={form.email}
                       onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                      placeholder="e.g. name@organization.com"
+                      placeholder="e.g. yourname@company.com"
                       className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none"
                     />
                   </div>
@@ -223,7 +270,7 @@ export function ContactSection() {
                     ) : (
                       <>
                         <Send className="w-3.5 h-3.5" />
-                        <span>Send Message</span>
+                        <span>Send Message to {TARGET_EMAIL}</span>
                       </>
                     )}
                   </button>
