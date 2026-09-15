@@ -44,6 +44,9 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+    watch: {
+      ignored: ["**/*.pdf"],
+    },
   },
   preview: {
     port,
