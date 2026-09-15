@@ -7,7 +7,7 @@ import { copyToClipboard } from "@/lib/utils";
 
 const TARGET_EMAIL = "ahmed.bourmeche@insat.ucar.tn";
 
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "zpQNPM_pbxbkZxhcA";
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "CttQF4TAsxgsNuuOg";
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_l6rmlzb";
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_2364qte";
 
