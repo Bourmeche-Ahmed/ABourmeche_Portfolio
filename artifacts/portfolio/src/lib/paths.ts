@@ -18,13 +18,12 @@ export function getAssetPath(path: string): string {
 }
 
 /**
- * Common asset paths
+ * Common asset paths (exact disk & git file names)
  */
 export const ASSET_PATHS = {
-  cv: () => getAssetPath('cv/Ahmed_Bourmeche_RESUME.pdf'),
-  cvUpper: () => getAssetPath('cv/Ahmed_BOURMECHE_RESUME.pdf'),
+  cv: () => getAssetPath('cv/Ahmed_BOURMECHE_RESUME.pdf'),
   cvRoot: () => getAssetPath('Ahmed_BOURMECHE_RESUME.pdf'),
-  cvRootAlt: () => getAssetPath('Ahmed_Bourmeche_RESUME.pdf'),
+  cvCamel: () => getAssetPath('cv/Ahmed_Bourmeche_RESUME.pdf'),
   photo: () => getAssetPath('ABourmeche.jpeg'),
 } as const;
 
@@ -37,13 +36,11 @@ export async function triggerResumeDownload(e?: React.MouseEvent) {
 
   const candidateUrls = [
     ASSET_PATHS.cv(),
-    ASSET_PATHS.cvUpper(),
     ASSET_PATHS.cvRoot(),
-    ASSET_PATHS.cvRootAlt(),
-    './cv/Ahmed_Bourmeche_RESUME.pdf',
+    ASSET_PATHS.cvCamel(),
     './cv/Ahmed_BOURMECHE_RESUME.pdf',
     './Ahmed_BOURMECHE_RESUME.pdf',
-    './Ahmed_Bourmeche_RESUME.pdf',
+    './cv/Ahmed_Bourmeche_RESUME.pdf',
   ];
 
   for (const url of candidateUrls) {
@@ -55,15 +52,17 @@ export async function triggerResumeDownload(e?: React.MouseEvent) {
       // If server returned HTML fallback (SPA 404), skip it
       if (contentType.includes('text/html')) continue;
 
-      const blob = await res.blob();
+      const rawBlob = await res.blob();
       // Verify minimum size for real PDF (avoid corrupted 1-2kb HTML responses)
-      if (blob.size < 5000) continue;
+      if (rawBlob.size < 5000) continue;
 
       // Verify PDF magic header %PDF
-      const headerBuffer = await blob.slice(0, 5).text();
+      const headerBuffer = await rawBlob.slice(0, 5).text();
       if (!headerBuffer.startsWith('%PDF')) continue;
 
-      downloadBlob(blob, 'Ahmed_Bourmeche_RESUME.pdf');
+      // Wrap in explicit application/pdf blob
+      const pdfBlob = new Blob([rawBlob], { type: 'application/pdf' });
+      downloadBlob(pdfBlob, 'Ahmed_Bourmeche_RESUME.pdf');
       return true;
     } catch {
       // Continue to next candidate
@@ -87,5 +86,5 @@ function downloadBlob(blob: Blob, filename: string) {
   setTimeout(() => {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(blobUrl);
-  }, 300);
+  }, 60000);
 }
