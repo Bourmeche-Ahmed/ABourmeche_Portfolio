@@ -36,8 +36,8 @@ export function Footer() {
             ))}
           </nav>
 
-          <p className="font-mono text-xs text-ink-soft">
-            © {new Date().getFullYear()} · Instrument Panel Architecture
+          <p className="font-sans text-xs text-ink-soft">
+            © {new Date().getFullYear()} Ahmed Bourmeche · All Rights Reserved
           </p>
         </div>
       </div>
