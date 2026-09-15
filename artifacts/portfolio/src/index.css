@@ -4,155 +4,152 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.6%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.6%;
-    --card-border: 0 0% 88.6%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.6%;
-    --popover-border: 0 0% 88.6%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 9.0%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 88.6%;
-    --input: 0 0% 88.6%;
-    --ring: 0 0% 3.6%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --panel: #f4f6f8;
+    --panel-sunk: #e5e9f0;
+    --panel-raised: #ffffff;
+    --ink: #0f172a;
+    --ink-soft: #475569;
+    --rule: #cbd5e1;
+    --signal: #d97706;
+    --signal-tint: #fef3c7;
+    --telemetry: #0284c7;
+    --hardware: #ea580c;
+    --radius: 2px;
+    --hair: 1px solid var(--rule);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --card-border: 217.2 32.6% 17.5%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --popover-border: 217.2 32.6% 17.5%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.3% 65.1%;
-    --accent: 210 40% 98%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --panel: #0b0f17;
+    --panel-sunk: #151d2a;
+    --panel-raised: #111827;
+    --ink: #f8fafc;
+    --ink-soft: #94a3b8;
+    --rule: #1e293b;
+    --signal: #f59e0b;
+    --signal-tint: #451a03;
+    --telemetry: #38bdf8;
+    --hardware: #f97316;
+    --radius: 2px;
+    --hair: 1px solid var(--rule);
+  }
+
+  *, *::before, *::after {
+    box-shadow: none !important;
   }
 
   html {
     scroll-behavior: smooth;
+    background-color: var(--panel);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", sans-serif;
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--panel);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Saira Condensed", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--signal) !important;
+    outline-offset: 2px !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Instrument panel link styling */
+  .panel-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .panel-link:hover {
+    color: var(--signal);
+    text-decoration-color: var(--signal);
   }
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  /* Primary CTA */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background-color: var(--ink);
+    color: var(--panel);
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
-  @keyframes slide-in-from-left {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+  /* Secondary Button */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background-color: var(--panel-raised);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    border: var(--hair);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-secondary:hover {
+    background-color: var(--panel-sunk);
+    border-color: var(--ink-soft);
   }
 
-  .animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out;
+  /* Rectangular Tag Chip */
+  .tech-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.8125rem;
+    color: var(--ink);
+    background-color: var(--panel-sunk);
+    border: var(--hair);
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease;
   }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out;
-  }
-
-  .animate-slide-in-left {
-    animation: slide-in-from-left 0.5s ease-out;
-  }
-}
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-
-
-@layer components {
-  /* Custom animations */
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slide-in-from-left {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out;
-  }
-
-  .animate-slide-in-left {
-    animation: slide-in-from-left 0.5s ease-out;
+  .tech-chip:hover {
+    border-color: var(--ink-soft);
   }
 }
-

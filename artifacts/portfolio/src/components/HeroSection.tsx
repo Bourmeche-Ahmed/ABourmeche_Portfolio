@@ -1,149 +1,99 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { ChevronDown, ExternalLink, ArrowRight } from "lucide-react";
-import { CircuitHero } from "./CircuitHero";
+import { useState, useEffect } from "react";
 import { smoothScrollTo } from "@/lib/utils";
-import { MagneticButton } from "./MagneticButton";
 import { ASSET_PATHS } from "@/lib/paths";
 
 export function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setIsReducedMotion(mediaQuery.matches);
+
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex items-center overflow-hidden"
-    >
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(34,211,238,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(34,211,238,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -z-10 pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-cyan-500/8 rounded-full blur-3xl -z-10 pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 w-full pt-24 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 mb-6"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-xs text-cyan-400 font-medium">
-                Available for opportunities
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-5"
-            >
-              Ahmed{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-                BOURMECHE
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
-           >
-Building hardware that talks to the real world —{" "}
-   <span className="text-foreground font-medium">
-     Embedded Systems · Industrial IoT · PCB Design
-   </span>
-   {" "}· Automation · Real-Time Systems
-</motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap gap-3"
-            >
-              <MagneticButton
-                variant="primary"
-                onClick={() => smoothScrollTo("projects")}
-              >
-                View Projects <ArrowRight className="w-4 h-4" />
-              </MagneticButton>
-              <MagneticButton
-                variant="outline"
-                onClick={() => smoothScrollTo("contact")}
-              >
-                Contact
-              </MagneticButton>
-              <a
-                href={ASSET_PATHS.cv()}
-                download="Ahmed_Bourmeche_RESUME.pdf"
-                className="inline-block"
-              >
-                <motion.div
-                  className="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 cursor-pointer select-none text-muted-foreground hover:text-foreground hover:bg-white/5"
-                >
-                  <ExternalLink className="w-4 h-4" /> Download CV
-                </motion.div>
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-wrap gap-4 mt-10"
-            >
-              {[
-                ["8+", "Projects Built"],
-                ["3+", "Tech Domains"],
-                ["100%", "TypeScript Coverage"],
-              ].map(([num, label]) => (
-                <div key={label} className="text-center">
-                  <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-                    {num}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{label}</p>
-                </div>
-              ))}
-            </motion.div>
+    <section id="home" className="pt-28 pb-16 border-b border-rule">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="max-w-3xl">
+          {/* Availability line */}
+          <div className="flex items-center gap-2.5 mb-6 text-sm text-ink-soft font-sans">
+            <span
+              className="w-2.5 h-2.5 bg-signal shrink-0 rounded-[2px]"
+              aria-hidden="true"
+            />
+            <span>
+              Available for a final-year internship (PFE) from February 2027 · open to relocation
+            </span>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="flex justify-center lg:justify-end"
-          >
-            <CircuitHero />
-          </motion.div>
-        </div>
+          {/* Name */}
+          <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink mb-3 leading-[1.05]">
+            Ahmed Bourmeche
+          </h1>
 
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          onClick={() => smoothScrollTo("about")}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground hover:text-cyan-400 transition-colors"
-          aria-label="Scroll down"
-        >
-          <span className="text-[10px] uppercase tracking-widest">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="w-4 h-4" />
-          </motion.div>
-        </motion.button>
+          {/* Role / Positioning */}
+          <p className="font-sans text-lg sm:text-xl text-ink-soft leading-relaxed mb-8 max-w-2xl">
+            Industrial Automation, Embedded Systems & Industrial IoT Engineer.
+            Building field-configurable edge gateways, bare-metal firmware, Modbus/RS-485 networks, and real-time control stacks.
+          </p>
+
+          {/* Actions */}
+          <div className="flex flex-wrap items-center gap-3 mb-10">
+            <button
+              onClick={() => smoothScrollTo("contact")}
+              className="btn-primary"
+            >
+              Contact
+            </button>
+            <button
+              onClick={() => smoothScrollTo("projects")}
+              className="btn-secondary"
+            >
+              Projects
+            </button>
+            <a
+              href={ASSET_PATHS.cv()}
+              download="Ahmed_Bourmeche_RESUME.pdf"
+              className="btn-secondary no-custom-link"
+            >
+              Download CV
+            </a>
+          </div>
+
+          {/* Measured Stat Centerpiece */}
+          <div className="border border-rule bg-panel-raised p-5 sm:p-6 rounded-[2px] mt-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm font-sans mb-3">
+              <span className="text-ink font-medium">RS-485 polling cycle, per device</span>
+              <span className="font-mono text-xs sm:text-sm">
+                <span className="text-ink-soft mr-2">4.5 s</span>
+                <span className="text-ink-soft mr-2 font-sans font-normal">→</span>
+                <span className="text-signal font-semibold">350 ms</span>
+                <span className="text-ink-soft ml-1.5">(13x)</span>
+              </span>
+            </div>
+
+            <div className="w-full h-3 bg-panel-sunk border border-rule relative overflow-hidden rounded-[2px]">
+              <div
+                className="h-full bg-signal"
+                style={{
+                  width: isReducedMotion ? "7.8%" : mounted ? "7.8%" : "100%",
+                  transition: isReducedMotion ? "none" : "width 900ms cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
+              />
+            </div>
+
+            <div className="flex justify-between text-[11px] font-mono text-ink-soft mt-2">
+              <span>Unoptimized polling baseline (4.5 s)</span>
+              <span>Dynamic register pruning (350 ms)</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

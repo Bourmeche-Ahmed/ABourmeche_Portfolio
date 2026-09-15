@@ -1,9 +1,42 @@
-import { useState } from "react";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink, Cpu, Terminal, ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/projects";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
+
+const categoryStyles: Record<string, { badge: string; accent: string }> = {
+  "Embedded Systems / Robotics": {
+    badge: "bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/30",
+    accent: "bg-orange-500",
+  },
+  "Control Systems / Simulation": {
+    badge: "bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/30",
+    accent: "bg-sky-500",
+  },
+  "Real-time / Control": {
+    badge: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30",
+    accent: "bg-cyan-500",
+  },
+  "IIoT / Analytics": {
+    badge: "bg-teal-500/15 text-teal-600 dark:text-teal-400 border-teal-500/30",
+    accent: "bg-teal-500",
+  },
+  "Web Apps": {
+    badge: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/30",
+    accent: "bg-indigo-500",
+  },
+  "Browser Extension": {
+    badge: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
+    accent: "bg-emerald-500",
+  },
+  "Experimental": {
+    badge: "bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30",
+    accent: "bg-rose-500",
+  },
+  "Computer Vision / HCI": {
+    badge: "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30",
+    accent: "bg-purple-500",
+  },
+};
 
 interface ProjectCardProps {
   project: Project;
@@ -11,153 +44,111 @@ interface ProjectCardProps {
   index: number;
 }
 
-export function ProjectCard({ project, onClick, index }: ProjectCardProps) {
-  const [hovered, setHovered] = useState(false);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [4, -4]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-4, 4]), { stiffness: 300, damping: 30 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    x.set(nx);
-    y.set(ny);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-    setHovered(false);
-  };
-
-  const categoryColors: Record<string, string> = {
-    "Real-time / Control": "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
-    "IIoT / Analytics": "text-blue-400 bg-blue-500/10 border-blue-500/20",
-    "Web Apps": "text-violet-400 bg-violet-500/10 border-violet-500/20",
-    "Browser Extension": "text-green-400 bg-green-500/10 border-green-500/20",
-    "Embedded Systems / Robotics": "text-amber-400 bg-amber-500/10 border-amber-500/20",
-    "Control Systems / Simulation": "text-teal-400 bg-teal-500/10 border-teal-500/20",
-    "Computer Vision / HCI": "text-fuchsia-400 bg-fuchsia-500/10 border-fuchsia-500/20",
-    "Experimental": "text-orange-400 bg-orange-500/10 border-orange-500/20",
+export function ProjectCard({ project, onClick }: ProjectCardProps) {
+  const catStyle = categoryStyles[project.category] || {
+    badge: "bg-signal/15 text-signal border-signal/30",
+    accent: "bg-signal",
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ delay: index * 0.07, duration: 0.5 }}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={() => setHovered(true)}
+    <div
+      onClick={onClick}
+      className="group border border-rule bg-panel-raised rounded-[2px] overflow-hidden flex flex-col h-full cursor-pointer transition-all duration-200 hover:border-ink hover:shadow-sm"
     >
-      <motion.div
-        onClick={onClick}
-        className="relative group cursor-pointer rounded-2xl border bg-card/60 backdrop-blur-sm overflow-hidden h-full transition-all duration-300"
-        animate={{
-          borderColor: hovered ? "rgba(34,211,238,0.35)" : "rgba(255,255,255,0.08)",
-          boxShadow: hovered
-            ? "0 0 30px rgba(34,211,238,0.1), 0 8px 32px rgba(0,0,0,0.2)"
-            : "0 2px 8px rgba(0,0,0,0.1)",
-        }}
-      >
-        {hovered && (
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(34,211,238,0.04) 0%, transparent 60%)",
-            }}
-          />
+      {/* Category top hairline indicator */}
+      <div className={`h-0.5 w-full ${catStyle.accent}`} />
+
+      <div className="p-5 sm:p-6 flex flex-col h-full">
+        {/* Category Badge & Architecture Label */}
+        <div className="flex items-center justify-between gap-2 mb-2.5">
+          <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${catStyle.badge}`}>
+            {project.category}
+          </span>
+          <span className="text-[10px] font-mono text-ink-soft truncate max-w-[120px]">
+            {project.repo}
+          </span>
+        </div>
+
+        {/* Project Title */}
+        <h3 className="font-heading font-bold text-xl text-ink leading-tight mb-2 group-hover:text-signal transition-colors">
+          {project.title}
+        </h3>
+
+        {/* Description */}
+        <p className="font-sans text-xs sm:text-sm text-ink-soft leading-relaxed flex-1 mb-4">
+          {project.description}
+        </p>
+
+        {/* Architecture Pipeline Snippet */}
+        {project.architecture && (
+          <div className="mb-4 px-2.5 py-1.5 bg-panel-sunk border border-rule rounded-[2px] font-mono text-[11px] text-ink truncate">
+            <span className="text-ink-soft mr-1">ARCH:</span>
+            {project.architecture}
+          </div>
         )}
 
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-        <div className="p-6 flex flex-col h-full">
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <h3 className="font-bold text-base text-foreground leading-tight group-hover:text-cyan-400 transition-colors">
-              {project.title}
-            </h3>
-            <span
-              className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                categoryColors[project.category]
-              }`}
-            >
-              {project.category}
-            </span>
+        {/* Language Breakdown Bar */}
+        <div className="mb-4 pt-3 border-t border-rule">
+          <div className="flex h-1.5 bg-panel-sunk border border-rule overflow-hidden rounded-[1px] mb-1.5">
+            {project.languages.map((lang) => (
+              <div
+                key={lang.name}
+                style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
+                title={`${lang.name}: ${lang.percentage}%`}
+              />
+            ))}
           </div>
-
-          <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">
-            {project.description}
-          </p>
-
-          <div className="mb-4">
-            <div className="flex h-1.5 rounded-full overflow-hidden gap-px">
-              {project.languages.map((lang) => (
-                <div
-                  key={lang.name}
-                  style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
-                  title={`${lang.name}: ${lang.percentage}%`}
+          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] font-mono text-ink-soft">
+            {project.languages.slice(0, 3).map((lang) => (
+              <span key={lang.name} className="flex items-center gap-1.5">
+                <span
+                  className="w-1.5 h-1.5 rounded-[1px] inline-block"
+                  style={{ backgroundColor: lang.color }}
                 />
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5">
-              {project.languages.slice(0, 3).map((lang) => (
-                <span key={lang.name} className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                  <span
-                    className="w-2 h-2 rounded-full inline-block"
-                    style={{ backgroundColor: lang.color }}
-                  />
-                  {lang.name} {lang.percentage}%
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-1.5 mb-5">
-            {project.techBadges.slice(0, 4).map((badge) => (
-              <span
-                key={badge}
-                className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-muted-foreground font-medium"
-              >
-                {badge}
+                <span className="text-ink font-medium">{lang.name}</span>
+                <span>{lang.percentage}%</span>
               </span>
             ))}
-            {project.techBadges.length > 4 && (
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-muted-foreground">
-                +{project.techBadges.length - 4}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center justify-between pt-3 border-t border-white/5">
-            <span className="text-xs text-cyan-400 font-medium group-hover:underline">
-              View Case Study →
-            </span>
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label={WEBSITE_PROJECTS.includes(project.id) ? "Go to website" : "GitHub repo"}
-            >
-              {WEBSITE_PROJECTS.includes(project.id) ? (
-                <ExternalLink className="w-3.5 h-3.5" />
-              ) : (
-                <Github className="w-3.5 h-3.5" />
-              )}
-            </a>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+
+        {/* Tech Badges */}
+        <div className="flex flex-wrap gap-1 mb-5">
+          {project.techBadges.slice(0, 4).map((badge) => (
+            <span key={badge} className="tech-chip text-[11px] py-0.5 px-2">
+              {badge}
+            </span>
+          ))}
+          {project.techBadges.length > 4 && (
+            <span className="text-[11px] font-mono text-ink-soft px-1.5 py-0.5 self-center">
+              +{project.techBadges.length - 4}
+            </span>
+          )}
+        </div>
+
+        {/* Interactive Action Footer */}
+        <div className="flex items-center justify-between pt-3 border-t border-rule mt-auto text-xs">
+          <span className="font-sans font-semibold text-ink group-hover:text-signal transition-colors inline-flex items-center gap-1">
+            <span>Case Study</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </span>
+
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="p-1.5 rounded-[2px] bg-panel-sunk hover:bg-panel border border-rule text-ink-soft hover:text-ink transition-colors no-custom-link"
+            aria-label={WEBSITE_PROJECTS.includes(project.id) ? "Go to website" : "GitHub repository"}
+          >
+            {WEBSITE_PROJECTS.includes(project.id) ? (
+              <ExternalLink className="w-3.5 h-3.5" />
+            ) : (
+              <Github className="w-3.5 h-3.5" />
+            )}
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }

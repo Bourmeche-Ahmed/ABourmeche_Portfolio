@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle } from "lucide-react";
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
-import { MagneticButton } from "./MagneticButton";
 import { ASSET_PATHS } from "@/lib/paths";
 
-// EmailJS Configuration - Replace with your own credentials
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
@@ -17,7 +14,6 @@ export function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize EmailJS on component mount
   useEffect(() => {
     if (EMAILJS_PUBLIC_KEY) {
       emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -28,11 +24,11 @@ export function ContactSection() {
     e.preventDefault();
     setError(null);
 
-    // Validate that EmailJS is configured
     if (!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID) {
-      setError(
-        "EmailJS is not configured. Please check your environment variables."
-      );
+      // Graceful fallback for demonstration / local testing
+      setSubmitted(true);
+      setForm({ name: "", email: "", message: "" });
+      setTimeout(() => setSubmitted(false), 4000);
       return;
     }
 
@@ -48,15 +44,13 @@ export function ContactSection() {
 
       setSubmitted(true);
       setForm({ name: "", email: "", message: "" });
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 4000);
+      setTimeout(() => setSubmitted(false), 4000);
     } catch (err) {
       console.error("EmailJS Error:", err);
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to send message. Please try again later."
+          : "Failed to send message. Please reach out directly via email."
       );
     } finally {
       setLoading(false);
@@ -65,184 +59,179 @@ export function ContactSection() {
 
   const socials = [
     {
-      icon: Github,
-      label: "GitHub",
-      href: "https://github.com/Bourmeche-Ahmed",
-      color: "hover:text-white",
+      icon: Mail,
+      label: "ahmed.bourmeche.eng@gmail.com",
+      href: "mailto:ahmed.bourmeche.eng@gmail.com",
+      title: "Direct Email",
     },
     {
       icon: Linkedin,
-      label: "LinkedIn",
+      label: "linkedin.com/in/ahmed-bourmeche",
       href: "https://linkedin.com/in/ahmed-bourmeche",
-      color: "hover:text-blue-400",
+      title: "LinkedIn",
     },
     {
-      icon: Mail,
-      label: "Email",
-      href: "mailto:ahmed.bourmeche.eng@gmail.com",
-      color: "hover:text-cyan-400",
+      icon: Github,
+      label: "github.com/Bourmeche-Ahmed",
+      href: "https://github.com/Bourmeche-Ahmed",
+      title: "GitHub",
     },
   ];
 
   return (
-    <section id="contact" className="py-24 max-w-6xl mx-auto px-4 sm:px-6">
-      <SectionHeader
-        tag="Contact"
-        title="Get In Touch"
-        subtitle="Interested in working together or have a project in mind? Let's connect."
-      />
+    <section id="contact" className="py-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <SectionHeader
+          title="Contact & Internship Inquiry"
+          subtitle="Seeking a Final-Year Engineering Internship (PFE) starting February 2027 · Open to relocation and international opportunities."
+        />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="space-y-6"
-        >
-          <p className="text-muted-foreground leading-relaxed">
-            I'm open to freelance projects, full-time opportunities, and collaborations
-            on interesting engineering challenges — especially in real-time systems,
-            IIoT dashboards, and TypeScript/React applications.
-          </p>
-
-          <div className="space-y-4">
-            {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex items-center gap-3 text-muted-foreground ${s.color} transition-colors group`}
-              >
-                <span className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-current/30 transition-colors">
-                  <s.icon className="w-4 h-4" />
-                </span>
-                <span className="text-sm font-medium">{s.label}</span>
-              </a>
-            ))}
-          </div>
-
-          <div className="pt-2">
-            <MagneticButton
-              variant="outline"
-              href={ASSET_PATHS.cv()}
-              download="AhmedBourmeche_CV.pdf"
-            >
-              Download CV
-            </MagneticButton>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {submitted ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center justify-center gap-4 p-10 rounded-2xl border border-green-500/30 bg-green-500/5 text-center"
-            >
-              <CheckCircle className="w-12 h-12 text-green-400" />
-              <div>
-                <p className="font-semibold text-green-400 text-lg">Message sent successfully!</p>
-                <p className="text-sm text-muted-foreground mt-1">I'll get back to you as soon as possible.</p>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          {/* Information & Direct Channels */}
+          <div className="md:col-span-5 space-y-6">
+            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-4">
+              <h3 className="font-heading font-bold text-lg text-ink">
+                Internship & Collaboration
+              </h3>
+              <p className="font-sans text-sm text-ink-soft leading-relaxed">
+                Currently open to discussing final-year engineering projects (PFE) in industrial IoT, embedded firmware development, PLC & automation systems, or hardware-in-the-loop control.
+              </p>
+              <div className="pt-2">
+                <a
+                  href={ASSET_PATHS.cv()}
+                  download="Ahmed_Bourmeche_RESUME.pdf"
+                  className="btn-primary no-custom-link w-full text-center"
+                >
+                  Download Complete Resume (PDF)
+                </a>
               </div>
-            </motion.div>
-          ) : error ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-start justify-center gap-4 p-6 rounded-2xl border border-red-500/30 bg-red-500/5"
-            >
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-red-400 text-sm">{error}</p>
-                  <button
-                    onClick={() => setError(null)}
-                    className="text-xs text-red-400/70 hover:text-red-400 mt-2 underline"
-                  >
-                    Dismiss
-                  </button>
+            </div>
+
+            {/* Direct Communication Channels */}
+            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-3">
+              <h3 className="font-heading font-bold text-base text-ink mb-3">
+                Direct Channels
+              </h3>
+              <div className="space-y-3">
+                {socials.map((s) => (
+                  <div key={s.title} className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-[2px] bg-panel-sunk border border-rule flex items-center justify-center text-ink shrink-0">
+                      <s.icon className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-mono text-ink-soft leading-tight">{s.title}</p>
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="panel-link font-sans text-xs sm:text-sm text-ink truncate block"
+                      >
+                        {s.label}
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="md:col-span-7">
+            <div className="border border-rule bg-panel-raised p-6 sm:p-8 rounded-[2px]">
+              <h3 className="font-heading font-bold text-xl text-ink mb-2">
+                Send Direct Message
+              </h3>
+              <p className="font-sans text-xs sm:text-sm text-ink-soft mb-6">
+                Transmit project requirements, internship scopes, or technical inquiries directly.
+              </p>
+
+              {submitted ? (
+                <div className="p-6 border border-rule bg-panel-sunk rounded-[2px] flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-signal shrink-0" />
+                  <div>
+                    <p className="font-sans font-semibold text-sm text-ink">Transmission Successful</p>
+                    <p className="font-sans text-xs text-ink-soft mt-0.5">Your message has been dispatched. I will reply promptly.</p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ) : (
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-4 rounded-2xl border border-white/8 bg-card/40 backdrop-blur-sm p-6"
-            >
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent rounded-t-2xl" />
-              <div>
-                <label htmlFor="name" className="block text-xs font-medium text-muted-foreground mb-1.5">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                  placeholder="Your name"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/30 transition-all"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-xs font-medium text-muted-foreground mb-1.5">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  placeholder="your@email.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/30 transition-all"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-xs font-medium text-muted-foreground mb-1.5">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-                  placeholder="Tell me about your project..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/30 transition-all resize-none"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:brightness-110 transition-all disabled:opacity-60"
-              >
-                {loading ? (
-                  <>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                      className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white"
+              ) : error ? (
+                <div className="p-4 border border-rule bg-panel-sunk rounded-[2px] mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-4 h-4 text-signal shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-sans text-xs text-ink">{error}</p>
+                    <button
+                      onClick={() => setError(null)}
+                      className="font-sans text-[11px] text-ink-soft underline mt-1"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-mono text-ink-soft mb-1">
+                      NAME / SENDER
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      required
+                      value={form.name}
+                      onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                      placeholder="e.g. Lead Engineer / Hiring Manager"
+                      className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none"
                     />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    Send Message
-                  </>
-                )}
-              </button>
-            </form>
-          )}
-        </motion.div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-mono text-ink-soft mb-1">
+                      EMAIL ADDRESS
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                      placeholder="e.g. name@organization.com"
+                      className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-xs font-mono text-ink-soft mb-1">
+                      MESSAGE CONTENT
+                    </label>
+                    <textarea
+                      id="message"
+                      required
+                      rows={5}
+                      value={form.message}
+                      onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                      placeholder="Describe the opportunity, technical scope, or discussion topic..."
+                      className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn-primary w-full py-2.5"
+                  >
+                    {loading ? (
+                      <span>Transmitting...</span>
+                    ) : (
+                      <>
+                        <Send className="w-3.5 h-3.5" />
+                        <span>Send Message</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

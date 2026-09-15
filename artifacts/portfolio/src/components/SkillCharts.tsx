@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   RadarChart,
   PolarGrid,
@@ -15,154 +14,161 @@ import {
 
 const skillGroups = [
   {
-    category: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    color: "#22d3ee",
-    icon: "⚡",
+    category: "Embedded Systems & Hardware",
+    color: "bg-orange-500",
+    badge: "border-orange-500/30 text-orange-600 dark:text-orange-400",
+    skills: ["ESP32 / ESP-IDF", "Bare-metal C", "RS-485 / Modbus RTU", "BACnet", "OCPP 1.6J/2.0.1", "NB-IoT", "LoRa", "KiCad PCB Design", "STM32"],
   },
   {
-    category: "Backend",
-    skills: ["Python", "Flask", "REST APIs", "Node.js"],
-    color: "#3b82f6",
-    icon: "🔧",
+    category: "Industrial Ingestion & Backend",
+    color: "bg-sky-500",
+    badge: "border-sky-500/30 text-sky-600 dark:text-sky-400",
+    skills: ["Python", "Django REST Framework", "Flask", "MQTT (Mosquitto)", "Telegraf", "TimescaleDB", "PostgreSQL", "Redis", "Docker Compose"],
   },
   {
-    category: "Embedded & IoT",
-    skills: ["ESP32 / ESP-IDF", "C / Bare-metal", "RS485", "NB-IoT", "LoRa", "CAN", "KiCad PCB"],
-    color: "#f97316",
-    icon: "📡",
+    category: "Control Systems & Digital Twins",
+    color: "bg-teal-500",
+    badge: "border-teal-500/30 text-teal-600 dark:text-teal-400",
+    skills: ["MATLAB", "Simulink", "Digital Twins", "Closed-loop PID Control", "Hardware-in-the-loop (HIL)", "Signal Processing"],
   },
   {
-    category: "Control & Simulation",
-    skills: ["MATLAB", "Simulink", "PID Control", "Digital Twins", "Signal Processing"],
-    color: "#8b5cf6",
-    icon: "🔁",
-  },
-  {
-    category: "IIoT / Real-time",
-    skills: ["Dashboards", "Telemetry Viz", "Anomaly Detection", "WebSockets", "Time-series"],
-    color: "#06b6d4",
-    icon: "📊",
-  },
-  {
-    category: "Tooling",
-    skills: ["Git", "Docker", "Bash/Shell", "Vite", "ESP-IDF CLI"],
-    color: "#10b981",
-    icon: "🛠",
+    category: "Real-Time Dashboards & Frontend",
+    color: "bg-indigo-500",
+    badge: "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
+    skills: ["React", "TypeScript", "Tailwind CSS", "High-frequency Telemetry Charts", "WebSockets", "Vite"],
   },
 ];
 
 const radarData = [
-  { skill: "Frontend", value: 90 },
-  { skill: "Python/Flask", value: 82 },
-  { skill: "Embedded/IoT", value: 78 },
-  { skill: "MATLAB/Simulink", value: 74 },
-  { skill: "IIoT/Real-time", value: 80 },
-  { skill: "UI/UX Design", value: 72 },
+  { skill: "Embedded / Firmware", value: 95 },
+  { skill: "Industrial Protocols", value: 92 },
+  { skill: "Edge Gateways / IoT", value: 90 },
+  { skill: "Backend / Ingestion", value: 85 },
+  { skill: "Control / Simulation", value: 82 },
+  { skill: "Web Dashboards", value: 88 },
 ];
 
 const languageData = [
-  { name: "TypeScript", value: 38, color: "#3178C6" },
-  { name: "Python", value: 26, color: "#3572A5" },
-  { name: "JavaScript", value: 18, color: "#F1E05A" },
-  { name: "C (Embedded)", value: 10, color: "#f97316" },
-  { name: "HTML/SCSS", value: 6, color: "#E44D26" },
-  { name: "Other", value: 2, color: "#6e7681" },
+  { name: "C (Embedded)", value: 40, color: "#ea580c" },
+  { name: "Python", value: 30, color: "#0284c7" },
+  { name: "TypeScript", value: 20, color: "#3b82f6" },
+  { name: "MATLAB/C++", value: 10, color: "#7c3aed" },
 ];
-
-function SkillBar({ skill, index }: { skill: (typeof skillGroups)[0]; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.07, duration: 0.5 }}
-      className="rounded-xl border border-white/10 bg-white/5 dark:bg-white/3 p-4 hover:border-cyan-500/30 transition-colors"
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-base">{skill.icon}</span>
-        <span className="font-semibold text-sm" style={{ color: skill.color }}>
-          {skill.category}
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-1.5">
-        {skill.skills.map((s) => (
-          <span
-            key={s}
-            className="text-[10px] px-2 py-0.5 rounded-full border"
-            style={{
-              borderColor: `${skill.color}30`,
-              backgroundColor: `${skill.color}10`,
-              color: skill.color,
-            }}
-          >
-            {s}
-          </span>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
 
 export function SkillCharts() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-      <div>
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
-          Skill Coverage
-        </h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <RadarChart data={radarData}>
-            <PolarGrid stroke="rgba(99,179,237,0.15)" />
-            <PolarAngleAxis
-              dataKey="skill"
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-            />
-            <Radar
-              dataKey="value"
-              stroke="#22d3ee"
-              fill="#22d3ee"
-              fillOpacity={0.15}
-              strokeWidth={2}
-            />
-          </RadarChart>
-        </ResponsiveContainer>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Radar Chart Panel */}
+      <div className="lg:col-span-6 border border-rule bg-panel-raised p-6 rounded-[2px]">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
+          <div>
+            <h3 className="font-heading font-bold text-lg text-ink">
+              Competency Radar Profile
+            </h3>
+            <p className="font-sans text-xs text-ink-soft">Evaluated engineering proficiency across domains</p>
+          </div>
+          <span className="font-mono text-xs text-signal font-semibold bg-signal/10 px-2 py-0.5 rounded-[2px] border border-signal/30">
+            RADAR 01
+          </span>
+        </div>
+
+        <div className="w-full h-72">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={radarData}>
+              <PolarGrid stroke="var(--rule)" strokeDasharray="3 3" />
+              <PolarAngleAxis
+                dataKey="skill"
+                tick={{ fill: "var(--ink)", fontSize: 11, fontFamily: "IBM Plex Sans" }}
+              />
+              <Radar
+                dataKey="value"
+                stroke="var(--signal)"
+                fill="var(--signal)"
+                fillOpacity={0.25}
+                strokeWidth={2}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
-      <div>
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
-          Language Composition
-        </h3>
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={languageData} layout="vertical" margin={{ left: 0, right: 16 }}>
-            <XAxis type="number" hide />
-            <YAxis
-              type="category"
-              dataKey="name"
-              width={88}
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-            />
-            <Tooltip
-              formatter={(v) => [`${v}%`, "Share"]}
-              contentStyle={{
-                background: "hsl(var(--card))",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: "8px",
-                fontSize: "12px",
-              }}
-            />
-            <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-              {languageData.map((entry, i) => (
-                <Cell key={i} fill={entry.color} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+      {/* Language / Protocol Matrix */}
+      <div className="lg:col-span-6 space-y-6">
+        {/* Core Stack Breakdown */}
+        <div className="border border-rule bg-panel-raised p-6 rounded-[2px]">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
+            <div>
+              <h3 className="font-heading font-bold text-lg text-ink">
+                Language & Core Tooling Distribution
+              </h3>
+              <p className="font-sans text-xs text-ink-soft">Normalized weighting across active repositories</p>
+            </div>
+            <span className="font-mono text-xs text-ink-soft">
+              % SHARE
+            </span>
+          </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-3">
-          {skillGroups.map((skill, i) => (
-            <SkillBar key={skill.category} skill={skill} index={i} />
-          ))}
+          <div className="w-full h-36">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={languageData} layout="vertical" margin={{ left: 0, right: 16 }}>
+                <XAxis type="number" hide domain={[0, 45]} />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={110}
+                  tick={{ fill: "var(--ink)", fontSize: 12, fontFamily: "IBM Plex Sans" }}
+                />
+                <Tooltip
+                  formatter={(v) => [`${v}%`, "Share"]}
+                  contentStyle={{
+                    background: "var(--panel-raised)",
+                    border: "1px solid var(--rule)",
+                    borderRadius: "2px",
+                    fontSize: "12px",
+                    fontFamily: "IBM Plex Sans",
+                    color: "var(--ink)",
+                  }}
+                />
+                <Bar dataKey="value" radius={[0, 2, 2, 0]}>
+                  {languageData.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Domain Specification Matrix */}
+        <div className="border border-rule bg-panel-raised p-6 rounded-[2px]">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
+            <h3 className="font-heading font-bold text-lg text-ink">
+              Technical Domain Matrix
+            </h3>
+            <span className="font-mono text-xs text-ink-soft">
+              HARDWARE / FIRMWARE / CLOUD
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {skillGroups.map((group) => (
+              <div key={group.category} className="pb-3 border-b border-rule last:border-b-0 last:pb-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`w-1.5 h-3 rounded-[1px] ${group.color}`} />
+                  <h4 className="font-heading font-bold text-sm text-ink">
+                    {group.category}
+                  </h4>
+                </div>
+                <div className="flex flex-wrap gap-1.5 pl-3.5">
+                  {group.skills.map((s) => (
+                    <span key={s} className="tech-chip text-xs">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
