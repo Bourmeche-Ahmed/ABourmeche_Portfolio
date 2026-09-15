@@ -39,7 +39,7 @@ Message:
 ```
 
 4. Configure the template:
-   - **To Email Address:** Your receiving email (e.g., ahmed.bourmeche.eng@gmail.com)
+   - **To Email Address:** Your receiving email (`ahmed.bourmeche@insat.ucar.tn` or `{{to_email}}`)
    - **Subject:** You've received a new message from {{from_name}}
 
 5. Click **Save** and note your **Template ID** (looks like: `template_xxxxxxxxxxxxx`)

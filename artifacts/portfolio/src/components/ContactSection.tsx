@@ -7,9 +7,9 @@ import { copyToClipboard } from "@/lib/utils";
 
 const TARGET_EMAIL = "ahmed.bourmeche@insat.ucar.tn";
 
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "zpQNPM_pbxbkZxhcA";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_l6rmlzb";
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_2364qte";
 
 export function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -45,6 +45,10 @@ export function ContactSection() {
       try {
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           to_email: TARGET_EMAIL,
+          email_to: TARGET_EMAIL,
+          recipient: TARGET_EMAIL,
+          user_email: TARGET_EMAIL,
+          to_name: "Ahmed Bourmeche",
           from_name: form.name,
           from_email: form.email,
           message: form.message,
@@ -115,16 +119,13 @@ export function ContactSection() {
               </p>
               
               <div className="pt-2 flex flex-col gap-2">
-                <a
-                  href={ASSET_PATHS.cv()}
-                  download="Ahmed_Bourmeche_RESUME.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary no-custom-link w-full text-center inline-flex items-center justify-center gap-2"
+                <button
+                  onClick={triggerResumeDownload}
+                  className="btn-primary w-full text-center inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-4 h-4 text-signal" />
                   <span>Download Resume (PDF)</span>
-                </a>
+                </button>
 
                 <button
                   onClick={handleCopyEmail}

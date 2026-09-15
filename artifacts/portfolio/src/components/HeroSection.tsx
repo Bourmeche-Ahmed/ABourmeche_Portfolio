@@ -1,6 +1,6 @@
 import { smoothScrollTo } from "@/lib/utils";
-import { ASSET_PATHS } from "@/lib/paths";
-import { Download, ArrowRight, Mail, Sparkles } from "lucide-react";
+import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
+import { Download, ArrowRight, Mail } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -53,16 +53,13 @@ export function HeroSection() {
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
-              <a
-                href={ASSET_PATHS.cv()}
-                download="Ahmed_Bourmeche_RESUME.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary no-custom-link inline-flex items-center gap-1.5"
+              <button
+                onClick={triggerResumeDownload}
+                className="btn-secondary inline-flex items-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5 text-signal" />
                 <span>Download Resume</span>
-              </a>
+              </button>
             </div>
 
             {/* Spec tags */}
