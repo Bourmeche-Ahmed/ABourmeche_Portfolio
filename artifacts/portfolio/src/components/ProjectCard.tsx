@@ -1,9 +1,19 @@
-import { Github, ExternalLink, Cpu, Terminal, ArrowUpRight } from "lucide-react";
+import { Github, ExternalLink, ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/projects";
+import { ProjectImage } from "./ProjectImage";
+import { getAssetPath } from "@/lib/paths";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
 
-const categoryStyles: Record<string, { badge: string; accent: string }> = {
+export const categoryStyles: Record<string, { badge: string; accent: string }> = {
+  "Hardware / PCB Design": {
+    badge: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30",
+    accent: "bg-amber-500",
+  },
+  "Robotics / AI": {
+    badge: "bg-fuchsia-500/15 text-fuchsia-600 dark:text-fuchsia-400 border-fuchsia-500/30",
+    accent: "bg-fuchsia-500",
+  },
   "Embedded Systems / Robotics": {
     badge: "bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/30",
     accent: "bg-orange-500",
@@ -50,6 +60,11 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
     accent: "bg-signal",
   };
 
+  const coverFile = project.cover || project.gallery?.[0]?.file;
+  const coverSrc = coverFile ? getAssetPath(`projects/${project.id}/${coverFile}`) : undefined;
+  const expectedCoverPath = coverFile ? `public/projects/${project.id}/${coverFile}` : undefined;
+  const coverFit = project.gallery?.find((g) => g.file === coverFile)?.fit || "cover";
+
   return (
     <div
       onClick={onClick}
@@ -58,26 +73,54 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
       {/* Category top hairline indicator */}
       <div className={`h-0.5 w-full ${catStyle.accent}`} />
 
-      <div className="p-5 sm:p-6 flex flex-col h-full">
-        {/* Category Badge & Architecture Label */}
+      {/* 16:10 Cover image slot */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-rule bg-panel-sunk shrink-0">
+        <ProjectImage
+          src={coverSrc}
+          alt={project.title}
+          category={project.category}
+          fit={coverFit}
+          isCover
+          expectedPath={expectedCoverPath}
+          imgClassName="motion-safe:group-hover:scale-[1.03] motion-reduce:transform-none transition-transform duration-300"
+        />
+      </div>
+
+      <div className="p-5 sm:p-6 flex flex-col flex-1">
+        {/* Category Badge & Repo Identifier */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${catStyle.badge}`}>
             {project.category}
           </span>
-          <span className="text-[10px] font-mono text-ink-soft truncate max-w-[120px]">
+          <span className="text-[10px] font-mono text-ink-soft truncate max-w-[130px]">
             {project.repo}
           </span>
         </div>
 
         {/* Project Title */}
-        <h3 className="font-heading font-bold text-xl text-ink leading-tight mb-2 group-hover:text-signal transition-colors">
+        <h3 className="font-heading font-bold text-lg sm:text-xl text-ink leading-tight mb-2 group-hover:text-signal transition-colors">
           {project.title}
         </h3>
 
         {/* Description */}
-        <p className="font-sans text-xs sm:text-sm text-ink-soft leading-relaxed flex-1 mb-4">
+        <p className="font-sans text-xs sm:text-sm text-ink-soft leading-relaxed flex-1 mb-3.5">
           {project.description}
         </p>
+
+        {/* Metrics Chips (up to 3) */}
+        {project.metrics && project.metrics.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-3.5">
+            {project.metrics.slice(0, 3).map((m, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[2px] bg-panel-sunk border border-rule text-[10px] font-mono"
+              >
+                <span className="text-ink-soft">{m.label}:</span>
+                <span className="text-ink font-semibold">{m.value}</span>
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Architecture Pipeline Snippet */}
         {project.architecture && (
@@ -87,30 +130,32 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           </div>
         )}
 
-        {/* Language Breakdown Bar */}
-        <div className="mb-4 pt-3 border-t border-rule">
-          <div className="flex h-1.5 bg-panel-sunk border border-rule overflow-hidden rounded-[1px] mb-1.5">
-            {project.languages.map((lang) => (
-              <div
-                key={lang.name}
-                style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
-                title={`${lang.name}: ${lang.percentage}%`}
-              />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] font-mono text-ink-soft">
-            {project.languages.slice(0, 3).map((lang) => (
-              <span key={lang.name} className="flex items-center gap-1.5">
-                <span
-                  className="w-1.5 h-1.5 rounded-[1px] inline-block"
-                  style={{ backgroundColor: lang.color }}
+        {/* Language Breakdown Bar (hidden when absent) */}
+        {project.languages && project.languages.length > 0 && (
+          <div className="mb-4 pt-3 border-t border-rule">
+            <div className="flex h-1.5 bg-panel-sunk border border-rule overflow-hidden rounded-[1px] mb-1.5">
+              {project.languages.map((lang) => (
+                <div
+                  key={lang.name}
+                  style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
+                  title={`${lang.name}: ${lang.percentage}%`}
                 />
-                <span className="text-ink font-medium">{lang.name}</span>
-                <span>{lang.percentage}%</span>
-              </span>
-            ))}
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] font-mono text-ink-soft">
+              {project.languages.slice(0, 3).map((lang) => (
+                <span key={lang.name} className="flex items-center gap-1.5">
+                  <span
+                    className="w-1.5 h-1.5 rounded-[1px] inline-block"
+                    style={{ backgroundColor: lang.color }}
+                  />
+                  <span className="text-ink font-medium">{lang.name}</span>
+                  <span>{lang.percentage}%</span>
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Tech Badges */}
         <div className="flex flex-wrap gap-1 mb-5">
@@ -127,26 +172,28 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
         </div>
 
         {/* Interactive Action Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-rule mt-auto text-xs">
+        <div className="flex items-center justify-between pt-3 border-t border-rule mt-auto text-xs min-h-[44px]">
           <span className="font-sans font-semibold text-ink group-hover:text-signal transition-colors inline-flex items-center gap-1">
             <span>Case Study</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </span>
 
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="p-1.5 rounded-[2px] bg-panel-sunk hover:bg-panel border border-rule text-ink-soft hover:text-ink transition-colors no-custom-link"
-            aria-label={WEBSITE_PROJECTS.includes(project.id) ? "Go to website" : "GitHub repository"}
-          >
-            {WEBSITE_PROJECTS.includes(project.id) ? (
-              <ExternalLink className="w-3.5 h-3.5" />
-            ) : (
-              <Github className="w-3.5 h-3.5" />
-            )}
-          </a>
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="min-w-[44px] min-h-[44px] p-2 rounded-[2px] bg-panel-sunk hover:bg-panel border border-rule text-ink-soft hover:text-ink transition-colors no-custom-link flex items-center justify-center"
+              aria-label={WEBSITE_PROJECTS.includes(project.id) ? "Go to website" : "GitHub repository"}
+            >
+              {WEBSITE_PROJECTS.includes(project.id) ? (
+                <ExternalLink className="w-3.5 h-3.5" />
+              ) : (
+                <Github className="w-3.5 h-3.5" />
+              )}
+            </a>
+          )}
         </div>
       </div>
     </div>

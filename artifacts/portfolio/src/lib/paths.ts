@@ -3,18 +3,29 @@
  */
 export function getAssetPath(path: string): string {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  const base = import.meta.env.BASE_URL || '/';
   if (typeof window !== 'undefined') {
     const pathname = window.location.pathname;
     if (pathname.startsWith('/ABourmeche_Portfolio')) {
       return `/ABourmeche_Portfolio/${cleanPath}`;
     }
+    if (base && base !== './' && base !== '/') {
+      const cleanBase = base.endsWith('/') ? base : `${base}/`;
+      return `${cleanBase}${cleanPath}`;
+    }
     return `/${cleanPath}`;
   }
-  const base = import.meta.env.BASE_URL || '/';
   if (base.endsWith('/')) {
     return `${base}${cleanPath}`;
   }
   return `${base}/${cleanPath}`;
+}
+
+/**
+ * Get the asset URL for a project image
+ */
+export function getProjectPath(projectId: string, filename: string): string {
+  return getAssetPath(`projects/${projectId}/${filename}`);
 }
 
 /**

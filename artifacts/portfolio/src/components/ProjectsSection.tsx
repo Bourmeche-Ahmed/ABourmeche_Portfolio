@@ -31,6 +31,7 @@ export function ProjectsSection() {
         !q ||
         p.title.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
         p.techBadges.some((t) => t.toLowerCase().includes(q));
       return matchCat && matchSearch;
     });
