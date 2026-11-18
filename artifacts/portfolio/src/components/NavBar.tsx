@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { smoothScrollTo } from "@/lib/utils";
-import { Menu, X, Linkedin, Github } from "lucide-react";
+import { Menu, X, Linkedin, Github, Command } from "lucide-react";
 
 const navLinks = [
   { href: "home", label: "Home" },
@@ -12,12 +13,19 @@ const navLinks = [
   { href: "contact", label: "Contact" },
 ];
 
-export function NavBar() {
+interface NavBarProps {
+  onOpenCommandPalette?: () => void;
+  onThemeChanged?: (isDark: boolean) => void;
+}
+
+export function NavBar({ onOpenCommandPalette, onThemeChanged }: NavBarProps) {
   const [active, setActive] = useState("home");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
+      // 1. Active section
       const sections = navLinks.map((l) => document.getElementById(l.href));
       let current = "home";
       for (const section of sections) {
@@ -26,7 +34,14 @@ export function NavBar() {
         }
       }
       setActive(current);
+
+      // 2. Scroll progress
+      const scrollY = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = total > 0 ? (scrollY / total) * 100 : 0;
+      setScrollProgress(Math.min(pct, 100));
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -58,22 +73,45 @@ export function NavBar() {
         </button>
 
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => handleNav(link.href)}
-              className={`font-heading text-lg tracking-wide transition-colors relative py-1 ${
-                active === link.href
-                  ? "text-ink font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-signal"
-                  : "text-ink-soft hover:text-ink"
-              }`}
-            >
-              {link.label}
-            </button>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = active === link.href;
+            return (
+              <button
+                key={link.href}
+                onClick={() => handleNav(link.href)}
+                className={`font-heading text-lg tracking-wide transition-colors relative py-1 focus-visible:outline-none ${
+                  isActive ? "text-ink font-bold" : "text-ink-soft hover:text-ink"
+                }`}
+              >
+                {link.label}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavIndicator"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-signal"
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Command Palette Trigger (Desktop) */}
+          {onOpenCommandPalette && (
+            <button
+              onClick={onOpenCommandPalette}
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono text-ink-soft bg-panel-sunk border border-rule rounded-[2px] hover:border-ink-soft hover:text-ink transition-colors focus-visible:outline-none"
+              aria-label="Open command palette (Ctrl+K)"
+            >
+              <Command className="w-3 h-3 text-signal" />
+              <span className="hidden lg:inline text-[11px]">Command</span>
+              <kbd className="text-[10px] bg-panel-raised px-1 py-0.2 rounded-[2px] border border-rule font-semibold">
+                ⌘K
+              </kbd>
+            </button>
+          )}
+
           <a
             href="https://github.com/Bourmeche-Ahmed"
             target="_blank"
@@ -92,7 +130,7 @@ export function NavBar() {
           >
             <Linkedin className="w-4 h-4" />
           </a>
-          <ThemeToggle />
+          <ThemeToggle onThemeChanged={onThemeChanged} />
           <button
             className="md:hidden p-1.5 text-ink-soft hover:text-ink transition-colors"
             onClick={() => setMobileOpen((o) => !o)}
@@ -102,6 +140,14 @@ export function NavBar() {
           </button>
         </div>
       </nav>
+
+      {/* Signal trace scroll progress bar under navbar */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-transparent overflow-hidden">
+        <div
+          className="h-full bg-signal transition-all duration-75 origin-left"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
 
       {mobileOpen && (
         <div className="md:hidden border-t border-rule bg-panel px-4 py-3 space-y-1">

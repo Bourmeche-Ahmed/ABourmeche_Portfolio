@@ -42,6 +42,18 @@ export function ProjectsSection() {
     setCurrentPage(1);
   }, [activeCategory, search]);
 
+  // Listen for global open-project-modal events (from command palette or skill links)
+  useEffect(() => {
+    const handleOpenProject = (e: Event) => {
+      const customEvent = e as CustomEvent<Project>;
+      if (customEvent.detail) {
+        setSelected(customEvent.detail);
+      }
+    };
+    window.addEventListener("open-project-modal", handleOpenProject);
+    return () => window.removeEventListener("open-project-modal", handleOpenProject);
+  }, []);
+
   // Pagination calculation
   const totalPages = Math.ceil(filtered.length / PROJECTS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
