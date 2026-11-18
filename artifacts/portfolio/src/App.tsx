@@ -1,3 +1,4 @@
+import { BootSequence } from "@/components/BootSequence";
 import { NavBar } from "@/components/NavBar";
 import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
@@ -10,6 +11,7 @@ import { Footer } from "@/components/Footer";
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
+      <BootSequence />
       <NavBar />
       <main>
         <HeroSection />

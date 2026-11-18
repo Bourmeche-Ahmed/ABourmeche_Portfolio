@@ -1,11 +1,24 @@
 import { smoothScrollTo } from "@/lib/utils";
 import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
 import { Download, ArrowRight, Mail } from "lucide-react";
+import { PcbHeroCanvas } from "./PcbHeroCanvas";
+import { ScrambleText } from "./ScrambleText";
+import { TelemetryHud } from "./TelemetryHud";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  isOscilloscope?: boolean;
+}
+
+export function HeroSection({ isOscilloscope = false }: HeroSectionProps) {
   return (
-    <section id="home" className="pt-24 sm:pt-28 pb-16 sm:pb-20 border-b border-rule">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <section id="home" className="relative pt-24 sm:pt-28 pb-16 sm:pb-20 border-b border-rule overflow-hidden">
+      {/* Interactive PCB Trace Canvas Field */}
+      <PcbHeroCanvas
+        isOscilloscope={isOscilloscope}
+        className="opacity-70 dark:opacity-50"
+      />
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Bio & Core Info */}
           <div className="lg:col-span-7 space-y-6">
@@ -25,9 +38,14 @@ export function HeroSection() {
               <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink leading-[1.02]">
                 Ahmed Bourmeche
               </h1>
-              <p className="font-sans text-lg sm:text-xl text-signal font-semibold mt-2">
-                Industrial Automation, Embedded Systems & Industrial IoT Engineer
-              </p>
+              <ScrambleText
+                phrases={[
+                  "Industrial Automation, Embedded Systems & Industrial IoT Engineer",
+                  "Robotics, Control Systems & Firmware Engineer",
+                  "Automotive Electronics & Real-Time Telemetry Specialist",
+                ]}
+                className="font-sans text-lg sm:text-xl text-signal font-semibold mt-2 block min-h-[1.75rem]"
+              />
             </div>
 
             {/* Concise positioning */}
@@ -109,6 +127,11 @@ export function HeroSection() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Telemetry HUD (Desktop bottom right) */}
+        <div className="mt-8 flex justify-end">
+          <TelemetryHud />
         </div>
       </div>
     </section>
