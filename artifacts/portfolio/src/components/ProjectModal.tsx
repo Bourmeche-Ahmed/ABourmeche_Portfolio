@@ -1,5 +1,9 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const VroomBlockDiagram = lazy(() => import("./widgets/VroomBlockDiagram"));
+const QuarterCarSimulation = lazy(() => import("./widgets/QuarterCarSimulation"));
+const PidPlayground = lazy(() => import("./PidPlayground"));
 import {
   X,
   Github,
@@ -476,6 +480,25 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </h3>
                 <ArchitectureFlow architecture={project.architecture} />
               </div>
+            )}
+
+            {/* Interactive Engineering Widgets (Clearly labeled) */}
+            {project.id === "vroom" && (
+              <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading hardware topology...</div>}>
+                <VroomBlockDiagram />
+              </Suspense>
+            )}
+
+            {project.id === "quarter-car-suspension-system" && (
+              <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading suspension simulation...</div>}>
+                <QuarterCarSimulation />
+              </Suspense>
+            )}
+
+            {project.id === "pid-control-dashboard" && (
+              <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading PID simulation...</div>}>
+                <PidPlayground />
+              </Suspense>
             )}
 
             {/* Highlights */}
