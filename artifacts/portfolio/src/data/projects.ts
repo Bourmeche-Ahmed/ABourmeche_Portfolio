@@ -55,7 +55,7 @@ const rawProjects: Project[] = [
     order: 1,
     title: "VROOM – Automotive OBD-II/CAN Telemetry Dashboard",
     description:
-      "A smart automotive companion designed end-to-end in KiCad: plugs into OBD-II/CAN, feeds live car telemetry to an RGB LED matrix and BLE companion app, featuring automotive power protection and an ESP32-S3.",
+      "Smart Automotive Hardware: KiCad-designed companion plugging into vehicle OBD-II/CAN, featuring automotive-grade power regulation (ISO 7637 TVS, TPS54360 buck), dual-core ESP32-S3, HUB75 RGB LED matrix driver, and BLE telemetry.",
     longDescription:
       "VROOM is a smart automotive companion designed from scratch in KiCad, turning live vehicle OBD-II and CAN bus data into a customizable RGB LED matrix display with an accompanying mobile companion app over Bluetooth Low Energy (BLE). The board features an automotive-protected power stage with a fused 12 V vehicle input (2 A fuse), an SMCJ33A TVS clamp for load-dump transients conforming to ISO 7637 considerations, reverse-polarity Schottky protection, a 60 V-capable TPS54360 buck converter (8.2 µH inductor, B560C Schottky catch diode) stepping down to 5 V, and an AP2112K-3.3 LDO producing the 3.3 V logic rail. Vehicle network communication utilizes an SN65HVD230 CAN transceiver equipped with a Würth common-mode choke and SM712 TVS protection across the CAN lines for noisy vehicle buses. The host MCU is an ESP32-S3-WROOM-1 with an intentional antenna keep-out zone for robust BLE range, supported by a USB-C interface with USBLC6-2SC6 ESD protection and 5.1 kΩ CC termination. Two 74HCT244 octal buffers level-shift 3.3 V GPIOs to 5 V logic to drive a standard 16-pin HUB75-style RGB LED matrix connector (R1/G1/B1/R2/G2/B2, A-D, CLK, LAT, OE). Onboard peripherals include a 6-axis MPU-6050 IMU for motion and driving-dynamics effects and a 2N3904-driven acoustic buzzer. The 2-layer PCB (approx. 77 x 67 mm, 55 footprints, four M2 mounting holes) was brought through DRC resolution for routing shorts, ground-plane isolation, and thermal vias ahead of fabrication.",
     category: "Hardware / PCB Design",
@@ -133,7 +133,7 @@ const rawProjects: Project[] = [
     order: 2,
     title: "Autonomous Navigation via Reinforcement Learning",
     description:
-      "A Pioneer 3-AT agent trained with PPO in Webots to navigate cluttered environments from raw sonar and proprioceptive observations, reaching an 81% success rate with 0% timeouts.",
+      "Autonomous Mobile Robotics & AI: Pioneer 3-AT mobile robot trained with PPO reinforcement learning in Webots physics simulation, navigating dense obstacle courses from raw sonar and proprioceptive signals (81% success, 0% timeouts).",
     longDescription:
       "An autonomous navigation agent developed by training a Pioneer 3-AT robot in Webots simulation using Proximal Policy Optimization (PPO) via Stable-Baselines3 and Gymnasium. The agent navigates cluttered environments using only raw sonar range measurements and proprioceptive feedback (linear/angular velocities and target direction). A custom reward shaping function promotes efficient heading progression toward targets while strictly penalizing near-obstacle proximity. Domain randomization of obstacle layouts and positions was implemented to improve generalizability across unseen configurations. Using true-position collision detection, the policy was evaluated over 50+ randomized test episodes, achieving an 81% success rate with 0% timeouts.",
     category: "Robotics / AI",
@@ -175,24 +175,18 @@ const rawProjects: Project[] = [
       "True-position collision detection and verification",
       "High reliability with 0% timeout rate across 50+ evaluation trials",
     ],
-    cover: "webots-navigation.png",
+    cover: "rl1.png",
     gallery: [
       {
-        file: "webots-navigation.png",
-        alt: "Pioneer 3-AT navigating in Webots",
-        caption: "Pioneer 3-AT navigating in Webots",
+        file: "rl1.png",
+        alt: "Pioneer 3-AT autonomous navigation in Webots",
+        caption: "Pioneer 3-AT mobile robot navigating cluttered obstacle environments in Webots simulation",
         fit: "cover",
       },
       {
-        file: "training-curve.png",
-        alt: "PPO training reward curve",
-        caption: "PPO training reward curve",
-        fit: "contain",
-      },
-      {
-        file: "obstacle-layouts.png",
-        alt: "Randomized obstacle layouts used for domain randomization",
-        caption: "Randomized obstacle layouts used for domain randomization",
+        file: "rl2.png",
+        alt: "PPO reinforcement learning training and performance curve",
+        caption: "PPO training performance curve and trajectory evaluation",
         fit: "contain",
       },
     ],
@@ -256,6 +250,18 @@ const rawProjects: Project[] = [
         caption: "FARZIT autonomous robot: STM32, single ToF sensor, SolidWorks chassis, and custom KiCad PCB",
         fit: "cover",
       },
+      {
+        file: "chassis-render.png",
+        alt: "SolidWorks mechanical chassis render",
+        caption: "Custom multi-tier robot chassis modeled in SolidWorks",
+        fit: "contain",
+      },
+      {
+        file: "printed-parts.jpg",
+        alt: "3D-printed chassis components",
+        caption: "3D-printed structural brackets, motor mounts, and sensor housings",
+        fit: "cover",
+      },
     ],
   },
   {
@@ -263,7 +269,7 @@ const rawProjects: Project[] = [
     order: 4,
     title: "PID Control Dashboard",
     description:
-      "Real-time PID control system — React dashboard connected to a Flask API and a MATLAB Simulink digital twin. Engineers tune Kp, Ki, Kd live and watch the simulated system response update instantly.",
+      "Control Systems & Digital Twin: React engineering console tightly coupled via Flask API to a MATLAB Simulink closed-loop plant model, enabling sub-100ms live PID gain tuning and real-time transient response observation.",
     longDescription:
       "A complete industrial control engineering platform that tightly couples a modern web stack with MATLAB Simulink simulation. The React dashboard lets engineers interactively tune PID gain parameters (Kp, Ki, Kd) and visualize the closed-loop system response in real time. A Flask REST API bridges the web layer to a MATLAB Simulink digital twin model running the actual control loop simulation — changes made in the browser propagate to Simulink, and simulation telemetry streams back to the dashboard within milliseconds.",
     category: "Real-time / Control",
@@ -298,19 +304,13 @@ const rawProjects: Project[] = [
       "Simulink model parameter inspection panel",
       "Mobile-responsive operator interface",
     ],
-    cover: "dashboard.png",
+    cover: "pid.png",
     gallery: [
       {
-        file: "dashboard.png",
+        file: "pid.png",
         alt: "PID Control Dashboard",
-        caption: "PID Control Dashboard operator interface with real-time response curve",
+        caption: "PID Control Dashboard operator interface with real-time response curve and live Simulink digital twin integration",
         fit: "cover",
-      },
-      {
-        file: "simulink-model.png",
-        alt: "MATLAB Simulink digital twin model",
-        caption: "MATLAB Simulink digital twin closed-loop simulation model",
-        fit: "contain",
       },
     ],
   },
@@ -319,7 +319,7 @@ const rawProjects: Project[] = [
     order: 5,
     title: "IIoT Predictive Maintenance Dashboard",
     description:
-      "Industrial IoT dashboard for predictive maintenance — monitoring sensor metrics, anomaly alerts, trend analysis, and ML model outputs across connected machinery.",
+      "Industrial IoT & Machine Telemetry: Edge-to-cloud predictive maintenance platform monitoring multi-sensor industrial machinery telemetry, running ML anomaly detection models, and triggering automated threshold alerts to prevent downtime.",
     longDescription:
       "A comprehensive IIoT analytics platform built to reduce unplanned downtime. The system aggregates real-time sensor telemetry from industrial equipment, applies machine learning models to predict failure events, and presents actionable insights through an intuitive dashboard with configurable alert thresholds and trend visualizations.",
     category: "IIoT / Analytics",
@@ -351,24 +351,18 @@ const rawProjects: Project[] = [
       "ML prediction confidence scores",
       "Configurable alert rules per equipment type",
     ],
-    cover: "dashboard.png",
+    cover: "iiot1.png",
     gallery: [
       {
-        file: "dashboard.png",
+        file: "iiot1.png",
         alt: "IIoT Predictive Maintenance Dashboard",
-        caption: "Industrial IoT analytics dashboard for equipment monitoring",
+        caption: "Industrial IoT predictive maintenance dashboard for machine vibration and sensor telemetry",
         fit: "cover",
       },
       {
-        file: "health-alerts.png",
-        alt: "Machine health telemetry and anomaly alerts",
-        caption: "Real-time health score overlays and anomaly alerts",
-        fit: "contain",
-      },
-      {
-        file: "report.png",
-        alt: "Predictive failure analysis report",
-        caption: "Machine learning failure prediction and trend report",
+        file: "iiot2.png",
+        alt: "Anomaly detection and machinery telemetry alerts",
+        caption: "Real-time machinery telemetry, anomaly detection timeline, and predictive failure analysis",
         fit: "contain",
       },
     ],
@@ -378,7 +372,7 @@ const rawProjects: Project[] = [
     order: 6,
     title: "Self-Balancing Robot – Time-Based Trajectory Planning",
     description:
-      "Bare-metal STM32 self-balancing two-wheeled robot using a 100 Hz PID balance loop, MPU-6050 sensor fusion, and a 20 Hz state-machine planner for time-based trajectory tracking.",
+      "Embedded Control Systems: Bare-metal STM32 two-wheeled inverted pendulum robot implementing a 100 Hz PID balance loop, MPU-6050 sensor fusion tilt estimation, and a 20 Hz state-machine planner for time-based trajectory execution.",
     longDescription:
       "A two-wheeled self-balancing robot built on bare-metal STM32 microcontroller firmware. The control architecture uses a cascaded scheme that decouples tilt stabilization from velocity regulation: an inner 100 Hz PID balance loop operates on real-time tilt angle estimation from MPU-6050 6-DOF IMU sensor fusion, while an outer loop regulates translational velocity. A 20 Hz embedded state-machine motion planner coordinates time-based trajectory profiles, generating smooth velocity setpoints for autonomous maneuvers. The control gains were tuned through iterative physical bench testing to achieve dynamic stability and disturbance rejection.",
     category: "Embedded Systems / Robotics",
@@ -438,6 +432,18 @@ const rawProjects: Project[] = [
         caption: "Cascaded control architecture",
         fit: "contain",
       },
+      {
+        file: "cad-model.png",
+        alt: "CAD model of self-balancing robot chassis",
+        caption: "CAD model (Onshape)",
+        fit: "contain",
+      },
+      {
+        file: "printed-parts.jpg",
+        alt: "3D-printed parts for self-balancing robot",
+        caption: "3D-printed parts",
+        fit: "cover",
+      },
     ],
   },
   {
@@ -445,7 +451,7 @@ const rawProjects: Project[] = [
     order: 7,
     title: "Quarter Car Suspension System",
     description:
-      "Hardware-in-the-loop 2-DOF quarter-car simulation coupling Proteus (ATmega328P Euler solver) and LabVIEW over virtual COM, with active PD control reaching 87% peak displacement reduction.",
+      "Hardware-in-the-Loop Simulation: 2-DOF vehicle suspension benchmark coupling an ATmega328P real-time Euler numerical integrator (Proteus) with LabVIEW supervisory control, achieving 87% peak displacement attenuation via active PD control.",
     longDescription:
       "A hardware-in-the-loop benchmark that couples Proteus and LabVIEW through virtual serial COM ports for real-time suspension testing. Proteus simulates an ATmega328P running an Euler integrator (dt = 1e-4 s) that solves the 2-DOF quarter-car differential equations continuously. LabVIEW acts as the operator and control interface, reading live states and injecting control actions. Open-loop passive tests across varied sprung masses and excitation amplitudes confirmed non-linearity through superposition failure (33% error). An active PD controller (Kp = -2000 N/m, Kd = -800 N.s/m) reduced peak displacement by 87% and suppressed oscillations in approximately 40 seconds.",
     category: "Control Systems / Simulation",
@@ -506,7 +512,7 @@ const rawProjects: Project[] = [
     order: 8,
     title: "Hand Gesture-Controlled Maze Game",
     description:
-      "Real-time maze game controlled entirely by hand gestures using webcam input, MediaPipe landmark tracking, OpenCV gesture classification, and a Tkinter GUI.",
+      "Real-Time Embedded HCI & Computer Vision: Touchless human-machine interface pipeline extracting 21 MediaPipe hand landmarks in real time via OpenCV to classify geometric directional gestures for dynamic closed-loop control.",
     longDescription:
       "An accessibility-focused HCI prototype that removes keyboard and mouse interaction completely. OpenCV captures webcam frames, MediaPipe Hands extracts 21 landmarks per frame, and custom geometric classification logic maps landmarks and angles to directional commands (Up, Down, Left, Right). Commands drive maze navigation in a Tkinter-rendered interface, enabling fully touchless gameplay and validating a low-latency real-time gesture interaction loop.",
     category: "Computer Vision / HCI",
@@ -554,7 +560,7 @@ const rawProjects: Project[] = [
     order: 9,
     title: "Line-Follower Robot",
     description:
-      "Autonomous line-following robot built on Arduino UNO with hand-tuned PID control over an array of IR sensors, validated across varied track geometries and speed profiles.",
+      "Autonomous Embedded Robotics: High-speed differential-drive mobile robot on Arduino UNO featuring an analog/digital IR reflectance sensor array and hand-tuned closed-loop PID steering across varied track geometries.",
     longDescription:
       "An autonomous mobile robot designed and constructed on Arduino UNO in January 2023 for high-speed line tracking. The robot senses track boundaries using an array of infrared (IR) sensors, feeding error signals into an embedded hand-tuned PID controller that modulates differential PWM motor speeds. The platform was validated across varied track geometries (sharp angles, curved turns) and speed profiles through iterative tuning.",
     category: "Embedded Systems / Robotics",
@@ -596,13 +602,25 @@ const rawProjects: Project[] = [
         caption: "Track geometry testing",
         fit: "cover",
       },
+      {
+        file: "cad-model.png",
+        alt: "CAD model of line-follower chassis",
+        caption: "CAD model (Onshape)",
+        fit: "contain",
+      },
+      {
+        file: "printed-parts.jpg",
+        alt: "3D-printed parts for line-follower robot",
+        caption: "3D-printed parts",
+        fit: "cover",
+      },
     ],
   },
   {
     id: "linkedin-optimizer",
     title: "LinkedIn Optimizer",
     description:
-      "A Chrome extension providing an AI-powered writing coach directly within LinkedIn — offering real-time tone and clarity suggestions while you compose posts and messages.",
+      "Side Project: A privacy-first Chrome extension exploring browser-native NLP and in-page DOM observation to provide real-time writing suggestions directly in LinkedIn.",
     longDescription:
       "LinkedIn Optimizer is a privacy-friendly Chrome extension that enhances your LinkedIn writing experience with an in-page AI assistant. It analyzes your text as you type and surfaces actionable suggestions for tone, clarity, and engagement — all processed locally or through a lightweight API, without storing your personal content.",
     category: "Browser Extension",
@@ -637,7 +655,7 @@ const rawProjects: Project[] = [
     id: "stepact-2026-marathon",
     title: "STEP'ACT 2026 Marathon",
     description:
-      "Event registration platform for STEP'ACT 2026 — a prestigious multi-distance trail running event held annually. Features participant registration, event information management, and contact submissions.",
+      "Side Project: Full-stack registration and participant management web platform built for an annual trail marathon, featuring PostgreSQL queue management and a responsive registration flow.",
     longDescription:
       "STEP'ACT 2026 is a comprehensive event registration and management platform for a major annual trail running marathon. Built with a modern TypeScript stack, it provides seamless participant registration, detailed event information, and direct contact capabilities. The platform showcases both frontend elegance and backend reliability for handling high-volume event registrations.",
     category: "Web Apps",
@@ -676,7 +694,7 @@ const rawProjects: Project[] = [
     id: "testcybernexus3",
     title: "CyberNexus UI Lab",
     description:
-      "An experimental TypeScript UI prototype exploring advanced interaction patterns, component compositions, and edge-case rendering challenges — a personal lab for pushing frontend boundaries.",
+      "Side Project / Lab: Experimental UI sandbox exploring state machine primitives, transition animations, and interaction mechanics outside embedded hardware.",
     longDescription:
       "CyberNexus UI Lab is a frontend engineering sandbox built to prototype and stress-test advanced UI concepts. With a 93% TypeScript codebase, it focuses on exploring interaction primitives, complex state management patterns, animated transitions, and accessibility edge cases — generating reusable insights and patterns for production projects.",
     category: "Experimental",
@@ -712,7 +730,7 @@ const rawProjects: Project[] = [
     id: "ytb-voice-gesture-control",
     title: "YTB Voice & Gesture Control",
     description:
-      "A prototype for controlling YouTube playback through voice commands and hand gesture recognition — exploring hands-free media interaction using browser-native APIs.",
+      "Side Project / HCI Prototype: An experimental hands-free media interaction prototype combining browser-native speech recognition and computer vision APIs for touchless control.",
     longDescription:
       "YTB Voice & Gesture Control is an experimental prototype that reimagines how users interact with video content. Using browser-native speech recognition and computer vision APIs, it enables hands-free control of YouTube playback through natural voice commands and hand gestures — with a focus on accessibility and future interaction paradigms.",
     category: "Experimental",
@@ -747,7 +765,7 @@ const rawProjects: Project[] = [
     id: "ieeeweb",
     title: "IEEE Student Branch Website",
     description:
-      "A fully responsive website for an IEEE student branch — featuring a clean SCSS architecture, PHP backend integration, and structured content management for events and publications.",
+      "Side Project: Responsive organizational portal built for an IEEE student branch featuring modular SCSS architecture and dynamic PHP content management.",
     longDescription:
       "A professional organizational website built for an IEEE student branch, delivering a polished public-facing presence with event listings, member showcases, and publication archives. The project features a maintainable SCSS component architecture, PHP-powered dynamic content, and responsive layouts optimized for all device sizes.",
     category: "Web Apps",

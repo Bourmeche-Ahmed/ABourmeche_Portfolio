@@ -60,7 +60,7 @@ export function ProjectsSection() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <SectionHeader
           title="Selected Engineering Projects"
-          subtitle="Hardware-in-the-loop simulations, autonomous embedded robotics, IIoT platforms, and control dashboards."
+          subtitle="Autonomous embedded robotics, automotive PCB hardware, IIoT telemetry platforms, and real-time control systems."
         />
 
         {/* Filter Controls & Search */}

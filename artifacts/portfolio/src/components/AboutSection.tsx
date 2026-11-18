@@ -73,7 +73,7 @@ export function AboutSection() {
               <span>Full-Stack Vertical</span>
             </h3>
             <p>
-              I operate across the vertical — from bare-metal <span className="font-mono text-xs text-ink font-semibold">ESP32 & STM32</span> firmware and KiCad PCB design, up through Python APIs, all the way to React/TypeScript dashboards.
+              I operate across the vertical — from bare-metal <span className="font-mono text-xs text-ink font-semibold">ESP32 & STM32</span> firmware and KiCad PCB design, up through Python APIs, all the way to React/TypeScript dashboards. As a hands-on complement to my electronics and firmware work, I actively use CAD design (<span className="font-mono text-xs text-ink font-semibold">Onshape</span>) and rapid 3D printing to prototype custom mechanical enclosures and robotic structures.
             </p>
           </div>
 

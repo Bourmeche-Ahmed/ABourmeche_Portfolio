@@ -37,6 +37,12 @@ const skillGroups = [
     badge: "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
     skills: ["React", "TypeScript", "Tailwind CSS", "High-frequency Telemetry Charts", "WebSockets", "Vite"],
   },
+  {
+    category: "CAD & Fabrication",
+    color: "bg-amber-600",
+    badge: "border-amber-600/30 text-amber-700 dark:text-amber-400",
+    skills: ["Onshape (primary CAD tool)", "SolidWorks", "3D printing", "mechanical design for robots"],
+  },
 ];
 
 const radarData = [
