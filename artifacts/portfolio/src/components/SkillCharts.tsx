@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   RadarChart,
   PolarGrid,
@@ -11,6 +12,10 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import { ArrowUpRight } from "lucide-react";
+import { useInViewOnce } from "@/hooks/useInViewOnce";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { projects } from "@/data/projects";
 
 const skillGroups = [
   {
@@ -18,30 +23,35 @@ const skillGroups = [
     color: "bg-orange-500",
     badge: "border-orange-500/30 text-orange-600 dark:text-orange-400",
     skills: ["ESP32 / ESP-IDF", "Bare-metal C", "RS-485 / Modbus RTU", "BACnet", "OCPP 1.6J/2.0.1", "NB-IoT", "LoRa", "KiCad PCB Design", "STM32"],
+    projectIds: ["vroom", "farzit", "self-balancing-robot"],
   },
   {
     category: "Industrial Ingestion & Backend",
     color: "bg-sky-500",
     badge: "border-sky-500/30 text-sky-600 dark:text-sky-400",
     skills: ["Python", "Django REST Framework", "Flask", "MQTT (Mosquitto)", "Telegraf", "TimescaleDB", "PostgreSQL", "Redis", "Docker Compose"],
+    projectIds: ["iiot-predictive-maintenance"],
   },
   {
     category: "Control Systems & Digital Twins",
     color: "bg-teal-500",
     badge: "border-teal-500/30 text-teal-600 dark:text-teal-400",
     skills: ["MATLAB", "Simulink", "Digital Twins", "Closed-loop PID Control", "Hardware-in-the-loop (HIL)", "Signal Processing"],
+    projectIds: ["pid-control-dashboard", "quarter-car-suspension-system"],
   },
   {
     category: "Real-Time Dashboards & Frontend",
     color: "bg-indigo-500",
     badge: "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
     skills: ["React", "TypeScript", "Tailwind CSS", "High-frequency Telemetry Charts", "WebSockets", "Vite"],
+    projectIds: ["pid-control-dashboard", "iiot-predictive-maintenance"],
   },
   {
     category: "CAD & Fabrication",
     color: "bg-amber-600",
     badge: "border-amber-600/30 text-amber-700 dark:text-amber-400",
     skills: ["Onshape (primary CAD tool)", "SolidWorks", "3D printing", "mechanical design for robots"],
+    projectIds: ["farzit", "self-balancing-robot", "line-follower-robot"],
   },
 ];
 
@@ -62,10 +72,21 @@ const languageData = [
 ];
 
 export function SkillCharts() {
+  const [radarRef, radarInView] = useInViewOnce<HTMLDivElement>({ threshold: 0.1 });
+  const [activeGroup, setActiveGroup] = useState<string | null>("Embedded Systems & Hardware");
+  const reducedMotion = useReducedMotion();
+
+  const handleOpenProject = (projectId: string) => {
+    const proj = projects.find((p) => p.id === projectId);
+    if (proj) {
+      window.dispatchEvent(new CustomEvent("open-project-modal", { detail: proj }));
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       {/* Radar Chart Panel */}
-      <div className="lg:col-span-6 border border-rule bg-panel-raised p-6 rounded-[2px]">
+      <div ref={radarRef} className="lg:col-span-6 border border-rule bg-panel-raised p-6 rounded-[2px]">
         <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
           <div>
             <h3 className="font-heading font-bold text-lg text-ink">
@@ -92,6 +113,7 @@ export function SkillCharts() {
                 fill="var(--signal)"
                 fillOpacity={0.25}
                 strokeWidth={2}
+                isAnimationActive={!reducedMotion && radarInView}
               />
             </RadarChart>
           </ResponsiveContainer>
@@ -135,7 +157,7 @@ export function SkillCharts() {
                     color: "var(--ink)",
                   }}
                 />
-                <Bar dataKey="value" radius={[0, 2, 2, 0]}>
+                <Bar dataKey="value" radius={[0, 2, 2, 0]} isAnimationActive={!reducedMotion}>
                   {languageData.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
@@ -148,32 +170,78 @@ export function SkillCharts() {
         {/* Domain Specification Matrix */}
         <div className="border border-rule bg-panel-raised p-6 rounded-[2px]">
           <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
-            <h3 className="font-heading font-bold text-lg text-ink">
-              Technical Domain Matrix
-            </h3>
+            <div>
+              <h3 className="font-heading font-bold text-lg text-ink">
+                Technical Domain Matrix
+              </h3>
+              <p className="font-sans text-[11px] text-ink-soft">
+                Tap any category to view applied projects
+              </p>
+            </div>
             <span className="font-mono text-xs text-ink-soft">
-              HARDWARE / FIRMWARE / CLOUD
+              HARDWARE / FIRMWARE / CAD
             </span>
           </div>
 
           <div className="space-y-4">
-            {skillGroups.map((group) => (
-              <div key={group.category} className="pb-3 border-b border-rule last:border-b-0 last:pb-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className={`w-1.5 h-3 rounded-[1px] ${group.color}`} />
-                  <h4 className="font-heading font-bold text-sm text-ink">
-                    {group.category}
-                  </h4>
+            {skillGroups.map((group) => {
+              const isSelected = activeGroup === group.category;
+              return (
+                <div
+                  key={group.category}
+                  onClick={() => setActiveGroup((cur) => (cur === group.category ? null : group.category))}
+                  className={`p-3 rounded-[2px] border transition-all cursor-pointer ${
+                    isSelected ? "border-ink-soft bg-panel-sunk" : "border-rule bg-panel hover:border-ink-soft/60"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-1.5 h-3 rounded-[1px] ${group.color}`} />
+                      <h4 className="font-heading font-bold text-sm text-ink">
+                        {group.category}
+                      </h4>
+                    </div>
+                    {isSelected && (
+                      <span className="font-mono text-[10px] text-signal font-semibold">
+                        APPLIED IN:
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 pl-3.5 mb-2">
+                    {group.skills.map((s) => (
+                      <span key={s} className="tech-chip text-xs">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Linked Projects Chips */}
+                  {isSelected && group.projectIds && group.projectIds.length > 0 && (
+                    <div className="pt-2 pl-3.5 border-t border-rule flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-[10px] text-ink-soft">Projects:</span>
+                      {group.projectIds.map((pid) => {
+                        const proj = projects.find((p) => p.id === pid);
+                        if (!proj) return null;
+                        return (
+                          <button
+                            key={pid}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenProject(pid);
+                            }}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[2px] bg-panel-raised border border-rule hover:border-signal text-[11px] font-sans font-medium text-ink hover:text-signal transition-colors"
+                          >
+                            <span>{proj.title.split("–")[0].trim()}</span>
+                            <ArrowUpRight className="w-3 h-3 text-signal" />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-                <div className="flex flex-wrap gap-1.5 pl-3.5">
-                  {group.skills.map((s) => (
-                    <span key={s} className="tech-chip text-xs">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

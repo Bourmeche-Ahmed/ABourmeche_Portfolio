@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState, lazy, Suspense } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
-import { Briefcase, Building2, ExternalLink } from "lucide-react";
+import { Briefcase, Building2, ExternalLink, ChevronDown } from "lucide-react";
+import { useInViewOnce } from "@/hooks/useInViewOnce";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+const DcuPollingRace = lazy(() => import("./widgets/DcuPollingRace"));
 
 interface ExperienceItem {
   id: string;
@@ -143,6 +148,17 @@ const experiences: ExperienceItem[] = [
 ];
 
 export function ExperienceSection() {
+  const [ref, inView] = useInViewOnce<HTMLDivElement>({ threshold: 0.1 });
+  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
+    "esd-vimar": true,
+    "cybernexus": false,
+  });
+  const reducedMotion = useReducedMotion();
+
+  const toggleExpand = (id: string) => {
+    setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   return (
     <section id="experience" className="py-16 border-b border-rule">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -152,125 +168,171 @@ export function ExperienceSection() {
         />
 
         {/* Bus Rail Column Layout */}
-        <div className="relative pl-6 sm:pl-36">
+        <div ref={ref} className="relative pl-6 sm:pl-36">
           {/* Vertical Multidrop Bus Rail */}
           <div
-            className="absolute left-[7px] sm:left-[118px] top-4 bottom-4 w-px bg-rule pointer-events-none"
+            className="absolute left-[7px] sm:left-[118px] top-4 bottom-4 w-px bg-rule pointer-events-none overflow-hidden"
             aria-hidden="true"
-          />
+          >
+            {!reducedMotion && (
+              <motion.div
+                className="w-full h-full bg-signal"
+                initial={{ scaleY: 0 }}
+                animate={inView ? { scaleY: 1 } : { scaleY: 0 }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                style={{ transformOrigin: "top" }}
+              />
+            )}
+          </div>
 
           <div className="space-y-10">
-            {experiences.map((exp) => (
-              <div key={exp.id} className="relative">
-                {/* Desktop Date Gutter */}
-                <div className="hidden sm:block absolute -left-36 top-2 w-28 text-right pr-4">
-                  <span className="font-mono text-[13px] text-ink-soft block leading-tight font-medium">
-                    {exp.dates}
-                  </span>
-                </div>
+            {experiences.map((exp) => {
+              const isExpanded = expandedIds[exp.id] ?? false;
 
-                {/* Node marker: 8px square node on the rail with tap line */}
-                <div
-                  className={`absolute -left-[21px] sm:-left-[31px] top-3.5 w-2 h-2 rounded-[1px] ${
-                    exp.isCurrentOrRecent
-                      ? "bg-signal ring-2 ring-signal/30 ring-offset-2 ring-offset-panel"
-                      : "bg-ink"
-                  }`}
-                  aria-hidden="true"
-                />
+              return (
+                <div key={exp.id} className="relative">
+                  {/* Desktop Date Gutter */}
+                  <div className="hidden sm:block absolute -left-36 top-2 w-28 text-right pr-4">
+                    <span className="font-mono text-[13px] text-ink-soft block leading-tight font-medium">
+                      {exp.dates}
+                    </span>
+                  </div>
 
-                {/* Experience Card */}
-                <div className="border border-rule bg-panel-raised rounded-[2px] overflow-hidden transition-all duration-200 hover:border-ink-soft">
-                  {/* Top colored accent indicator rail */}
-                  <div className={`h-1 w-full ${exp.accentBar}`} />
+                  {/* Node marker: 8px square node on the rail with tap line */}
+                  <div
+                    className={`absolute -left-[21px] sm:-left-[31px] top-3.5 w-2 h-2 rounded-[1px] ${
+                      exp.isCurrentOrRecent
+                        ? "bg-signal ring-2 ring-signal/30 ring-offset-2 ring-offset-panel"
+                        : "bg-ink"
+                    }`}
+                    aria-hidden="true"
+                  />
 
-                  <div className="p-5 sm:p-7">
-                    {/* Mobile Date Display */}
-                    <div className="sm:hidden mb-2">
-                      <span className="font-mono text-[12px] text-ink-soft font-medium">
-                        {exp.dates}
-                      </span>
-                    </div>
+                  {/* Experience Card */}
+                  <div className="border border-rule bg-panel-raised rounded-[2px] overflow-hidden transition-all duration-200 hover:border-ink-soft">
+                    {/* Top colored accent indicator rail */}
+                    <div className={`h-1 w-full ${exp.accentBar}`} />
 
-                    {/* Card Header with Role & Meta */}
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3 pb-3 border-b border-rule">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${exp.badgeColor}`}>
-                            {exp.badge}
-                          </span>
-                        </div>
-                        <h3 className="font-heading font-bold text-xl sm:text-2xl text-ink leading-tight">
-                          {exp.role}
-                        </h3>
-                        <div className="font-sans text-sm text-ink-soft mt-1 flex items-center gap-2 flex-wrap">
-                          {exp.companyUrl ? (
-                            <a
-                              href={exp.companyUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-medium text-ink hover:text-signal transition-colors inline-flex items-center gap-1 no-custom-link underline underline-offset-2"
-                            >
-                              <span>{exp.company}</span>
-                              <ExternalLink className="w-3 h-3 text-ink-soft" />
-                            </a>
-                          ) : (
-                            <span className="font-medium text-ink">{exp.company}</span>
-                          )}
-                          <span className="text-rule">|</span>
-                          <span>{exp.location}</span>
+                    <div className="p-5 sm:p-7">
+                      {/* Mobile Date Display */}
+                      <div className="sm:hidden mb-2">
+                        <span className="font-mono text-[12px] text-ink-soft font-medium">
+                          {exp.dates}
+                        </span>
+                      </div>
+
+                      {/* Card Header with Role & Meta */}
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3 pb-3 border-b border-rule">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${exp.badgeColor}`}>
+                              {exp.badge}
+                            </span>
+                          </div>
+                          <h3 className="font-heading font-bold text-xl sm:text-2xl text-ink leading-tight">
+                            {exp.role}
+                          </h3>
+                          <div className="font-sans text-sm text-ink-soft mt-1 flex items-center gap-2 flex-wrap">
+                            {exp.companyUrl ? (
+                              <a
+                                href={exp.companyUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-ink hover:text-signal transition-colors inline-flex items-center gap-1 no-custom-link underline underline-offset-2"
+                              >
+                                <span>{exp.company}</span>
+                                <ExternalLink className="w-3 h-3 text-ink-soft" />
+                              </a>
+                            ) : (
+                              <span className="font-medium text-ink">{exp.company}</span>
+                            )}
+                            <span className="text-rule">|</span>
+                            <span>{exp.location}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Headline if present */}
-                    {exp.headline && (
-                      <div className="mb-3 font-sans text-sm font-semibold text-ink flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-signal rounded-[1px]" />
-                        <span>{exp.headline}</span>
+                      {/* Headline if present */}
+                      {exp.headline && (
+                        <div className="mb-3 font-sans text-sm font-semibold text-ink flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 bg-signal rounded-[1px]" />
+                          <span>{exp.headline}</span>
+                        </div>
+                      )}
+
+                      {/* Short Summary */}
+                      <p className="font-sans text-sm text-ink-soft leading-relaxed mb-4">
+                        {exp.description}
+                      </p>
+
+                      {/* Interactive Widget for ESD Performance */}
+                      {exp.id === "esd-vimar" && (
+                        <div className="mb-5">
+                          <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading DCU polling race widget...</div>}>
+                            <DcuPollingRace />
+                          </Suspense>
+                        </div>
+                      )}
+
+                      {/* Expand / Collapse Button */}
+                      <div className="mb-3">
+                        <button
+                          onClick={() => toggleExpand(exp.id)}
+                          aria-expanded={isExpanded}
+                          className="font-heading font-bold text-xs uppercase tracking-wider text-ink-soft hover:text-ink flex items-center gap-1.5 py-1 focus-visible:outline-none"
+                        >
+                          <span>Key Engineering Deliverables ({exp.bullets.length})</span>
+                          <ChevronDown
+                            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                              isExpanded ? "rotate-180 text-signal" : ""
+                            }`}
+                          />
+                        </button>
                       </div>
-                    )}
 
-                    {/* Short Summary */}
-                    <p className="font-sans text-sm text-ink-soft leading-relaxed mb-5">
-                      {exp.description}
-                    </p>
-
-                    {/* Key Contributions with hairline tick */}
-                    <div className="mb-6">
-                      <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-ink-soft mb-2.5">
-                        Key Engineering Deliverables
-                      </h4>
-                      <ul className="space-y-2.5">
-                        {exp.bullets.map((bullet, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start text-sm text-ink font-sans leading-relaxed"
+                      {/* Key Contributions with animated disclosure */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.div
+                            initial={reducedMotion ? { opacity: 1 } : { opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
+                            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden mb-6"
                           >
-                            <span
-                              className="w-3 h-px bg-rule shrink-0 mt-[10px] mr-2.5"
-                              aria-hidden="true"
-                            />
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                            <ul className="space-y-2.5 pt-1">
+                              {exp.bullets.map((bullet, idx) => (
+                                <li
+                                  key={idx}
+                                  className="flex items-start text-sm text-ink font-sans leading-relaxed"
+                                >
+                                  <span
+                                    className="w-3 h-px bg-rule shrink-0 mt-[10px] mr-2.5"
+                                    aria-hidden="true"
+                                  />
+                                  <span>{bullet}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
 
-                    {/* Tech Tags */}
-                    <div className="pt-3 border-t border-rule">
-                      <div className="flex flex-wrap gap-1.5">
-                        {exp.tags.map((tag) => (
-                          <span key={tag} className="tech-chip text-xs">
-                            {tag}
-                          </span>
-                        ))}
+                      {/* Tech Tags */}
+                      <div className="pt-3 border-t border-rule">
+                        <div className="flex flex-wrap gap-1.5">
+                          {exp.tags.map((tag) => (
+                            <span key={tag} className="tech-chip text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

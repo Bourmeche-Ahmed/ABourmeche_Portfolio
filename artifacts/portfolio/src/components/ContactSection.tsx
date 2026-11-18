@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Download, Copy, Check, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
+import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Download, Copy, Check, ExternalLink, Loader2 } from "lucide-react";
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
 import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
@@ -13,6 +14,7 @@ const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "templat
 
 export function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [validationErrors, setValidationErrors] = useState<{ name?: string; email?: string; message?: string }>({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,8 +32,26 @@ export function ContactSection() {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
+  const validate = () => {
+    const errs: { name?: string; email?: string; message?: string } = {};
+    if (!form.name.trim() || form.name.trim().length < 2) {
+      errs.name = "Please enter your name (min 2 characters).";
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim() || !emailRegex.test(form.email.trim())) {
+      errs.email = "Please enter a valid email address.";
+    }
+    if (!form.message.trim() || form.message.trim().length < 10) {
+      errs.message = "Please write a brief message (min 10 characters).";
+    }
+    setValidationErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
+
     setError(null);
     setLoading(true);
 
@@ -62,7 +82,7 @@ export function ContactSection() {
 
         setSubmitted(true);
         setForm({ name: "", email: "", message: "" });
-        setTimeout(() => setSubmitted(false), 5000);
+        setValidationErrors({});
       } catch (err: any) {
         console.error("EmailJS Error:", err);
         const errDetail = err?.text || err?.message || "";
@@ -78,8 +98,8 @@ export function ContactSection() {
       window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
       setSubmitted(true);
       setForm({ name: "", email: "", message: "" });
+      setValidationErrors({});
       setLoading(false);
-      setTimeout(() => setSubmitted(false), 5000);
     }
   };
 
@@ -199,13 +219,28 @@ export function ContactSection() {
               </div>
 
               {submitted ? (
-                <div className="p-6 border border-rule bg-panel-sunk rounded-[2px] flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-signal shrink-0" />
-                  <div>
+                <div className="p-6 border border-rule bg-panel-sunk rounded-[2px] flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-[2px] bg-signal/15 border border-signal/30 flex items-center justify-center text-signal shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <motion.path
+                        d="M5 13l4 4L19 7"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
                     <p className="font-sans font-semibold text-sm text-ink">Message Transmitted Successfully</p>
                     <p className="font-sans text-xs text-ink-soft mt-0.5">
                       Your inquiry has been dispatched to {TARGET_EMAIL}. I will reply promptly.
                     </p>
+                    <button
+                      onClick={() => setSubmitted(false)}
+                      className="mt-3 text-xs font-mono text-signal underline underline-offset-2 hover:text-ink transition-colors"
+                    >
+                      Send Another Message
+                    </button>
                   </div>
                 </div>
               ) : error ? (
@@ -232,10 +267,18 @@ export function ContactSection() {
                       type="text"
                       required
                       value={form.name}
-                      onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                      onChange={(e) => {
+                        setForm((f) => ({ ...f, name: e.target.value }));
+                        if (validationErrors.name) setValidationErrors((v) => ({ ...v, name: undefined }));
+                      }}
                       placeholder="e.g. Lead Engineer / Hiring Manager"
-                      className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none"
+                      className={`w-full px-3 py-2 rounded-[2px] bg-panel-sunk border text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none ${
+                        validationErrors.name ? "border-rose-500" : "border-rule"
+                      }`}
                     />
+                    {validationErrors.name && (
+                      <p className="text-[11px] font-sans text-rose-500 mt-1">{validationErrors.name}</p>
+                    )}
                   </div>
 
                   <div>
@@ -247,10 +290,18 @@ export function ContactSection() {
                       type="email"
                       required
                       value={form.email}
-                      onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                      onChange={(e) => {
+                        setForm((f) => ({ ...f, email: e.target.value }));
+                        if (validationErrors.email) setValidationErrors((v) => ({ ...v, email: undefined }));
+                      }}
                       placeholder="e.g. yourname@company.com"
-                      className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none"
+                      className={`w-full px-3 py-2 rounded-[2px] bg-panel-sunk border text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none ${
+                        validationErrors.email ? "border-rose-500" : "border-rule"
+                      }`}
                     />
+                    {validationErrors.email && (
+                      <p className="text-[11px] font-sans text-rose-500 mt-1">{validationErrors.email}</p>
+                    )}
                   </div>
 
                   <div>
@@ -262,19 +313,30 @@ export function ContactSection() {
                       required
                       rows={5}
                       value={form.message}
-                      onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                      onChange={(e) => {
+                        setForm((f) => ({ ...f, message: e.target.value }));
+                        if (validationErrors.message) setValidationErrors((v) => ({ ...v, message: undefined }));
+                      }}
                       placeholder="Describe the opportunity, technical scope, or discussion topic..."
-                      className="w-full px-3 py-2 rounded-[2px] bg-panel-sunk border border-rule text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none resize-none"
+                      className={`w-full px-3 py-2 rounded-[2px] bg-panel-sunk border text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none resize-none ${
+                        validationErrors.message ? "border-rose-500" : "border-rule"
+                      }`}
                     />
+                    {validationErrors.message && (
+                      <p className="text-[11px] font-sans text-rose-500 mt-1">{validationErrors.message}</p>
+                    )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary w-full py-2.5"
+                    className="btn-primary w-full py-2.5 flex items-center justify-center gap-2"
                   >
                     {loading ? (
-                      <span>Transmitting...</span>
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Transmitting...</span>
+                      </>
                     ) : (
                       <>
                         <Send className="w-3.5 h-3.5" />
