@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 import { ProjectCard } from "./ProjectCard";
@@ -144,7 +145,7 @@ export function ProjectsSection() {
           </div>
         </div>
 
-        {/* Projects Grid */}
+        {/* Projects Grid with layout reflow */}
         {filtered.length === 0 ? (
           <div className="border border-rule bg-panel-raised p-10 text-center rounded-[2px]">
             <p className="text-base text-ink font-semibold mb-1">No matching engineering projects found</p>
@@ -160,16 +161,18 @@ export function ProjectsSection() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {paginatedProjects.map((project, i) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                index={i}
-                onClick={() => setSelected(project)}
-              />
-            ))}
-          </div>
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <AnimatePresence mode="popLayout">
+              {paginatedProjects.map((project, i) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  index={i}
+                  onClick={() => setSelected(project)}
+                />
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
 
         {/* Pagination Bar */}

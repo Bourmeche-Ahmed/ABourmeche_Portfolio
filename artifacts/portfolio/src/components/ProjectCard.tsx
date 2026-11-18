@@ -1,7 +1,13 @@
+import React, { useRef, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import { Github, ExternalLink, ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { ProjectImage } from "./ProjectImage";
+import { CountUpMetric } from "./CountUpMetric";
 import { getAssetPath } from "@/lib/paths";
+import { usePointerFine } from "@/hooks/usePointerFine";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionConfig } from "@/config/motion";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
 
@@ -55,6 +61,13 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, onClick }: ProjectCardProps) {
+  const isPointerFine = usePointerFine();
+  const reducedMotion = useReducedMotion();
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000, active: false });
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+
   const catStyle = categoryStyles[project.category] || {
     badge: "bg-signal/15 text-signal border-signal/30",
     accent: "bg-signal",
@@ -65,16 +78,69 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
   const expectedCoverPath = coverFile ? `public/projects/${project.id}/${coverFile}` : undefined;
   const coverFit = project.gallery?.find((g) => g.file === coverFile)?.fit || "cover";
 
+  // Mouse move handler for spotlight border and 3D tilt
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isPointerFine || reducedMotion) return;
+    const card = cardRef.current;
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setMousePos({ x, y, active: true });
+
+    if (motionConfig.flags.tilt) {
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      // Max 3.5 degrees tilt
+      const rx = ((y - centerY) / centerY) * -3.5;
+      const ry = ((x - centerX) / centerX) * 3.5;
+      setTilt({ rx, ry });
+    }
+  }, [isPointerFine, reducedMotion]);
+
+  const handleMouseLeave = useCallback(() => {
+    setMousePos((prev) => ({ ...prev, active: false }));
+    setTilt({ rx: 0, ry: 0 });
+  }, []);
+
   return (
-    <div
+    <motion.div
+      ref={cardRef}
       onClick={onClick}
-      className="group border border-rule bg-panel-raised rounded-[2px] overflow-hidden flex flex-col h-full cursor-pointer transition-all duration-200 hover:border-ink hover:shadow-sm"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      layout
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        transform:
+          isPointerFine && !reducedMotion && tilt.rx !== 0
+            ? `perspective(800px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`
+            : "none",
+        transition: "transform 0.15s ease-out, border-color 0.15s ease",
+      }}
+      className="group relative border border-rule bg-panel-raised rounded-[2px] overflow-hidden flex flex-col h-full cursor-pointer hover:border-ink"
     >
+      {/* Cursor spotlight border effect on desktop */}
+      {isPointerFine && mousePos.active && !reducedMotion && (
+        <div
+          className="pointer-events-none absolute -inset-px rounded-[2px] opacity-100 transition-opacity duration-300 z-10"
+          style={{
+            background: `radial-gradient(280px circle at ${mousePos.x}px ${mousePos.y}px, rgba(245, 158, 11, 0.18), transparent 80%)`,
+          }}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Category top hairline indicator */}
       <div className={`h-0.5 w-full ${catStyle.accent}`} />
 
-      {/* 16:10 Cover image slot */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-rule bg-panel-sunk shrink-0">
+      {/* 16:10 Cover image slot with shared layout transition */}
+      <motion.div
+        layoutId={`project-cover-${project.id}`}
+        className="relative aspect-[16/10] w-full overflow-hidden border-b border-rule bg-panel-sunk shrink-0"
+      >
         <ProjectImage
           src={coverSrc}
           alt={project.title}
@@ -84,9 +150,9 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           expectedPath={expectedCoverPath}
           imgClassName="motion-safe:group-hover:scale-[1.03] motion-reduce:transform-none transition-transform duration-300"
         />
-      </div>
+      </motion.div>
 
-      <div className="p-5 sm:p-6 flex flex-col flex-1">
+      <div className="p-5 sm:p-6 flex flex-col flex-1 relative z-20">
         {/* Category Badge & Repo Identifier */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${catStyle.badge}`}>
@@ -97,27 +163,24 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           </span>
         </div>
 
-        {/* Project Title */}
-        <h3 className="font-heading font-bold text-lg sm:text-xl text-ink leading-tight mb-2 group-hover:text-signal transition-colors">
+        {/* Project Title with shared layout transition */}
+        <motion.h3
+          layoutId={`project-title-${project.id}`}
+          className="font-heading font-bold text-lg sm:text-xl text-ink leading-tight mb-2 group-hover:text-signal transition-colors"
+        >
           {project.title}
-        </h3>
+        </motion.h3>
 
         {/* Description */}
         <p className="font-sans text-xs sm:text-sm text-ink-soft leading-relaxed flex-1 mb-3.5">
           {project.description}
         </p>
 
-        {/* Metrics Chips (up to 3) */}
+        {/* Metrics Chips (up to 3) with count-up animation */}
         {project.metrics && project.metrics.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3.5">
             {project.metrics.slice(0, 3).map((m, idx) => (
-              <span
-                key={idx}
-                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[2px] bg-panel-sunk border border-rule text-[10px] font-mono"
-              >
-                <span className="text-ink-soft">{m.label}:</span>
-                <span className="text-ink font-semibold">{m.value}</span>
-              </span>
+              <CountUpMetric key={idx} label={m.label} value={m.value} />
             ))}
           </div>
         )}
@@ -196,6 +259,6 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   Github,
@@ -17,6 +18,8 @@ import { copyToClipboard } from "@/lib/utils";
 import { getAssetPath } from "@/lib/paths";
 import { ProjectImage, BlueprintPlaceholder } from "./ProjectImage";
 import { categoryStyles } from "./ProjectCard";
+import { ArchitectureFlow } from "./ArchitectureFlow";
+import { CountUpMetric } from "./CountUpMetric";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
 
@@ -299,9 +302,21 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   {project.repo}
                 </span>
               </div>
-              <h2 className="font-heading font-bold text-xl sm:text-2xl lg:text-3xl text-ink leading-tight">
+              <motion.h2
+                layoutId={`project-title-${project.id}`}
+                className="font-heading font-bold text-xl sm:text-2xl lg:text-3xl text-ink leading-tight"
+              >
                 {project.title}
-              </h2>
+              </motion.h2>
+
+              {/* Modal Metrics Chips */}
+              {project.metrics && project.metrics.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2.5">
+                  {project.metrics.map((m, idx) => (
+                    <CountUpMetric key={idx} label={m.label} value={m.value} />
+                  ))}
+                </div>
+              )}
             </div>
 
             <button
@@ -459,9 +474,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <Layers className="w-4 h-4 text-telemetry" />
                   <span>System Architecture</span>
                 </h3>
-                <div className="p-3.5 rounded-[2px] bg-panel-sunk border border-rule font-mono text-xs text-ink overflow-x-auto leading-relaxed">
-                  {project.architecture}
-                </div>
+                <ArchitectureFlow architecture={project.architecture} />
               </div>
             )}
 
