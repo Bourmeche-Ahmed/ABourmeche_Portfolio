@@ -104,26 +104,26 @@ const rawProjects: Project[] = [
     gallery: [
       {
         file: "vroom1.jpg",
-        alt: "VROOM PCB 3D layout in KiCad",
-        caption: "VROOM PCB layout (KiCad): automotive power stage, CAN interface, ESP32-S3, and HUB75 driver",
+        alt: "VROOM 2-layer PCB 3D render in KiCad showing ESP32-S3 module, buzzer, HUB75 connector, and 74HCT244 buffers",
+        caption: "KiCad 3D render: 2-layer PCB (~77 × 67 mm) with ESP32-S3, buzzer (BZ1), HUB75 header, and 74HCT244 level shifters",
         fit: "cover",
       },
       {
         file: "vroom2.jpg",
-        alt: "VROOM power supply schematic",
-        caption: "Schematic: protected 12 V input, 60 V-capable TPS54360 buck converter (5 V), and 3.3 V LDO",
-        fit: "contain",
+        alt: "KiCad PCB layout editor view with F.Cu (red) and B.Cu (blue) traces, ground plane, and component footprints",
+        caption: "PCB layout: front copper (red) and back copper (blue) routing, ground plane pour, and M2 mounting holes",
+        fit: "cover",
       },
       {
         file: "vroom3.jpg",
-        alt: "VROOM CAN and MCU subsystem schematic",
-        caption: "Schematic: CAN transceiver, common-mode choke, TVS, ESP32-S3, and USB-C ESD protection",
+        alt: "KiCad schematic of CAN transceiver subsystem: SN65HVD230 with SM712 TVS and Würth common-mode choke to OBD-II",
+        caption: "Schematic: SN65HVD230 CAN transceiver, SM712 TVS protection, and Würth WE-CNSW common-mode choke",
         fit: "contain",
       },
       {
         file: "vroom4.jpg",
-        alt: "VROOM HUB75 display driver schematic",
-        caption: "Schematic: dual 74HCT244 level shifters driving 16-pin HUB75 RGB LED matrix and IMU",
+        alt: "KiCad schematic of power supply: 12 V fused input, SMCJ33A TVS, TPS54360 buck converter to 5 V, AP2112K LDO to 3.3 V",
+        caption: "Schematic: TPS54360 buck (12 V → 5 V) with B560C catch diode, 8.2 µH inductor, and AP2112K-3.3 LDO",
         fit: "contain",
       },
     ],
@@ -179,8 +179,8 @@ const rawProjects: Project[] = [
     gallery: [
       {
         file: "rl1.png",
-        alt: "Pioneer 3-AT autonomous navigation in Webots",
-        caption: "Pioneer 3-AT mobile robot navigating cluttered obstacle environments in Webots simulation",
+        alt: "Side-by-side comparison: Classical VFH (left, yellow path, timeout) vs Learned PPO (right, green path, success) in a grid of cylindrical obstacles",
+        caption: "Classical VFH vs Learned PPO: the VFH agent loops and times out; the PPO policy navigates directly to the goal",
         fit: "cover",
       },
       {
@@ -246,8 +246,8 @@ const rawProjects: Project[] = [
     gallery: [
       {
         file: "farzit.jpg",
-        alt: "FARZIT autonomous obstacle-avoidance robot",
-        caption: "FARZIT autonomous robot: STM32, single ToF sensor, SolidWorks chassis, and custom KiCad PCB",
+        alt: "FARZIT robot SolidWorks 3D render: teal multi-tier chassis with wheels, red emergency stop button, and penguin logo",
+        caption: "SolidWorks render of the FARZIT chassis with emergency stop, drive wheels, and team logo",
         fit: "cover",
       },
       {
@@ -308,8 +308,8 @@ const rawProjects: Project[] = [
     gallery: [
       {
         file: "pid.png",
-        alt: "PID Control Dashboard",
-        caption: "PID Control Dashboard operator interface with real-time response curve and live Simulink digital twin integration",
+        alt: "PID Control Dashboard: dark-themed UI showing temperature vs setpoint chart, error signal, control output, and PID tuner sliders (Kp, Ki, Kd)",
+        caption: "Dashboard operator view: live temperature tracking, error/control output plots, and PID gain tuning panel",
         fit: "cover",
       },
     ],
@@ -355,8 +355,8 @@ const rawProjects: Project[] = [
     gallery: [
       {
         file: "iiot1.png",
-        alt: "IIoT Predictive Maintenance Dashboard",
-        caption: "Industrial IoT predictive maintenance dashboard for machine vibration and sensor telemetry",
+        alt: "IIoT dashboard showing Pump B status: temperature 88.48°C, vibration 0.327 mm/s, pressure 5.94 bar, health score 75/100 Healthy, and time-series charts with warning/critical thresholds",
+        caption: "Pump B overview: multi-sensor telemetry (temperature, vibration, pressure), health gauge, and anomaly score timeline",
         fit: "cover",
       },
       {
@@ -503,6 +503,24 @@ const rawProjects: Project[] = [
         file: "response.png",
         alt: "Displacement response",
         caption: "Active PD control response plot",
+        fit: "contain",
+      },
+      {
+        file: "hil1.jpg",
+        alt: "HIL architecture diagram: LabVIEW supervision connected via FabulaTech virtual COM ports (COM3/COM4 params, COM1/COM2 outputs) to Proteus ATmega328P Euler integrator",
+        caption: "HIL communication architecture: LabVIEW ↔ virtual serial COM bridge ↔ Proteus ATmega328P solver",
+        fit: "contain",
+      },
+      {
+        file: "hil2.jpg",
+        alt: "LabVIEW waveform charts: passive suspension (left) showing persistent oscillation vs active PD control (right) converging to zero in ~40 s",
+        caption: "Passive vs active PD control: persistent oscillation (left) vs convergence to zero in ≈ 40 s (right)",
+        fit: "contain",
+      },
+      {
+        file: "hil3.jpg",
+        alt: "Comparison table: passive vs active PD — peak Zs reduced by ~87%, peak Żs by ~83%, oscillations eliminated, settling ≈ 40 s",
+        caption: "Quantitative results: 87% peak displacement reduction, 83% velocity reduction, oscillations fully suppressed",
         fit: "contain",
       },
     ],
