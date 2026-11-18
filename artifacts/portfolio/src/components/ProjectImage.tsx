@@ -33,6 +33,7 @@ export interface ProjectImageProps {
   alt: string;
   category: ProjectCategory;
   fit?: "cover" | "contain";
+  focus?: string; // CSS object-position, e.g. "center top"
   isCover?: boolean;
   expectedPath?: string;
   className?: string;
@@ -97,6 +98,7 @@ export function ProjectImage({
   alt,
   category,
   fit = "cover",
+  focus,
   isCover = false,
   expectedPath,
   className = "",
@@ -178,6 +180,7 @@ export function ProjectImage({
         decoding="async"
         onError={handleError}
         onLoad={handleLoad}
+        style={focus ? { objectPosition: focus } : undefined}
         className={`w-full h-full transition-opacity duration-300 ${
           fit === "contain" ? "object-contain p-2" : "object-cover"
         } ${isLoaded ? "opacity-100" : "opacity-0"} ${imgClassName}`}

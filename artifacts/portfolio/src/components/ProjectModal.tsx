@@ -388,6 +388,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                               alt={item.alt}
                               category={project.category}
                               fit={item.fit || "cover"}
+                              focus={item.focus}
                               expectedPath={expectedPath}
                               onError={() => handleImageError(item.file)}
                             />
@@ -454,6 +455,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           alt={item.alt}
                           category={project.category}
                           fit={item.fit || "cover"}
+                          focus={item.focus}
                           expectedPath={expectedPath}
                           onError={() => handleImageError(item.file)}
                           imgClassName="group-hover:scale-[1.02] transition-transform duration-300"

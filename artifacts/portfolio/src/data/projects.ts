@@ -21,6 +21,7 @@ export interface GalleryItem {
   alt: string;
   caption: string;
   fit?: "cover" | "contain";
+  focus?: string; // CSS object-position value, e.g. "center top" or "50% 30%"
 }
 
 export interface ProjectMetric {
@@ -249,6 +250,7 @@ const rawProjects: Project[] = [
         alt: "FARZIT robot SolidWorks 3D render: teal multi-tier chassis with wheels, red emergency stop button, and penguin logo",
         caption: "SolidWorks render of the FARZIT chassis with emergency stop, drive wheels, and team logo",
         fit: "cover",
+        focus: "50% 35%",
       },
       {
         file: "chassis-render.png",
@@ -485,26 +487,8 @@ const rawProjects: Project[] = [
       "Active PD suspension control",
       "HIL-ready serial communication pipeline",
     ],
-    cover: "proteus.png",
+    cover: "hil1.jpg",
     gallery: [
-      {
-        file: "proteus.png",
-        alt: "Proteus simulation",
-        caption: "Proteus simulation of ATmega328P Euler solver",
-        fit: "contain",
-      },
-      {
-        file: "labview.png",
-        alt: "LabVIEW interface",
-        caption: "LabVIEW real-time control interface",
-        fit: "contain",
-      },
-      {
-        file: "response.png",
-        alt: "Displacement response",
-        caption: "Active PD control response plot",
-        fit: "contain",
-      },
       {
         file: "hil1.jpg",
         alt: "HIL architecture diagram: LabVIEW supervision connected via FabulaTech virtual COM ports (COM3/COM4 params, COM1/COM2 outputs) to Proteus ATmega328P Euler integrator",
@@ -521,6 +505,24 @@ const rawProjects: Project[] = [
         file: "hil3.jpg",
         alt: "Comparison table: passive vs active PD — peak Zs reduced by ~87%, peak Żs by ~83%, oscillations eliminated, settling ≈ 40 s",
         caption: "Quantitative results: 87% peak displacement reduction, 83% velocity reduction, oscillations fully suppressed",
+        fit: "contain",
+      },
+      {
+        file: "proteus.png",
+        alt: "Proteus simulation",
+        caption: "Proteus simulation of ATmega328P Euler solver",
+        fit: "contain",
+      },
+      {
+        file: "labview.png",
+        alt: "LabVIEW interface",
+        caption: "LabVIEW real-time control interface",
+        fit: "contain",
+      },
+      {
+        file: "response.png",
+        alt: "Displacement response",
+        caption: "Active PD control response plot",
         fit: "contain",
       },
     ],
