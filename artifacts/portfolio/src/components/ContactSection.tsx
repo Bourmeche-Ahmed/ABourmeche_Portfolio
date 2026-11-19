@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Download, Copy, Check, ExternalLink, Loader2 } from "lucide-react";
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
+import { LedMatrixTicker } from "./LedMatrixTicker";
 import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
 import { copyToClipboard } from "@/lib/utils";
 
@@ -131,6 +132,9 @@ export function ContactSection() {
           title="Contact & Internship Inquiry"
           subtitle="Seeking a Final-Year Engineering Internship (PFE) starting February 2027 · Open to relocation and international opportunities."
         />
+
+        {/* 32x7 LED Dot Matrix Telemetry Marquee */}
+        <LedMatrixTicker />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Left Column: Direct Inquiries & Channels */}
