@@ -76,7 +76,15 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
   const coverFile = project.cover || project.gallery?.[0]?.file;
   const coverSrc = coverFile ? getAssetPath(`projects/${project.id}/${coverFile}`) : undefined;
   const expectedCoverPath = coverFile ? `public/projects/${project.id}/${coverFile}` : undefined;
-  const coverFit = project.gallery?.find((g) => g.file === coverFile)?.fit || "cover";
+  const coverGalleryItem = project.gallery?.find((g) => g.file === coverFile);
+  const coverFit = coverGalleryItem?.fit || "cover";
+  const coverFocus = coverGalleryItem?.focus;
+
+  const isTilted =
+    isPointerFine &&
+    !reducedMotion &&
+    tilt.rx !== 0 &&
+    motionConfig.flags.three_d.cardParallax;
 
   // Mouse move handler for spotlight border and 3D tilt
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -118,6 +126,7 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           isPointerFine && !reducedMotion && tilt.rx !== 0
             ? `perspective(800px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`
             : "none",
+        transformStyle: isTilted ? "preserve-3d" : "flat",
         transition: "transform 0.15s ease-out, border-color 0.15s ease",
       }}
       className="group relative border border-rule bg-panel-raised rounded-[2px] overflow-hidden flex flex-col h-full cursor-pointer hover:border-ink"
@@ -139,6 +148,10 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
       {/* 16:10 Cover image slot with shared layout transition */}
       <motion.div
         layoutId={`project-cover-${project.id}`}
+        style={{
+          transform: isTilted ? "translateZ(0px)" : "none",
+          transformStyle: "preserve-3d",
+        }}
         className="relative aspect-[16/10] w-full overflow-hidden border-b border-rule bg-panel-sunk shrink-0"
       >
         <ProjectImage
@@ -146,13 +159,17 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           alt={project.title}
           category={project.category}
           fit={coverFit}
+          focus={coverFocus}
           isCover
           expectedPath={expectedCoverPath}
           imgClassName="motion-safe:group-hover:scale-[1.03] motion-reduce:transform-none transition-transform duration-300"
         />
       </motion.div>
 
-      <div className="p-5 sm:p-6 flex flex-col flex-1 relative z-20">
+      <div
+        className="p-5 sm:p-6 flex flex-col flex-1 relative z-20"
+        style={{ transformStyle: isTilted ? "preserve-3d" : "flat" }}
+      >
         {/* Category Badge & Repo Identifier */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${catStyle.badge}`}>
@@ -163,9 +180,13 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           </span>
         </div>
 
-        {/* Project Title with shared layout transition */}
+        {/* Project Title with shared layout transition and 20px 3D depth */}
         <motion.h3
           layoutId={`project-title-${project.id}`}
+          style={{
+            transform: isTilted ? "translateZ(20px)" : "none",
+            transformStyle: "preserve-3d",
+          }}
           className="font-heading font-bold text-lg sm:text-xl text-ink leading-tight mb-2 group-hover:text-signal transition-colors"
         >
           {project.title}
@@ -176,9 +197,15 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           {project.description}
         </p>
 
-        {/* Metrics Chips (up to 3) with count-up animation */}
+        {/* Metrics Chips (up to 3) with count-up animation and 40px depth */}
         {project.metrics && project.metrics.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3.5">
+          <div
+            className="flex flex-wrap gap-1.5 mb-3.5"
+            style={{
+              transform: isTilted ? "translateZ(40px)" : "none",
+              transformStyle: "preserve-3d",
+            }}
+          >
             {project.metrics.slice(0, 3).map((m, idx) => (
               <CountUpMetric key={idx} label={m.label} value={m.value} />
             ))}
@@ -220,8 +247,14 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           </div>
         )}
 
-        {/* Tech Badges */}
-        <div className="flex flex-wrap gap-1 mb-5">
+        {/* Tech Badges with 30px depth */}
+        <div
+          className="flex flex-wrap gap-1 mb-5"
+          style={{
+            transform: isTilted ? "translateZ(30px)" : "none",
+            transformStyle: "preserve-3d",
+          }}
+        >
           {project.techBadges.slice(0, 4).map((badge) => (
             <span key={badge} className="tech-chip text-[11px] py-0.5 px-2">
               {badge}
@@ -234,8 +267,14 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           )}
         </div>
 
-        {/* Interactive Action Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-rule mt-auto text-xs min-h-[44px]">
+        {/* Interactive Action Footer with 40px depth */}
+        <div
+          className="flex items-center justify-between pt-3 border-t border-rule mt-auto text-xs min-h-[44px]"
+          style={{
+            transform: isTilted ? "translateZ(40px)" : "none",
+            transformStyle: "preserve-3d",
+          }}
+        >
           <span className="font-sans font-semibold text-ink group-hover:text-signal transition-colors inline-flex items-center gap-1">
             <span>Case Study</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
