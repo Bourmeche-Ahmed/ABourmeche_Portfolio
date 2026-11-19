@@ -1,5 +1,6 @@
 import { SectionHeader } from "./SectionHeader";
 import { SkillCharts } from "./SkillCharts";
+import { SkillRing3D } from "./SkillRing3D";
 
 export function SkillsSection() {
   return (
@@ -9,6 +10,7 @@ export function SkillsSection() {
           title="Technical Competencies & Matrix"
           subtitle="Engineering capabilities spanning low-level embedded protocols, field buses, telemetry architectures, and control theory."
         />
+        <SkillRing3D />
         <SkillCharts />
       </div>
     </section>
