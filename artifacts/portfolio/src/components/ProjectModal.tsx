@@ -25,6 +25,7 @@ import { ProjectImage, BlueprintPlaceholder } from "./ProjectImage";
 import { categoryStyles } from "./ProjectCard";
 import { ArchitectureFlow } from "./ArchitectureFlow";
 import { CountUpMetric } from "./CountUpMetric";
+import { CoverflowGallery } from "./CoverflowGallery";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
 
@@ -105,6 +106,7 @@ interface ProjectModalProps {
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [copied, setCopied] = useState(false);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [galleryMode, setGalleryMode] = useState<"coverflow" | "grid">("coverflow");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
@@ -349,31 +351,135 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             {/* Gallery Section */}
             {hasGallery && (
               <div>
-                <h3 className="font-heading font-bold text-base text-ink mb-3 flex items-center gap-2">
-                  <GalleryIcon className="w-4 h-4 text-signal" />
-                  <span>Project Gallery</span>
-                  <span className="font-mono text-xs text-ink-soft">({galleryItems.length})</span>
-                </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-heading font-bold text-base text-ink flex items-center gap-2">
+                    <GalleryIcon className="w-4 h-4 text-signal" />
+                    <span>Project Gallery</span>
+                    <span className="font-mono text-xs text-ink-soft">({galleryItems.length})</span>
+                  </h3>
 
-                {/* Mobile View (<640px): Horizontal scroll-snap carousel */}
-                <div className="block sm:hidden">
-                  <div
-                    ref={carouselRef}
-                    onScroll={handleCarouselScroll}
-                    className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 pb-2 touch-pan-x"
-                  >
-                    {galleryItems.map((item, idx) => {
-                      const itemSrc = getAssetPath(`projects/${project.id}/${item.file}`);
-                      const expectedPath = `public/projects/${project.id}/${item.file}`;
+                  {galleryItems.length > 1 && (
+                    <div className="flex items-center gap-1 border border-rule bg-panel-sunk p-0.5 rounded-[2px] text-xs font-mono">
+                      <button
+                        onClick={() => setGalleryMode("coverflow")}
+                        className={`px-2 py-0.5 rounded-[1px] transition-colors ${
+                          galleryMode === "coverflow"
+                            ? "bg-panel-raised text-ink font-semibold shadow-xs"
+                            : "text-ink-soft hover:text-ink"
+                        }`}
+                      >
+                        3D Coverflow
+                      </button>
+                      <button
+                        onClick={() => setGalleryMode("grid")}
+                        className={`px-2 py-0.5 rounded-[1px] transition-colors ${
+                          galleryMode === "grid"
+                            ? "bg-panel-raised text-ink font-semibold shadow-xs"
+                            : "text-ink-soft hover:text-ink"
+                        }`}
+                      >
+                        Grid
+                      </button>
+                    </div>
+                  )}
+                </div>
 
-                      return (
-                        <div
-                          key={item.file}
-                          className="snap-center shrink-0 w-full flex flex-col"
-                        >
+                {galleryMode === "coverflow" && galleryItems.length > 1 ? (
+                  <CoverflowGallery
+                    items={galleryItems}
+                    projectId={project.id}
+                    category={project.category}
+                    onSelectImage={(idx) => setLightboxIndex(idx)}
+                    onImageError={handleImageError}
+                  />
+                ) : (
+                  <>
+                    {/* Mobile View (<640px): Horizontal scroll-snap carousel */}
+                    <div className="block sm:hidden">
+                      <div
+                        ref={carouselRef}
+                        onScroll={handleCarouselScroll}
+                        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 pb-2 touch-pan-x"
+                      >
+                        {galleryItems.map((item, idx) => {
+                          const itemSrc = getAssetPath(`projects/${project.id}/${item.file}`);
+                          const expectedPath = `public/projects/${project.id}/${item.file}`;
+
+                          return (
+                            <div
+                              key={item.file}
+                              className="snap-center shrink-0 w-full flex flex-col"
+                            >
+                              <div
+                                onClick={() => setLightboxIndex(idx)}
+                                className="relative aspect-[16/10] w-full rounded-[2px] border border-rule overflow-hidden bg-panel-sunk cursor-pointer active:scale-[0.99] transition-transform"
+                                role="button"
+                                tabIndex={0}
+                                aria-label={`Open image: ${item.caption}`}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    setLightboxIndex(idx);
+                                  }
+                                }}
+                              >
+                                <ProjectImage
+                                  src={itemSrc}
+                                  alt={item.alt}
+                                  category={project.category}
+                                  fit={item.fit || "cover"}
+                                  focus={item.focus}
+                                  expectedPath={expectedPath}
+                                  onError={() => handleImageError(item.file)}
+                                />
+                              </div>
+                              {item.caption && (
+                                <p className="mt-2 text-[11px] font-mono text-ink-soft text-center line-clamp-2 px-1">
+                                  {item.caption}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Dot Indicators */}
+                      {galleryItems.length > 1 && (
+                        <div className="flex justify-center items-center gap-1.5 mt-2.5">
+                          {galleryItems.map((item, idx) => (
+                            <button
+                              key={item.file}
+                              onClick={() => scrollToSlide(idx)}
+                              className={`min-w-[24px] min-h-[24px] flex items-center justify-center p-1`}
+                              aria-label={`Go to slide ${idx + 1}`}
+                            >
+                              <span
+                                className={`w-2 h-2 rounded-[1px] transition-colors ${
+                                  activeSlideIndex === idx
+                                    ? "bg-signal"
+                                    : "bg-rule hover:bg-ink-soft"
+                                }`}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Desktop View (≥640px): 2-Column Grid */}
+                    <div className="hidden sm:grid sm:grid-cols-2 gap-3.5">
+                      {galleryItems.map((item, idx) => {
+                        const itemSrc = getAssetPath(`projects/${project.id}/${item.file}`);
+                        const expectedPath = `public/projects/${project.id}/${item.file}`;
+                        const isFeatured = galleryItems.length >= 3 && idx === 0;
+
+                        return (
                           <div
+                            key={item.file}
                             onClick={() => setLightboxIndex(idx)}
-                            className="relative aspect-[16/10] w-full rounded-[2px] border border-rule overflow-hidden bg-panel-sunk cursor-pointer active:scale-[0.99] transition-transform"
+                            className={`group relative rounded-[2px] border border-rule bg-panel-sunk overflow-hidden cursor-pointer hover:border-ink hover:shadow-xs transition-all ${
+                              isFeatured ? "col-span-2 aspect-[21/9]" : "col-span-1 aspect-[16/10]"
+                            }`}
                             role="button"
                             tabIndex={0}
                             aria-label={`Open image: ${item.caption}`}
@@ -392,85 +498,20 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                               focus={item.focus}
                               expectedPath={expectedPath}
                               onError={() => handleImageError(item.file)}
+                              imgClassName="group-hover:scale-[1.02] transition-transform duration-300"
                             />
+                            {/* Hover Caption Overlay */}
+                            <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                              <p className="text-[11px] font-mono text-zinc-100 truncate">
+                                {item.caption}
+                              </p>
+                            </div>
                           </div>
-                          {item.caption && (
-                            <p className="mt-2 text-[11px] font-mono text-ink-soft text-center line-clamp-2 px-1">
-                              {item.caption}
-                            </p>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Dot Indicators */}
-                  {galleryItems.length > 1 && (
-                    <div className="flex justify-center items-center gap-1.5 mt-2.5">
-                      {galleryItems.map((item, idx) => (
-                        <button
-                          key={item.file}
-                          onClick={() => scrollToSlide(idx)}
-                          className={`min-w-[24px] min-h-[24px] flex items-center justify-center p-1`}
-                          aria-label={`Go to slide ${idx + 1}`}
-                        >
-                          <span
-                            className={`w-2 h-2 rounded-[1px] transition-colors ${
-                              activeSlideIndex === idx
-                                ? "bg-signal"
-                                : "bg-rule hover:bg-ink-soft"
-                            }`}
-                          />
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
-                  )}
-                </div>
-
-                {/* Desktop View (≥640px): 2-Column Grid */}
-                <div className="hidden sm:grid sm:grid-cols-2 gap-3.5">
-                  {galleryItems.map((item, idx) => {
-                    const itemSrc = getAssetPath(`projects/${project.id}/${item.file}`);
-                    const expectedPath = `public/projects/${project.id}/${item.file}`;
-                    const isFeatured = galleryItems.length >= 3 && idx === 0;
-
-                    return (
-                      <div
-                        key={item.file}
-                        onClick={() => setLightboxIndex(idx)}
-                        className={`group relative rounded-[2px] border border-rule bg-panel-sunk overflow-hidden cursor-pointer hover:border-ink hover:shadow-xs transition-all ${
-                          isFeatured ? "col-span-2 aspect-[21/9]" : "col-span-1 aspect-[16/10]"
-                        }`}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Open image: ${item.caption}`}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            setLightboxIndex(idx);
-                          }
-                        }}
-                      >
-                        <ProjectImage
-                          src={itemSrc}
-                          alt={item.alt}
-                          category={project.category}
-                          fit={item.fit || "cover"}
-                          focus={item.focus}
-                          expectedPath={expectedPath}
-                          onError={() => handleImageError(item.file)}
-                          imgClassName="group-hover:scale-[1.02] transition-transform duration-300"
-                        />
-                        {/* Hover Caption Overlay */}
-                        <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-[11px] font-mono text-zinc-100 truncate">
-                            {item.caption}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                  </>
+                )}
               </div>
             )}
 
