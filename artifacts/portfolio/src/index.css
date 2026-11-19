@@ -89,51 +89,69 @@
     text-decoration-color: var(--signal);
   }
 
-  /* Primary CTA */
+  /* Primary CTA — Keycap physical button */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    background-color: var(--ink);
+    min-height: 44px;
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(180deg, var(--ink) 0%, color-mix(in srgb, var(--ink) 85%, black) 100%);
     color: var(--panel);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: var(--radius);
-    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid color-mix(in srgb, var(--ink) 60%, black);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), border-bottom-width 0.08s ease, opacity 0.15s ease;
   }
   .btn-primary:hover {
-    opacity: 0.92;
+    opacity: 0.95;
     transform: translateY(-1px);
+    border-bottom-width: 4px;
   }
   .btn-primary:active {
-    transform: translateY(0);
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+    opacity: 1;
   }
 
-  /* Secondary Button */
+  /* Secondary Button — Keycap physical button */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    background-color: var(--panel-raised);
+    min-height: 44px;
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(180deg, var(--panel-raised) 0%, var(--panel) 100%);
     color: var(--ink);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius);
-    border: var(--hair);
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    border-bottom: 3px solid color-mix(in srgb, var(--rule) 70%, var(--ink));
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), border-bottom-width 0.08s ease, background-color 0.15s ease;
   }
   .btn-secondary:hover {
-    background-color: var(--panel-sunk);
+    background: var(--panel-sunk);
     border-color: var(--ink-soft);
+    transform: translateY(-1px);
+    border-bottom-width: 4px;
+  }
+  .btn-secondary:active {
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+    background: var(--panel-sunk);
   }
 
   /* Rectangular Tag Chip */
