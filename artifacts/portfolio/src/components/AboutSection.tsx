@@ -1,5 +1,6 @@
 import { SectionHeader } from "./SectionHeader";
 import { Code2, Cpu, LineChart, Zap, CircuitBoard, CheckCircle2 } from "lucide-react";
+import { BalancingRobot } from "./widgets/BalancingRobot";
 
 const cards = [
   {
@@ -106,6 +107,9 @@ export function AboutSection() {
             </p>
           </div>
         </div>
+
+        {/* Interactive 3D Balancing Robot Digital Twin */}
+        <BalancingRobot />
 
         {/* Domain capability cards */}
         <div>
