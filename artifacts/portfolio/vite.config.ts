@@ -33,6 +33,11 @@ export default defineConfig({
           }
           return "assets/[name][extname]";
         },
+        manualChunks: (id) => {
+          if (id.includes("node_modules/three") || id.includes("@react-three")) {
+            return "three-bundle";
+          }
+        },
       },
     },
   },
