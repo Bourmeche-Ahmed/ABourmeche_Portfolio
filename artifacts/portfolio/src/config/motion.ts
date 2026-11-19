@@ -13,6 +13,28 @@ export interface MotionConfig {
     commandPalette: boolean;
     widgets: boolean;
     oscilloscope: boolean;
+    three_d: {
+      idCard: boolean;
+      explodedPcb: boolean;
+      balancingRobot: boolean;
+      skillRing: boolean;
+      coverflow: boolean;
+      cardParallax: boolean;
+      keycap: boolean;
+      sectionFlip: boolean;
+      floatingChips: boolean;
+    };
+    micro: {
+      namePowerOn: boolean;
+      chipFacts: boolean;
+      glanceStrip: boolean;
+      lineFollower: boolean;
+      terminalWhoami: boolean;
+      ledTicker: boolean;
+      sonarPing: boolean;
+      learningStatus: boolean;
+      sendPulse: boolean;
+    };
   };
   easings: {
     /** Primary measurement easing: fast start, precise settle */
@@ -47,6 +69,28 @@ export const motionConfig: MotionConfig = {
     commandPalette: true,
     widgets: true,
     oscilloscope: true,
+    three_d: {
+      idCard: true,
+      explodedPcb: true,
+      balancingRobot: true,
+      skillRing: true,
+      coverflow: true,
+      cardParallax: true,
+      keycap: true,
+      sectionFlip: true,
+      floatingChips: true,
+    },
+    micro: {
+      namePowerOn: true,
+      chipFacts: true,
+      glanceStrip: true,
+      lineFollower: true,
+      terminalWhoami: true,
+      ledTicker: true,
+      sonarPing: true,
+      learningStatus: true,
+      sendPulse: true,
+    },
   },
 
   // Easing curves: cubic-bezier(0.22, 1, 0.36, 1) per design spec

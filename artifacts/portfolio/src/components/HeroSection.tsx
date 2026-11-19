@@ -4,6 +4,7 @@ import { Download, ArrowRight, Mail } from "lucide-react";
 import { PcbHeroCanvas } from "./PcbHeroCanvas";
 import { ScrambleText } from "./ScrambleText";
 import { TelemetryHud } from "./TelemetryHud";
+import { HolographicIdCard } from "./HolographicIdCard";
 
 interface HeroSectionProps {
   isOscilloscope?: boolean;
@@ -92,40 +93,9 @@ export function HeroSection({ isOscilloscope = false }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* Right Column: Hero Profile Picture Frame */}
+          {/* Right Column: Hero Profile Picture Frame with 3D Holographic ID Card */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="w-full max-w-[290px] border border-rule bg-panel-raised p-3 rounded-[2px] shadow-sm">
-              {/* Top status bar */}
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-rule font-mono text-[10px] text-ink-soft">
-                <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-signal rounded-[1px]" />
-                  <span>SYS.ID // A_BOURMECHE</span>
-                </span>
-                <span className="text-signal font-semibold">ONLINE</span>
-              </div>
-
-              {/* Photo Frame */}
-              <div className="border border-rule overflow-hidden rounded-[2px] bg-panel-sunk relative">
-                <img
-                  src={ASSET_PATHS.photo()}
-                  alt="Ahmed Bourmeche"
-                  className="w-full h-auto object-cover contrast-105"
-                />
-              </div>
-
-              {/* Caption */}
-              <div className="pt-3 text-center">
-                <p className="font-heading font-bold text-lg text-ink tracking-wide">
-                  AHMED BOURMECHE
-                </p>
-                <p className="font-mono text-xs text-signal font-medium">
-                  INSAT · University of Carthage
-                </p>
-                <p className="font-sans text-[11px] text-ink-soft mt-0.5">
-                  Industrial Automation & Real-Time IoT
-                </p>
-              </div>
-            </div>
+            <HolographicIdCard />
           </div>
         </div>
 
