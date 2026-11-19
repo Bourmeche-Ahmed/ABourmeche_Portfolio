@@ -7,6 +7,7 @@ import { TelemetryHud } from "./TelemetryHud";
 import { HolographicIdCard } from "./HolographicIdCard";
 import { FloatingChips } from "./FloatingChips";
 import { NamePowerOn } from "./NamePowerOn";
+import { HeroChipFact } from "./HeroChipFact";
 
 interface HeroSectionProps {
   isOscilloscope?: boolean;
@@ -86,13 +87,33 @@ export function HeroSection({ isOscilloscope = false }: HeroSectionProps) {
               </a>
             </div>
 
-            {/* Spec tags */}
+            {/* Spec tags with flip-on-hover micro-facts and project deep links */}
             <div className="pt-2 flex flex-wrap gap-1.5 text-xs font-mono text-ink-soft">
-              <span className="tech-chip text-[11px] py-0.5 px-2">INSAT Engineering</span>
-              <span className="tech-chip text-[11px] py-0.5 px-2">Embedded C / ESP-IDF</span>
-              <span className="tech-chip text-[11px] py-0.5 px-2">RS-485 & Modbus</span>
-              <span className="tech-chip text-[11px] py-0.5 px-2">MATLAB / Simulink</span>
-              <span className="tech-chip text-[11px] py-0.5 px-2">TypeScript & Python</span>
+              <HeroChipFact
+                label="INSAT Engineering"
+                fact="INSAT State Degree · PFE Feb 2027"
+                projectId="farzit"
+              />
+              <HeroChipFact
+                label="Embedded C / ESP-IDF"
+                fact="VROOM KiCad PCB & ESP32-S3 BLE"
+                projectId="vroom"
+              />
+              <HeroChipFact
+                label="RS-485 & Modbus"
+                fact="13x polling speedup via batching"
+                projectId="iiot-predictive-maintenance"
+              />
+              <HeroChipFact
+                label="MATLAB / Simulink"
+                fact="Sub-100ms live digital twin plant"
+                projectId="pid-control-dashboard"
+              />
+              <HeroChipFact
+                label="TypeScript & Python"
+                fact="CTO @ CyberNexus & FastAPI APIs"
+                projectId="testcybernexus3"
+              />
             </div>
           </div>
 
