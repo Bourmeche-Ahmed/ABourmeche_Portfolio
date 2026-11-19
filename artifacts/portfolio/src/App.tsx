@@ -11,6 +11,7 @@ import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { ToastProvider, useToastNotification } from "@/components/Toast";
 import { CommandPalette } from "@/components/CommandPalette";
+import { SonarPing } from "@/components/SonarPing";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { Command } from "lucide-react";
 import type { Project } from "@/data/projects";
@@ -70,6 +71,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground antialiased relative">
+      <SonarPing />
       <BootSequence />
       <NavBar
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
