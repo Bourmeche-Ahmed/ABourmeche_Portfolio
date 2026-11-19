@@ -33,7 +33,7 @@ const timelineItems = [
     description:
       "Designed and built a fully responsive organizational website with SCSS component architecture and PHP backend — managing events, members, and publications.",
     tags: ["HTML", "SCSS", "PHP", "Responsive"],
-    dot: "bg-orange-400",
+    dot: "bg-hardware",
   },
   {
     period: "2023",

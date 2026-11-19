@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { Gauge, Sliders, RotateCcw } from "lucide-react";
+import { Gauge } from "lucide-react";
 import { usePageVisible } from "@/hooks/usePageVisible";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 function simulatePID(kp: number, ki: number, kd: number, steps: number): { points: number[]; overshoot: number; settlingTime: number } {
   const dt = 0.05;
@@ -49,7 +48,6 @@ export function PidPlayground({ className = "" }: { className?: string }) {
   const [kd, setKd] = useState(0.8);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isVisible = usePageVisible();
-  const isReduced = useReducedMotion();
 
   const { points, overshoot, settlingTime } = useMemo(
     () => simulatePID(kp, ki, kd, 140),
@@ -84,10 +82,10 @@ export function PidPlayground({ className = "" }: { className?: string }) {
     ctx.clearRect(0, 0, W, H);
 
     const isDark = document.documentElement.classList.contains("dark");
-    const gridColor = isDark ? "rgba(148, 163, 184, 0.1)" : "rgba(100, 116, 139, 0.12)";
-    const axisColor = isDark ? "rgba(148, 163, 184, 0.25)" : "rgba(100, 116, 139, 0.25)";
-    const setpointColor = isDark ? "rgba(56, 189, 248, 0.6)" : "rgba(2, 132, 199, 0.6)";
-    const curveColor = "#f59e0b"; // --signal amber
+    const gridColor = isDark ? "rgba(143, 184, 179, 0.12)" : "rgba(63, 107, 102, 0.12)";
+    const axisColor = isDark ? "rgba(143, 184, 179, 0.25)" : "rgba(63, 107, 102, 0.25)";
+    const setpointColor = isDark ? "rgba(95, 179, 171, 0.6)" : "rgba(34, 109, 104, 0.6)";
+    const curveColor = isDark ? "#5FB3AB" : "#226D68"; // --signal teal
 
     // Grid lines
     for (let x = 0; x <= W; x += 30) {
@@ -130,7 +128,7 @@ export function PidPlayground({ className = "" }: { className?: string }) {
     // 2% Error envelope band
     const bandTop = setY - 0.02 * (H * 0.5);
     const bandBottom = setY + 0.02 * (H * 0.5);
-    ctx.fillStyle = isDark ? "rgba(56, 189, 248, 0.06)" : "rgba(2, 132, 199, 0.06)";
+    ctx.fillStyle = isDark ? "rgba(95, 179, 171, 0.08)" : "rgba(34, 109, 104, 0.08)";
     ctx.fillRect(0, bandTop, W, bandBottom - bandTop);
 
     // Response curve
@@ -152,7 +150,7 @@ export function PidPlayground({ className = "" }: { className?: string }) {
       const maxIndex = points.indexOf(Math.max(...points));
       const maxX = (maxIndex / (points.length - 1)) * W;
 
-      ctx.fillStyle = "#ea580c"; // hardware orange
+      ctx.fillStyle = "#D6955B"; // hardware warm copper
       ctx.beginPath();
       ctx.arc(maxX, maxY, 3, 0, Math.PI * 2);
       ctx.fill();
@@ -189,7 +187,7 @@ export function PidPlayground({ className = "" }: { className?: string }) {
             OVERSHOOT (Mp): <span className="text-signal font-bold">{overshoot}%</span>
           </span>
           <span className="bg-panel-raised/90 border border-rule px-2 py-0.5 rounded-[2px] text-ink">
-            SETTLING (Ts): <span className="text-telemetry font-bold">{settlingTime}s</span>
+            SETTLING (Ts): <span className="text-hardware font-bold">{settlingTime}s</span>
           </span>
         </div>
       </div>
@@ -237,7 +235,7 @@ export function PidPlayground({ className = "" }: { className?: string }) {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="w-8 text-xs font-mono font-bold text-telemetry">Ki</span>
+          <span className="w-8 text-xs font-mono font-bold text-hardware">Ki</span>
           <input
             type="range"
             min={0}
@@ -245,7 +243,7 @@ export function PidPlayground({ className = "" }: { className?: string }) {
             step={0.1}
             value={ki}
             onChange={(e) => setKi(parseFloat(e.target.value))}
-            className="flex-1 h-1.5 bg-panel-sunk rounded-[1px] accent-telemetry cursor-pointer"
+            className="flex-1 h-1.5 bg-panel-sunk rounded-[1px] accent-hardware cursor-pointer"
             aria-label="Ki gain parameter"
           />
           <span className="w-10 text-right text-xs font-mono text-ink font-semibold tabular-nums">

@@ -20,36 +20,36 @@ import { projects } from "@/data/projects";
 const skillGroups = [
   {
     category: "Embedded Systems & Hardware",
-    color: "bg-orange-500",
-    badge: "border-orange-500/30 text-orange-600 dark:text-orange-400",
+    color: "bg-hardware",
+    badge: "border-hardware/30 text-hardware-text",
     skills: ["ESP32 / ESP-IDF", "Bare-metal C", "RS-485 / Modbus RTU", "BACnet", "OCPP 1.6J/2.0.1", "NB-IoT", "LoRa", "KiCad PCB Design", "STM32"],
     projectIds: ["vroom", "farzit", "self-balancing-robot"],
   },
   {
     category: "Industrial Ingestion & Backend",
-    color: "bg-sky-500",
-    badge: "border-sky-500/30 text-sky-600 dark:text-sky-400",
+    color: "bg-signal",
+    badge: "border-signal/30 text-signal",
     skills: ["Python", "Django REST Framework", "Flask", "MQTT (Mosquitto)", "Telegraf", "TimescaleDB", "PostgreSQL", "Redis", "Docker Compose"],
     projectIds: ["iiot-predictive-maintenance"],
   },
   {
     category: "Control Systems & Digital Twins",
-    color: "bg-teal-500",
-    badge: "border-teal-500/30 text-teal-600 dark:text-teal-400",
+    color: "bg-signal",
+    badge: "border-signal/30 text-signal",
     skills: ["MATLAB", "Simulink", "Digital Twins", "Closed-loop PID Control", "Hardware-in-the-loop (HIL)", "Signal Processing"],
     projectIds: ["pid-control-dashboard", "quarter-car-suspension-system"],
   },
   {
     category: "Real-Time Dashboards & Frontend",
-    color: "bg-indigo-500",
-    badge: "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
+    color: "bg-signal",
+    badge: "border-signal/30 text-signal",
     skills: ["React", "TypeScript", "Tailwind CSS", "High-frequency Telemetry Charts", "WebSockets", "Vite"],
     projectIds: ["pid-control-dashboard", "iiot-predictive-maintenance"],
   },
   {
     category: "CAD & Fabrication",
-    color: "bg-amber-600",
-    badge: "border-amber-600/30 text-amber-700 dark:text-amber-400",
+    color: "bg-hardware",
+    badge: "border-hardware/30 text-hardware-text",
     skills: ["Onshape (primary CAD tool)", "SolidWorks", "3D printing", "mechanical design for robots"],
     projectIds: ["farzit", "self-balancing-robot", "line-follower-robot"],
   },
@@ -65,10 +65,10 @@ const radarData = [
 ];
 
 const languageData = [
-  { name: "C (Embedded)", value: 40, color: "#ea580c" },
-  { name: "Python", value: 30, color: "#0284c7" },
-  { name: "TypeScript", value: 20, color: "#3b82f6" },
-  { name: "MATLAB/C++", value: 10, color: "#7c3aed" },
+  { name: "C (Embedded)", value: 40, color: "#D6955B" },
+  { name: "Python", value: 30, color: "#226D68" },
+  { name: "TypeScript", value: 20, color: "#18534F" },
+  { name: "MATLAB/C++", value: 10, color: "#3F6B66" },
 ];
 
 export function SkillCharts() {

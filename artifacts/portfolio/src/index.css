@@ -4,37 +4,46 @@
 
 @layer base {
   :root {
-    --panel: #f4f6f8;
-    --panel-sunk: #e5e9f0;
-    --panel-raised: #ffffff;
-    --ink: #0f172a;
-    --ink-soft: #475569;
-    --rule: #cbd5e1;
-    --signal: #d97706;
-    --signal-tint: #fef3c7;
-    --telemetry: #0284c7;
-    --hardware: #ea580c;
+    --panel: #ECF8F6;
+    --panel-sunk: #DCEFEC;
+    --panel-raised: #F6FBFA;
+    --ink: #18534F;
+    --ink-soft: #3F6B66;
+    --rule: #C5E0DC;
+    --signal: #226D68;
+    --signal-tint: #D5ECE8;
+    --telemetry: #226D68;
+    --hardware: #D6955B;
+    --hardware-text: #9A5A1F;
+    --highlight: #FEEAA1;
     --radius: 2px;
     --hair: 1px solid var(--rule);
   }
 
   .dark {
-    --panel: #0b0f17;
-    --panel-sunk: #151d2a;
-    --panel-raised: #111827;
-    --ink: #f8fafc;
-    --ink-soft: #94a3b8;
-    --rule: #1e293b;
-    --signal: #f59e0b;
-    --signal-tint: #451a03;
-    --telemetry: #38bdf8;
-    --hardware: #f97316;
+    --panel: #0B2321;
+    --panel-sunk: #081B1A;
+    --panel-raised: #11302D;
+    --ink: #ECF8F6;
+    --ink-soft: #8FB8B3;
+    --rule: #1F4743;
+    --signal: #5FB3AB;
+    --signal-tint: #123A36;
+    --telemetry: #5FB3AB;
+    --hardware: #D6955B;
+    --hardware-text: #D6955B;
+    --highlight: #FEEAA1;
     --radius: 2px;
     --hair: 1px solid var(--rule);
   }
 
   *, *::before, *::after {
     box-shadow: none !important;
+  }
+
+  ::selection {
+    background-color: var(--highlight);
+    color: var(--ink);
   }
 
   html {
@@ -89,7 +98,7 @@
     text-decoration-color: var(--signal);
   }
 
-  /* Primary CTA — Keycap physical button */
+  /* Clean Flat Primary Button — 2px radius, hairline border, active scale */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -97,31 +106,24 @@
     gap: 0.5rem;
     min-height: 44px;
     padding: 0.5rem 1.25rem;
-    background: linear-gradient(180deg, var(--ink) 0%, color-mix(in srgb, var(--ink) 85%, black) 100%);
-    color: var(--panel);
+    background-color: var(--signal);
+    color: #ffffff;
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: var(--radius);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
-    border-bottom: 3px solid color-mix(in srgb, var(--ink) 60%, black);
+    border: 1px solid var(--signal);
     cursor: pointer;
-    transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), border-bottom-width 0.08s ease, opacity 0.15s ease;
+    transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
   }
   .btn-primary:hover {
-    opacity: 0.95;
-    transform: translateY(-1px);
-    border-bottom-width: 4px;
+    opacity: 0.92;
   }
   .btn-primary:active {
-    transform: translateY(2px);
-    border-bottom-width: 1px;
-    opacity: 1;
+    transform: scale(0.98);
   }
 
-  /* Secondary Button — Keycap physical button */
+  /* Clean Flat Secondary Button — 2px radius, hairline border, active scale */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
@@ -129,29 +131,22 @@
     gap: 0.5rem;
     min-height: 44px;
     padding: 0.5rem 1.25rem;
-    background: linear-gradient(180deg, var(--panel-raised) 0%, var(--panel) 100%);
+    background-color: var(--panel-raised);
     color: var(--ink);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius);
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
-    border-right: 1px solid var(--rule);
-    border-bottom: 3px solid color-mix(in srgb, var(--rule) 70%, var(--ink));
+    border: 1px solid var(--rule);
     cursor: pointer;
-    transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), border-bottom-width 0.08s ease, background-color 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
   }
   .btn-secondary:hover {
-    background: var(--panel-sunk);
-    border-color: var(--ink-soft);
-    transform: translateY(-1px);
-    border-bottom-width: 4px;
+    background-color: var(--panel-sunk);
+    border-color: var(--signal);
   }
   .btn-secondary:active {
-    transform: translateY(2px);
-    border-bottom-width: 1px;
-    background: var(--panel-sunk);
+    transform: scale(0.98);
   }
 
   /* Rectangular Tag Chip */
@@ -168,6 +163,18 @@
     transition: border-color 0.15s ease;
   }
   .tech-chip:hover {
-    border-color: var(--ink-soft);
+    border-color: var(--signal);
+  }
+
+  /* Single draw SVG trace line */
+  .hero-trace-line {
+    stroke-dashoffset: 600;
+    animation: drawTrace 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes drawTrace {
+    to {
+      stroke-dashoffset: 0;
+    }
   }
 }
