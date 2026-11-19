@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { BootSequence } from "@/components/BootSequence";
 import { NavBar } from "@/components/NavBar";
 import { HeroSection } from "@/components/HeroSection";
+import { AtAGlanceStrip } from "@/components/AtAGlanceStrip";
 import { AboutSection } from "@/components/AboutSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { SkillsSection } from "@/components/SkillsSection";
@@ -75,6 +76,7 @@ function AppContent() {
       />
       <main>
         <HeroSection isOscilloscope={isOscilloscope} />
+        <AtAGlanceStrip />
         <AboutSection />
         <ProjectsSection />
         <SkillsSection />
