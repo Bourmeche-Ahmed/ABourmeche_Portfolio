@@ -5,6 +5,7 @@ import { PcbHeroCanvas } from "./PcbHeroCanvas";
 import { ScrambleText } from "./ScrambleText";
 import { TelemetryHud } from "./TelemetryHud";
 import { HolographicIdCard } from "./HolographicIdCard";
+import { FloatingChips } from "./FloatingChips";
 
 interface HeroSectionProps {
   isOscilloscope?: boolean;
@@ -18,6 +19,9 @@ export function HeroSection({ isOscilloscope = false }: HeroSectionProps) {
         isOscilloscope={isOscilloscope}
         className="opacity-70 dark:opacity-50"
       />
+
+      {/* 3D Floating IC Chips at depth behind hero text */}
+      <FloatingChips />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
