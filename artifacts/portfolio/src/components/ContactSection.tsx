@@ -20,6 +20,12 @@ export function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [showKonamiHint, setShowKonamiHint] = useState(false);
+
+  useEffect(() => {
+    const hintTimer = setTimeout(() => setShowKonamiHint(true), 25000);
+    return () => clearTimeout(hintTimer);
+  }, []);
 
   useEffect(() => {
     if (EMAILJS_PUBLIC_KEY) {
@@ -334,21 +340,41 @@ export function ContactSection() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary w-full py-2.5 flex items-center justify-center gap-2"
+                    className="btn-primary w-full py-2.5 flex flex-col items-center justify-center gap-1.5 relative overflow-hidden"
                   >
                     {loading ? (
-                      <>
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        <span>Transmitting...</span>
-                      </>
+                      <div className="w-full flex flex-col items-center gap-1.5 py-0.5">
+                        <div className="flex items-center gap-2">
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-signal" />
+                          <span>Transmitting Packet Across Wire...</span>
+                        </div>
+                        {/* Signal pulse wire animation */}
+                        <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden relative">
+                          <div className="h-full bg-signal w-1/3 rounded-full animate-pulse" />
+                        </div>
+                      </div>
                     ) : (
-                      <>
+                      <div className="flex items-center gap-2">
                         <Send className="w-3.5 h-3.5" />
                         <span>Send Message to {TARGET_EMAIL}</span>
-                      </>
+                      </div>
                     )}
                   </button>
                 </form>
+              )}
+
+              {/* Konami Easter Egg Pro-Tip (appears after 25s idle) */}
+              {showKonamiHint && (
+                <div className="mt-3.5 p-2.5 bg-signal/10 border border-signal/30 rounded-[2px] font-mono text-[10px] text-ink-soft animate-in fade-in duration-300 flex items-center justify-between">
+                  <span>💡 Pro-tip: Enter Konami code (↑ ↑ ↓ ↓ ← → ← → B A) anywhere for CRT phosphor oscilloscope mode.</span>
+                  <button
+                    onClick={() => setShowKonamiHint(false)}
+                    className="text-ink-soft hover:text-ink ml-2 p-1"
+                    aria-label="Dismiss hint"
+                  >
+                    ✕
+                  </button>
+                </div>
               )}
             </div>
           </div>

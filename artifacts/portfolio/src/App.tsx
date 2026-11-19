@@ -12,7 +12,9 @@ import { Footer } from "@/components/Footer";
 import { ToastProvider, useToastNotification } from "@/components/Toast";
 import { CommandPalette } from "@/components/CommandPalette";
 import { SonarPing } from "@/components/SonarPing";
+import { NotFoundPage } from "@/components/NotFoundPage";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
+import { Switch, Route } from "wouter";
 import { Command } from "lucide-react";
 import type { Project } from "@/data/projects";
 
@@ -112,7 +114,12 @@ function AppContent() {
 function App() {
   return (
     <ToastProvider>
-      <AppContent />
+      <Switch>
+        <Route path="/404" component={NotFoundPage} />
+        <Route path="/" component={AppContent} />
+        <Route path="/ABourmeche_Portfolio" component={AppContent} />
+        <Route component={NotFoundPage} />
+      </Switch>
     </ToastProvider>
   );
 }
