@@ -6,6 +6,7 @@ import { ScrambleText } from "./ScrambleText";
 import { TelemetryHud } from "./TelemetryHud";
 import { HolographicIdCard } from "./HolographicIdCard";
 import { FloatingChips } from "./FloatingChips";
+import { NamePowerOn } from "./NamePowerOn";
 
 interface HeroSectionProps {
   isOscilloscope?: boolean;
@@ -38,11 +39,9 @@ export function HeroSection({ isOscilloscope = false }: HeroSectionProps) {
               </span>
             </div>
 
-            {/* Name */}
+            {/* Name with LED power-on sequence */}
             <div>
-              <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink leading-[1.02]">
-                Ahmed Bourmeche
-              </h1>
+              <NamePowerOn className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink leading-[1.02]" />
               <ScrambleText
                 phrases={[
                   "Industrial Automation, Embedded Systems & Industrial IoT Engineer",
