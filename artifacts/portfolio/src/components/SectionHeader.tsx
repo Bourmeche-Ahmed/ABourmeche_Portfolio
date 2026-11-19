@@ -28,7 +28,11 @@ export function SectionHeader({ title, subtitle, className = "" }: SectionHeader
   }
 
   return (
-    <div ref={ref} className={`mb-8 pb-3 relative overflow-hidden ${className}`}>
+    <div
+      ref={ref}
+      style={{ perspective: 800 }}
+      className={`mb-8 pb-3 relative overflow-hidden ${className}`}
+    >
       {/* Hairline drawing in from left */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-[1px] bg-rule origin-left"
@@ -37,27 +41,23 @@ export function SectionHeader({ title, subtitle, className = "" }: SectionHeader
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      {/* Staggered Title */}
-      <motion.h2
-        className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-ink"
-        initial={{ opacity: 0, y: 14 }}
-        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-        transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+      {/* 3D Datasheet Flip Entrance */}
+      <motion.div
+        initial={{ opacity: 0, y: 14, rotateX: 12 }}
+        animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 14, rotateX: 12 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformOrigin: "top center", transformStyle: "preserve-3d" }}
       >
-        {title}
-      </motion.h2>
+        <h2 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-ink">
+          {title}
+        </h2>
 
-      {/* Staggered Subtitle */}
-      {subtitle && (
-        <motion.p
-          className="text-ink-soft text-sm sm:text-base max-w-3xl mt-1.5 leading-relaxed font-sans"
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          transition={{ duration: 0.4, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {subtitle}
-        </motion.p>
-      )}
+        {subtitle && (
+          <p className="text-ink-soft text-sm sm:text-base max-w-3xl mt-1.5 leading-relaxed font-sans">
+            {subtitle}
+          </p>
+        )}
+      </motion.div>
     </div>
   );
 }
