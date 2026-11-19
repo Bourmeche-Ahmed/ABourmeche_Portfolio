@@ -1,6 +1,7 @@
 import { SectionHeader } from "./SectionHeader";
 import { Code2, Cpu, LineChart, Zap, CircuitBoard, CheckCircle2 } from "lucide-react";
 import { BalancingRobot } from "./widgets/BalancingRobot";
+import { TerminalWhoami } from "./TerminalWhoami";
 
 const cards = [
   {
@@ -65,6 +66,9 @@ export function AboutSection() {
             </div>
           </div>
         </div>
+
+        {/* Interactive Engineering Terminal Whoami */}
+        <TerminalWhoami />
 
         {/* Engineering Narrative Columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-sm text-ink-soft leading-relaxed font-sans">
