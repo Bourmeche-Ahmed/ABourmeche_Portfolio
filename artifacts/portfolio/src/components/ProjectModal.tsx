@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, Suspense, lazy } from 
 import { motion, AnimatePresence } from "framer-motion";
 
 const VroomBlockDiagram = lazy(() => import("./widgets/VroomBlockDiagram"));
+const ExplodedPcb = lazy(() => import("./widgets/ExplodedPcb"));
 const QuarterCarSimulation = lazy(() => import("./widgets/QuarterCarSimulation"));
 const PidPlayground = lazy(() => import("./PidPlayground"));
 import {
@@ -486,9 +487,14 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
             {/* Interactive Engineering Widgets (Clearly labeled) */}
             {project.id === "vroom" && (
-              <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading hardware topology...</div>}>
-                <VroomBlockDiagram />
-              </Suspense>
+              <div className="space-y-4">
+                <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading 3D layer decomposition...</div>}>
+                  <ExplodedPcb />
+                </Suspense>
+                <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading hardware topology...</div>}>
+                  <VroomBlockDiagram />
+                </Suspense>
+              </div>
             )}
 
             {project.id === "quarter-car-suspension-system" && (
