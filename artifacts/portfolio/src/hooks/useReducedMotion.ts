@@ -1,28 +1,18 @@
 import { useState, useEffect } from "react";
-import { motionConfig } from "@/config/motion";
+import { getReducedMotion } from "@/config/motion";
 
 /**
- * Hook to detect if motion should be reduced based on user OS preferences
- * or central motion configuration.
+ * Hook to detect if motion should be reduced based on prefers-reduced-motion media query.
  */
 export function useReducedMotion(): boolean {
-  const [prefersReduced, setPrefersReduced] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    if (motionConfig.intensity === "reduced") return true;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
+  const [prefersReduced, setPrefersReduced] = useState<boolean>(() => getReducedMotion());
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    if (motionConfig.intensity === "reduced") {
-      setPrefersReduced(true);
-      return;
-    }
-
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onChange = (e: MediaQueryListEvent) => {
-      setPrefersReduced(e.matches || motionConfig.intensity === "reduced");
+      setPrefersReduced(e.matches);
     };
 
     setPrefersReduced(mql.matches);

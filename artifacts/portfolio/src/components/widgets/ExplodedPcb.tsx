@@ -2,76 +2,58 @@ import React, { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { usePointerFine } from "@/hooks/usePointerFine";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { motionConfig } from "@/config/motion";
+import { getAssetPath } from "@/lib/paths";
 import { Layers, Rotate3d, Info } from "lucide-react";
 
 interface LayerSpec {
   name: string;
   code: string;
   desc: string;
-  color: string;
-  border: string;
-  bg: string;
   zBase: number;
 }
 
 const LAYERS: LayerSpec[] = [
   {
-    name: "Top Silkscreen",
+    name: "Top Solder Mask & Silkscreen",
     code: "F.SilkS",
-    desc: "Ref designators (U1, U5, BZ1), polarity marks, pin 1 indicators",
-    color: "text-zinc-200",
-    border: "border-white/40",
-    bg: "rgba(255, 255, 255, 0.08)",
-    zBase: 60,
+    desc: "Component outlines, polarity marks, pin 1 dots",
+    zBase: 50,
   },
   {
-    name: "Front Copper",
+    name: "Top Copper (F.Cu)",
     code: "F.Cu",
-    desc: "Signal traces, 5V power bus, buck converter switch node, SMD pads",
-    color: "text-amber-500",
-    border: "border-amber-500/50",
-    bg: "rgba(245, 158, 11, 0.12)",
-    zBase: 20,
+    desc: "ESP32-S3, TPS54360 buck, SN65HVD230 CAN, 74HCT244, MPU-6050, USB-C",
+    zBase: 18,
   },
   {
     name: "FR-4 Dielectric Core",
-    code: "Substrate",
-    desc: "1.6mm glass-reinforced epoxy substrate with plated through-hole vias",
-    color: "text-emerald-500",
-    border: "border-emerald-600/40",
-    bg: "rgba(16, 185, 129, 0.15)",
-    zBase: -20,
+    code: "FR-4",
+    desc: "1.6mm glass-reinforced epoxy substrate with plated through-holes",
+    zBase: -18,
   },
   {
-    name: "Back Copper & Ground",
+    name: "Bottom Copper (B.Cu)",
     code: "B.Cu",
-    desc: "Continuous solid GND ground plane pour, return paths, thermal vias",
-    color: "text-sky-500",
-    border: "border-sky-500/50",
-    bg: "rgba(56, 189, 248, 0.12)",
-    zBase: -60,
+    desc: "Continuous solid GND ground return plane and thermal dissipation",
+    zBase: -50,
   },
 ];
 
 export function ExplodedPcb() {
-  const [explosion, setExplosion] = useState(0.85); // 0 (flat) to 1 (fully exploded)
-  const [rotY, setRotY] = useState(-18);
-  const [rotX, setRotX] = useState(15);
-  const [activeLayer, setActiveLayer] = useState<string | null>(null);
+  const [isExploded, setIsExploded] = useState(true);
+  const [rotY, setRotY] = useState(-15);
+  const [rotX, setRotX] = useState(12);
   const [isDragging, setIsDragging] = useState(false);
   const startX = useRef(0);
   const startY = useRef(0);
-  const currentRotY = useRef(-18);
-  const currentRotX = useRef(15);
+  const currentRotY = useRef(-15);
+  const currentRotX = useRef(12);
 
   const isPointerFine = usePointerFine();
   const reducedMotion = useReducedMotion();
-  const canAnimate =
-    !reducedMotion && motionConfig.flags.three_d.explodedPcb;
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!canAnimate) return;
+    if (reducedMotion) return;
     setIsDragging(true);
     startX.current = e.clientX;
     startY.current = e.clientY;
@@ -81,38 +63,74 @@ export function ExplodedPcb() {
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
-      if (!isDragging || !canAnimate) return;
+      if (!isDragging || reducedMotion) return;
       const dx = e.clientX - startX.current;
       const dy = e.clientY - startY.current;
-      const nextY = Math.max(-45, Math.min(45, currentRotY.current + dx * 0.4));
-      const nextX = Math.max(-10, Math.min(35, currentRotX.current - dy * 0.3));
+      const nextY = Math.max(-35, Math.min(35, currentRotY.current + dx * 0.35));
+      const nextX = Math.max(-5, Math.min(25, currentRotX.current - dy * 0.25));
       setRotY(nextY);
       setRotX(nextX);
     },
-    [isDragging, canAnimate]
+    [isDragging, reducedMotion]
   );
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    // Spring back gently
+    setRotY(-15);
+    setRotX(12);
   };
 
+  // If user prefers reduced motion, show real PCB photo directly
+  if (reducedMotion) {
+    return (
+      <div className="border border-rule bg-panel-raised p-4 rounded-[2px] space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-rule">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-signal" />
+            <h4 className="font-heading font-bold text-base text-ink">
+              VROOM 2-Layer PCB Structure
+            </h4>
+          </div>
+          <span className="font-mono text-xs text-ink-soft">~77 × 67 mm</span>
+        </div>
+        <div className="aspect-[16/10] w-full rounded-[2px] overflow-hidden border border-rule bg-panel-sunk">
+          <img
+            src={getAssetPath("projects/vroom/vroom1.jpg")}
+            alt="VROOM PCB 2-layer board"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <p className="font-sans text-xs text-ink-soft">
+          Illustrative layer stack: 2-layer FR-4 automotive companion board with ESP32-S3, TPS54360 buck converter, and SN65HVD230 CAN transceiver.
+        </p>
+      </div>
+    );
+  }
+
+  const explosionMultiplier = isExploded ? 1 : 0.05;
+
   return (
-    <div className="border border-rule bg-panel-raised p-4 rounded-[2px] space-y-4">
+    <div className="border border-rule bg-panel-raised p-4 rounded-[2px] space-y-3.5 select-none">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-rule">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-rule font-mono text-xs text-ink-soft">
         <div className="flex items-center gap-2">
           <Layers className="w-4 h-4 text-signal" />
           <h4 className="font-heading font-bold text-base text-ink">
-            3D PCB Layer Stack Decomposition
+            VROOM 2-Layer PCB Stack
           </h4>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-[1px] bg-panel-sunk border border-rule text-ink-soft">
-            2-Layer FR-4
+          <span className="text-[10px] px-1.5 py-0.5 rounded-[1px] bg-panel-sunk border border-rule text-ink-soft">
+            FR-4 Core
           </span>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-ink-soft">
-          <Rotate3d className="w-3.5 h-3.5 text-signal" />
-          <span className="hidden sm:inline">Drag to rotate 3D view</span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsExploded((prev) => !prev)}
+            className="btn-secondary text-xs py-1 px-2.5 h-auto"
+          >
+            {isExploded ? "Collapse Stack" : "Explode Stack"}
+          </button>
         </div>
       </div>
 
@@ -122,158 +140,119 @@ export function ExplodedPcb() {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className={`relative h-64 sm:h-72 w-full bg-panel-sunk border border-rule rounded-[2px] overflow-hidden flex items-center justify-center select-none ${
+        className={`relative h-60 sm:h-64 w-full bg-panel-sunk border border-rule rounded-[2px] overflow-hidden flex items-center justify-center ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         style={{ perspective: 1000 }}
       >
-        {/* Background measurement grid */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-20"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, var(--ink-soft) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }}
-        />
+        <div className="absolute top-2 right-2 flex items-center gap-1 font-mono text-[10px] text-ink-soft pointer-events-none">
+          <Rotate3d className="w-3 h-3 text-signal" />
+          <span>Drag to inspect</span>
+        </div>
 
-        {/* 3D Stack container */}
         <motion.div
           animate={{
-            rotateX: canAnimate ? rotX : 10,
-            rotateY: canAnimate ? rotY : -15,
+            rotateX: rotX,
+            rotateY: rotY,
           }}
-          transition={{ duration: isDragging ? 0 : 0.25 }}
-          className="relative w-56 sm:w-64 h-36 sm:h-40"
-          style={{
-            transformStyle: "preserve-3d",
+          transition={{
+            type: "spring",
+            stiffness: isDragging ? 400 : 200,
+            damping: 20,
           }}
+          className="relative w-56 sm:w-64 h-36"
+          style={{ transformStyle: "preserve-3d" }}
         >
           {LAYERS.map((layer) => {
-            const zOffset = layer.zBase * explosion;
-            const isHovered = activeLayer === layer.code;
+            const z = layer.zBase * explosionMultiplier;
 
             return (
-              <div
+              <motion.div
                 key={layer.code}
-                onMouseEnter={() => setActiveLayer(layer.code)}
-                onMouseLeave={() => setActiveLayer(null)}
-                className={`absolute inset-0 rounded-[2px] border transition-colors duration-200 p-2.5 flex flex-col justify-between ${
-                  layer.border
-                } ${isHovered ? "ring-1 ring-signal" : ""}`}
+                animate={{ z }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 20,
+                }}
+                className="absolute inset-0 rounded-[2px] border border-rule/70 p-2.5 flex flex-col justify-between"
                 style={{
-                  transform: `translateZ(${zOffset}px)`,
-                  backgroundColor: layer.bg,
-                  backdropFilter: "blur(1px)",
+                  transformStyle: "preserve-3d",
+                  backgroundColor: "var(--panel-raised)",
                   WebkitBackfaceVisibility: "visible",
+                  filter: "drop-shadow(0 4px 8px rgb(11 35 33 / .1))",
                 }}
               >
-                {/* Layer header */}
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[1px] bg-panel-raised/90 border border-rule ${layer.color}`}
-                  >
+                {/* Header */}
+                <div className="flex items-center justify-between font-mono text-[9px]">
+                  <span className="font-bold text-signal px-1 py-0.2 rounded-[1px] bg-panel-sunk border border-rule">
                     {layer.code}
                   </span>
-                  <span className="font-mono text-[9px] text-ink-soft bg-panel-raised/70 px-1 rounded-[1px]">
-                    Z: {Math.round(zOffset)}mm
-                  </span>
+                  <span className="text-ink-soft">{layer.name}</span>
                 </div>
 
-                {/* Layer schematic traces / simulated layout */}
-                <div className="flex-1 my-1 relative overflow-hidden opacity-40">
+                {/* Layer Content */}
+                <div className="flex-1 my-1 relative overflow-hidden flex items-center justify-center">
                   {layer.code === "F.SilkS" && (
-                    <div className="font-mono text-[8px] text-zinc-300 space-y-1">
-                      <div className="border border-dashed border-zinc-400 w-12 h-6 flex items-center justify-center">
-                        ESP32-S3
-                      </div>
-                      <div className="flex gap-2">
-                        <span>[U1 TPS54360]</span>
-                        <span>[BZ1]</span>
-                      </div>
+                    <div className="font-mono text-[8px] text-ink-soft/80 flex flex-wrap gap-1.5 justify-center">
+                      <span>[VROOM]</span>
+                      <span>[J1 OBD]</span>
+                      <span>[BZ1]</span>
+                      <span>REV 1.2</span>
                     </div>
                   )}
+
                   {layer.code === "F.Cu" && (
-                    <svg className="w-full h-full stroke-amber-500 fill-none stroke-[1.5]">
-                      <path d="M 10 10 H 70 V 30 H 120 V 50 H 180" />
-                      <circle cx="70" cy="30" r="3" fill="#f59e0b" />
-                      <path d="M 20 40 H 80 V 70 H 140" />
-                    </svg>
-                  )}
-                  {layer.code === "Substrate" && (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="font-mono text-[9px] text-emerald-600/60 uppercase tracking-widest">
-                        FR-4 Core (1.6mm)
+                    <div className="font-mono text-[8px] grid grid-cols-3 gap-1 w-full text-center">
+                      <span className="border border-rule px-1 py-0.5 rounded-[1px] bg-panel-sunk text-ink font-semibold">
+                        ESP32-S3
+                      </span>
+                      <span className="border border-rule px-1 py-0.5 rounded-[1px] bg-panel-sunk text-ink">
+                        TPS54360
+                      </span>
+                      <span className="border border-rule px-1 py-0.5 rounded-[1px] bg-panel-sunk text-ink">
+                        SN65HVD230
+                      </span>
+                      <span className="border border-rule px-1 py-0.5 rounded-[1px] bg-panel-sunk text-ink">
+                        74HCT244
+                      </span>
+                      <span className="border border-rule px-1 py-0.5 rounded-[1px] bg-panel-sunk text-ink">
+                        MPU-6050
+                      </span>
+                      <span className="border border-rule px-1 py-0.5 rounded-[1px] bg-panel-sunk text-ink">
+                        USB-C
                       </span>
                     </div>
                   )}
+
+                  {layer.code === "FR-4" && (
+                    <div className="font-mono text-[9px] text-ink-soft uppercase tracking-wider">
+                      FR-4 Dielectric Substrate (1.6 mm)
+                    </div>
+                  )}
+
                   {layer.code === "B.Cu" && (
-                    <div className="w-full h-full opacity-60 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:8px_8px]" />
+                    <div className="font-mono text-[8px] text-ink-soft text-center">
+                      Solid Copper Ground Plane Pour (Continuous Return Path)
+                    </div>
                   )}
                 </div>
 
-                {/* Layer footer */}
-                <div className="font-sans text-[10px] text-ink font-medium truncate">
-                  {layer.name}
+                {/* Footer description */}
+                <div className="font-sans text-[10px] text-ink-soft truncate">
+                  {layer.desc}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </motion.div>
       </div>
 
-      {/* Explode Slider & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-        <div className="flex items-center gap-3 flex-1">
-          <span className="font-mono text-xs text-ink-soft shrink-0">
-            Stack Spacing:
-          </span>
-          <input
-            type="range"
-            min="0"
-            max="1.5"
-            step="0.05"
-            value={explosion}
-            onChange={(e) => setExplosion(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-panel-sunk rounded-[1px] appearance-none cursor-pointer accent-signal border border-rule"
-            aria-label="Layer explosion spacing slider"
-          />
-          <span className="font-mono text-xs text-signal font-semibold w-10 text-right">
-            {Math.round(explosion * 100)}%
-          </span>
-        </div>
-
-        <div className="flex gap-1.5">
-          <button
-            onClick={() => setExplosion(0)}
-            className="px-2 py-1 text-[11px] font-mono border border-rule bg-panel-sunk hover:bg-panel text-ink-soft hover:text-ink rounded-[2px]"
-          >
-            Flat
-          </button>
-          <button
-            onClick={() => setExplosion(1)}
-            className="px-2 py-1 text-[11px] font-mono border border-rule bg-panel-sunk hover:bg-panel text-ink-soft hover:text-ink rounded-[2px]"
-          >
-            Explode
-          </button>
-          <button
-            onClick={() => {
-              setRotX(15);
-              setRotY(-18);
-              setExplosion(0.85);
-            }}
-            className="px-2 py-1 text-[11px] font-mono border border-rule bg-panel-sunk hover:bg-panel text-ink-soft hover:text-ink rounded-[2px]"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      {/* Caption note */}
-      <div className="flex items-start gap-1.5 text-[11px] font-sans text-ink-soft bg-panel-sunk p-2 rounded-[2px] border border-rule">
+      {/* Caption */}
+      <div className="flex items-start gap-1.5 text-xs font-sans text-ink-soft bg-panel-sunk p-2.5 rounded-[2px] border border-rule">
         <Info className="w-3.5 h-3.5 text-signal shrink-0 mt-0.5" />
         <span>
-          <strong>Illustrative layer stack:</strong> 2-layer FR-4 board (~77 × 67 mm) designed in KiCad for VROOM automotive OBD-II companion. Top copper carries switching buck converter paths and level-shifter outputs; bottom copper provides continuous return paths.
+          <strong>Illustrative layer stack:</strong> VROOM is an authentic 2-layer PCB (~77 × 67 mm) designed in KiCad. The top layer routes switching power, logic, and component pads; the bottom layer forms an uninterrupted solid ground plane.
         </span>
       </div>
     </div>

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Download, Copy, Check, ExternalLink, Loader2 } from "lucide-react";
+import { Send, Github, Linkedin, Mail, AlertCircle, Download, Copy, Check, Loader2 } from "lucide-react";
 import emailjs from "emailjs-com";
 import { SectionHeader } from "./SectionHeader";
-import { LedMatrixTicker } from "./LedMatrixTicker";
 import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
 import { copyToClipboard } from "@/lib/utils";
 
@@ -20,12 +19,6 @@ export function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [showKonamiHint, setShowKonamiHint] = useState(false);
-
-  useEffect(() => {
-    const hintTimer = setTimeout(() => setShowKonamiHint(true), 25000);
-    return () => clearTimeout(hintTimer);
-  }, []);
 
   useEffect(() => {
     if (EMAILJS_PUBLIC_KEY) {
@@ -138,9 +131,6 @@ export function ContactSection() {
           title="Contact & Internship Inquiry"
           subtitle="Seeking a Final-Year Engineering Internship (PFE) starting February 2027 · Open to relocation and international opportunities."
         />
-
-        {/* 32x7 LED Dot Matrix Telemetry Marquee */}
-        <LedMatrixTicker />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Left Column: Direct Inquiries & Channels */}
@@ -361,20 +351,6 @@ export function ContactSection() {
                     )}
                   </button>
                 </form>
-              )}
-
-              {/* Konami Easter Egg Pro-Tip (appears after 25s idle) */}
-              {showKonamiHint && (
-                <div className="mt-3.5 p-2.5 bg-signal/10 border border-signal/30 rounded-[2px] font-mono text-[10px] text-ink-soft animate-in fade-in duration-300 flex items-center justify-between">
-                  <span>💡 Pro-tip: Enter Konami code (↑ ↑ ↓ ↓ ← → ← → B A) anywhere for CRT phosphor oscilloscope mode.</span>
-                  <button
-                    onClick={() => setShowKonamiHint(false)}
-                    className="text-ink-soft hover:text-ink ml-2 p-1"
-                    aria-label="Dismiss hint"
-                  >
-                    ✕
-                  </button>
-                </div>
               )}
             </div>
           </div>

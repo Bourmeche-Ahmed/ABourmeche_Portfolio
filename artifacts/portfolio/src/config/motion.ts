@@ -1,116 +1,23 @@
 /**
- * Central motion tokens and feature flags for the engineering portfolio.
- * Provides fine-grained control over animations and performance.
+ * Minimal motion configuration: easings, durations, spring presets, and reducedMotion helper.
  */
 
-export interface MotionConfig {
-  intensity: "full" | "reduced";
-  flags: {
-    boot: boolean;
-    heroCanvas: boolean;
-    cursorFx: boolean;
-    tilt: boolean;
-    commandPalette: boolean;
-    widgets: boolean;
-    oscilloscope: boolean;
-    three_d: {
-      idCard: boolean;
-      explodedPcb: boolean;
-      balancingRobot: boolean;
-      skillRing: boolean;
-      coverflow: boolean;
-      cardParallax: boolean;
-      keycap: boolean;
-      sectionFlip: boolean;
-      floatingChips: boolean;
-    };
-    micro: {
-      namePowerOn: boolean;
-      chipFacts: boolean;
-      glanceStrip: boolean;
-      lineFollower: boolean;
-      terminalWhoami: boolean;
-      ledTicker: boolean;
-      sonarPing: boolean;
-      learningStatus: boolean;
-      sendPulse: boolean;
-    };
-  };
-  easings: {
-    /** Primary measurement easing: fast start, precise settle */
-    standard: [number, number, number, number];
-    /** Signal flow easing: constant velocity with snappy brake */
-    signal: [number, number, number, number];
-    /** Decelerate curve for entrances */
-    entrance: [number, number, number, number];
-  };
-  durations: {
-    instant: number;
-    fast: number;
-    normal: number;
-    slow: number;
-  };
-  stagger: {
-    tight: number;
-    normal: number;
-  };
-}
-
-export const motionConfig: MotionConfig = {
-  // Global intensity switch: "full" enables rich dynamics; "reduced" dials back all motion
-  intensity: "full",
-
-  // Individual feature flags to toggle specific features on or off
-  flags: {
-    boot: true,
-    heroCanvas: true,
-    cursorFx: true,
-    tilt: true,
-    commandPalette: true,
-    widgets: true,
-    oscilloscope: true,
-    three_d: {
-      idCard: true,
-      explodedPcb: true,
-      balancingRobot: true,
-      skillRing: true,
-      coverflow: true,
-      cardParallax: true,
-      keycap: true,
-      sectionFlip: true,
-      floatingChips: true,
-    },
-    micro: {
-      namePowerOn: true,
-      chipFacts: true,
-      glanceStrip: true,
-      lineFollower: true,
-      terminalWhoami: true,
-      ledTicker: true,
-      sonarPing: true,
-      learningStatus: true,
-      sendPulse: true,
-    },
-  },
-
-  // Easing curves: cubic-bezier(0.22, 1, 0.36, 1) per design spec
-  easings: {
-    standard: [0.22, 1, 0.36, 1],
-    signal: [0.16, 1, 0.3, 1],
-    entrance: [0, 0, 0.2, 1],
-  },
-
-  // Durations in seconds (200ms - 600ms per spec)
-  durations: {
-    instant: 0,
-    fast: 0.2,
-    normal: 0.35,
-    slow: 0.55,
-  },
-
-  // Stagger intervals in seconds (40ms - 80ms per spec)
-  stagger: {
-    tight: 0.04,
-    normal: 0.06,
-  },
+export const easings = {
+  standard: [0.22, 1, 0.36, 1] as const,
 };
+
+export const durations = {
+  fast: 0.2,
+  normal: 0.35,
+  slow: 0.5,
+};
+
+export const springPresets = {
+  snappy: { stiffness: 200, damping: 20 },
+  gentle: { stiffness: 120, damping: 14 },
+};
+
+export function getReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}

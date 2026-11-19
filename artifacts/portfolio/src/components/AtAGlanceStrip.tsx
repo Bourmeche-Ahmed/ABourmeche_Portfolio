@@ -1,70 +1,138 @@
-import React, { useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, animate } from "framer-motion";
 import { useInViewOnce } from "@/hooks/useInViewOnce";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { motionConfig } from "@/config/motion";
 import { projects } from "@/data/projects";
-import { Gauge, ShieldCheck, Zap, Activity, ArrowUpRight } from "lucide-react";
+import { Zap, ShieldCheck, Server, Users, ArrowUpRight } from "lucide-react";
 
 interface GlanceStat {
-  value: string;
-  unit: string;
+  target: number;
+  prefix?: string;
+  suffix: string;
   label: string;
   desc: string;
   projectId: string;
   icon: React.ElementType;
-  accent: string;
-  border: string;
 }
 
 const STATS: GlanceStat[] = [
   {
-    value: "13",
-    unit: "×",
-    label: "Modbus Polling Speedup",
-    desc: "Contiguous register batching across industrial meters",
+    target: 13,
+    suffix: "×",
+    label: "Polling Speedup (4.5s → 350ms)",
+    desc: "Contiguous register batching across Modbus meters",
     projectId: "iiot-predictive-maintenance",
     icon: Zap,
-    accent: "text-amber-500",
-    border: "hover:border-amber-500/50",
   },
   {
-    value: "81",
-    unit: "%",
-    label: "PPO Success Rate",
-    desc: "Pioneer 3-AT autonomous navigation with 0% timeouts",
+    target: 81,
+    suffix: "%",
+    label: "PPO Navigation Success",
+    desc: "Autonomous obstacle avoidance with 0% timeouts",
     projectId: "rl-navigation",
     icon: ShieldCheck,
-    accent: "text-emerald-500",
-    border: "hover:border-emerald-500/50",
   },
   {
-    value: "87",
-    unit: "%",
-    label: "Peak Displacement Cut",
-    desc: "Active PD suspension control vs passive 2-DOF baseline",
-    projectId: "quarter-car-suspension-system",
-    icon: Gauge,
-    accent: "text-sky-500",
-    border: "hover:border-sky-500/50",
+    target: 9,
+    suffix: " Svcs",
+    label: "Docker Microservices",
+    desc: "Production containerized telemetry & gateway stack",
+    projectId: "esd-vimar",
+    icon: Server,
   },
   {
-    value: "100",
-    unit: "Hz",
-    label: "Deterministic Balance Loop",
-    desc: "Bare-metal STM32 hardware-timer inverted pendulum loop",
-    projectId: "self-balancing-robot",
-    icon: Activity,
-    accent: "text-orange-500",
-    border: "hover:border-orange-500/50",
+    target: 2500,
+    prefix: "",
+    suffix: "+",
+    label: "Marathon Signups Handled",
+    desc: "STEP'ACT real-time registration & payment flow",
+    projectId: "stepact-2026-marathon",
+    icon: Users,
   },
 ];
+
+function CountUpTile({
+  stat,
+  inView,
+  reducedMotion,
+  index,
+  onClick,
+}: {
+  stat: GlanceStat;
+  inView: boolean;
+  reducedMotion: boolean;
+  index: number;
+  onClick: () => void;
+}) {
+  const [displayVal, setDisplayVal] = useState(reducedMotion ? stat.target : 0);
+  const Icon = stat.icon;
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setDisplayVal(stat.target);
+      return;
+    }
+    if (!inView) return;
+
+    const controls = animate(0, stat.target, {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (latest) => {
+        setDisplayVal(Math.round(latest));
+      },
+    });
+
+    return () => controls.stop();
+  }, [inView, reducedMotion, stat.target]);
+
+  return (
+    <motion.div
+      onClick={onClick}
+      initial={!reducedMotion ? { opacity: 0, y: 16 } : undefined}
+      animate={inView || reducedMotion ? { opacity: 1, y: 0 } : undefined}
+      transition={{
+        duration: 0.45,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      className="min-w-[220px] sm:min-w-0 shrink-0 snap-start p-3 sm:p-4 rounded-[2px] bg-panel-sunk border border-rule transition-colors duration-200 cursor-pointer group flex flex-col justify-between hover:border-signal hover:bg-panel focus-visible:outline-none"
+    >
+      {/* Header with icon and arrow */}
+      <div className="flex items-center justify-between mb-2">
+        <Icon className="w-4 h-4 text-signal" />
+        <ArrowUpRight className="w-3.5 h-3.5 text-ink-soft opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
+
+      {/* Number with unit */}
+      <div className="font-heading font-bold text-3xl sm:text-4xl text-ink tracking-tight flex items-baseline gap-0.5">
+        <span>{stat.prefix || ""}{displayVal.toLocaleString()}</span>
+        <span className="text-xl text-hardware font-medium">{stat.suffix}</span>
+      </div>
+
+      {/* Label & Description */}
+      <div className="mt-2">
+        <div className="font-sans font-semibold text-xs text-ink truncate group-hover:text-signal transition-colors">
+          {stat.label}
+        </div>
+        <div className="font-sans text-[11px] text-ink-soft line-clamp-1 mt-0.5">
+          {stat.desc}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export function AtAGlanceStrip() {
   const [ref, inView] = useInViewOnce<HTMLDivElement>({ threshold: 0.15 });
   const reducedMotion = useReducedMotion();
-  const canAnimate =
-    !reducedMotion && motionConfig.flags.micro.glanceStrip;
 
   const handleClick = (projectId: string) => {
     const target = projects.find((p) => p.id === projectId);
@@ -76,59 +144,21 @@ export function AtAGlanceStrip() {
   };
 
   return (
-    <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 mb-8">
+    <section id="glance" className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 mb-10">
       <div
         ref={ref}
-        className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-panel-raised border border-rule p-3 sm:p-4 rounded-[2px] shadow-sm select-none"
+        className="flex overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-panel-raised border border-rule p-3 sm:p-4 rounded-[2px] shadow-sm select-none scrollbar-none"
       >
-        {STATS.map((stat, i) => {
-          const Icon = stat.icon;
-
-          return (
-            <motion.div
-              key={stat.label}
-              onClick={() => handleClick(stat.projectId)}
-              initial={canAnimate ? { opacity: 0, y: 16 } : undefined}
-              animate={inView || !canAnimate ? { opacity: 1, y: 0 } : undefined}
-              transition={{
-                duration: 0.45,
-                delay: i * 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleClick(stat.projectId);
-                }
-              }}
-              className={`p-3 rounded-[2px] bg-panel-sunk border border-rule/60 transition-all duration-200 cursor-pointer group flex flex-col justify-between ${stat.border} hover:bg-panel hover:shadow-xs focus-visible:outline-none`}
-            >
-              {/* Header with icon and arrow */}
-              <div className="flex items-center justify-between mb-2">
-                <Icon className={`w-4 h-4 ${stat.accent}`} />
-                <ArrowUpRight className="w-3.5 h-3.5 text-ink-soft opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-
-              {/* Number with unit */}
-              <div className="font-heading font-bold text-3xl sm:text-4xl text-ink tracking-tight flex items-baseline gap-0.5">
-                <span>{stat.value}</span>
-                <span className={`text-xl ${stat.accent}`}>{stat.unit}</span>
-              </div>
-
-              {/* Label & Description */}
-              <div className="mt-1">
-                <div className="font-sans font-semibold text-xs text-ink truncate group-hover:text-signal transition-colors">
-                  {stat.label}
-                </div>
-                <div className="font-sans text-[11px] text-ink-soft line-clamp-1 mt-0.5">
-                  {stat.desc}
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
+        {STATS.map((stat, i) => (
+          <CountUpTile
+            key={stat.label}
+            stat={stat}
+            inView={inView}
+            reducedMotion={reducedMotion}
+            index={i}
+            onClick={() => handleClick(stat.projectId)}
+          />
+        ))}
       </div>
     </section>
   );

@@ -1,25 +1,23 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
-import { LineFollowerMascot } from "./LineFollowerMascot";
 import { smoothScrollTo } from "@/lib/utils";
-import { Menu, X, Linkedin, Github, Command } from "lucide-react";
+import { Menu, X, Linkedin, Github } from "lucide-react";
 
 const navLinks = [
   { href: "home", label: "Home" },
-  { href: "about", label: "About" },
-  { href: "experience", label: "Experience" },
+  { href: "glance", label: "At a glance" },
   { href: "projects", label: "Projects" },
   { href: "skills", label: "Skills" },
+  { href: "about", label: "About" },
+  { href: "experience", label: "Experience" },
   { href: "contact", label: "Contact" },
 ];
 
 interface NavBarProps {
-  onOpenCommandPalette?: () => void;
   onThemeChanged?: (isDark: boolean) => void;
 }
 
-export function NavBar({ onOpenCommandPalette, onThemeChanged }: NavBarProps) {
+export function NavBar({ onThemeChanged }: NavBarProps) {
   const [active, setActive] = useState("home");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -53,44 +51,40 @@ export function NavBar({ onOpenCommandPalette, onThemeChanged }: NavBarProps) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-panel/95 border-b border-rule transition-colors">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-panel/95 border-b border-rule backdrop-blur-sm transition-colors">
       <nav className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <button
           onClick={() => handleNav("home")}
           className="font-heading font-bold text-xl tracking-tight text-ink hover:text-signal transition-colors flex items-center gap-2.5 focus-visible:outline-none group"
         >
-          <div className="w-7 h-7 rounded-[3px] bg-panel-sunk border border-rule flex items-center justify-center p-0.5 group-hover:border-signal transition-colors">
+          <div className="w-7 h-7 rounded-[2px] bg-panel-sunk border border-rule flex items-center justify-center p-0.5 group-hover:border-signal transition-colors">
             <svg viewBox="0 0 256 256" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="12" y="12" width="232" height="232" rx="16" fill="#121820" stroke="#f57c00" strokeWidth="6" />
-              <path d="M 28 44 L 28 28 L 44 28" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <path d="M 228 44 L 228 28 L 212 28" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <path d="M 28 212 L 28 228 L 44 228" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <path d="M 228 212 L 228 228 L 212 228" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <circle cx="128" cy="128" r="64" stroke="#38bdf8" strokeWidth="4" strokeDasharray="6 6" fill="none" />
-              <text x="128" y="152" fontFamily="'IBM Plex Sans', sans-serif" fontSize="88" fontWeight="900" fill="#f57c00" textAnchor="middle">AB</text>
+              <rect x="12" y="12" width="232" height="232" rx="4" className="fill-panel-sunk stroke-hardware" strokeWidth="10" />
+              <path d="M 28 48 L 28 28 L 48 28" className="stroke-signal" strokeWidth="8" fill="none" />
+              <path d="M 228 48 L 228 28 L 208 28" className="stroke-signal" strokeWidth="8" fill="none" />
+              <path d="M 28 208 L 28 228 L 48 228" className="stroke-signal" strokeWidth="8" fill="none" />
+              <path d="M 228 208 L 228 228 L 208 228" className="stroke-signal" strokeWidth="8" fill="none" />
+              <circle cx="128" cy="128" r="64" className="stroke-signal" strokeWidth="4" strokeDasharray="6 6" fill="none" />
+              <text x="128" y="152" fontFamily="'IBM Plex Sans', sans-serif" fontSize="88" fontWeight="900" className="fill-hardware" textAnchor="middle">AB</text>
             </svg>
           </div>
           <span>AHMED BOURMECHE</span>
         </button>
 
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-5">
           {navLinks.map((link) => {
             const isActive = active === link.href;
             return (
               <button
                 key={link.href}
                 onClick={() => handleNav(link.href)}
-                className={`font-heading text-lg tracking-wide transition-colors relative py-1 focus-visible:outline-none ${
+                className={`font-heading text-base tracking-wide transition-colors relative py-1 focus-visible:outline-none ${
                   isActive ? "text-ink font-bold" : "text-ink-soft hover:text-ink"
                 }`}
               >
                 {link.label}
                 {isActive && (
-                  <motion.div
-                    layoutId="activeNavIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-signal"
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  />
+                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-signal" />
                 )}
               </button>
             );
@@ -98,21 +92,6 @@ export function NavBar({ onOpenCommandPalette, onThemeChanged }: NavBarProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Command Palette Trigger (Desktop) */}
-          {onOpenCommandPalette && (
-            <button
-              onClick={onOpenCommandPalette}
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono text-ink-soft bg-panel-sunk border border-rule rounded-[2px] hover:border-ink-soft hover:text-ink transition-colors focus-visible:outline-none"
-              aria-label="Open command palette (Ctrl+K)"
-            >
-              <Command className="w-3 h-3 text-signal" />
-              <span className="hidden lg:inline text-[11px]">Command</span>
-              <kbd className="text-[10px] bg-panel-raised px-1 py-0.2 rounded-[2px] border border-rule font-semibold">
-                ⌘K
-              </kbd>
-            </button>
-          )}
-
           <a
             href="https://github.com/Bourmeche-Ahmed"
             target="_blank"
@@ -142,13 +121,12 @@ export function NavBar({ onOpenCommandPalette, onThemeChanged }: NavBarProps) {
         </div>
       </nav>
 
-      {/* Signal trace scroll progress bar under navbar with Line-Follower Robot Mascot */}
+      {/* Plain 2px scroll progress bar under navbar */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-transparent pointer-events-none">
         <div
           className="h-full bg-signal transition-all duration-75 origin-left"
           style={{ width: `${scrollProgress}%` }}
         />
-        <LineFollowerMascot progress={scrollProgress} activeSection={active} />
       </div>
 
       {mobileOpen && (

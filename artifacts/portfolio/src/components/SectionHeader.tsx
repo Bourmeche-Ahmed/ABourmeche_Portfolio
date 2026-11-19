@@ -30,7 +30,6 @@ export function SectionHeader({ title, subtitle, className = "" }: SectionHeader
   return (
     <div
       ref={ref}
-      style={{ perspective: 800 }}
       className={`mb-8 pb-3 relative overflow-hidden ${className}`}
     >
       {/* Hairline drawing in from left */}
@@ -41,12 +40,11 @@ export function SectionHeader({ title, subtitle, className = "" }: SectionHeader
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      {/* 3D Datasheet Flip Entrance */}
+      {/* Clean 16px fade-up entrance (no perspective flip) */}
       <motion.div
-        initial={{ opacity: 0, y: 14, rotateX: 12 }}
-        animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 14, rotateX: 12 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        style={{ transformOrigin: "top center", transformStyle: "preserve-3d" }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       >
         <h2 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-ink">
           {title}
