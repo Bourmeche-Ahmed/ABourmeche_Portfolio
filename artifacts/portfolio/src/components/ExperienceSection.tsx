@@ -1,220 +1,190 @@
-import React from "react";
-import { SectionHeader } from "./SectionHeader";
-import { Briefcase, ExternalLink } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Briefcase, Calendar, MapPin, CheckCircle2 } from "lucide-react";
 
 interface ExperienceItem {
   id: string;
   role: string;
   company: string;
-  companyUrl: string | null;
-  dates: string;
+  period: string;
   location: string;
   badge: string;
-  headline?: string;
-  description: string;
-  bullets: React.ReactNode[];
-  tags: string[];
+  highlights: string[];
+  skills: string[];
 }
 
-const experiences: ExperienceItem[] = [
+const EXPERIENCES: ExperienceItem[] = [
   {
     id: "esd-vimar",
-    role: "Industrial IoT Engineering Intern",
-    company: "ESD Performance / Vimar SARL",
-    companyUrl: null,
-    dates: "Jun 2026 – Sep 2026",
-    location: "Tunisia · 4 months",
-    badge: "LATEST INTERNSHIP",
-    headline: "DCU Edge — Multi-Protocol Industrial IoT Edge Gateway",
-    description:
-      "Designed and implemented a field-configurable industrial IoT edge gateway (DCU) for building energy metering and power-quality analysis, unifying Modbus RTU, BACnet and OCPP device data into a single containerized edge stack.",
-    bullets: [
-      <>
-        Built a multi-protocol edge gateway polling Schneider Electric <span className="font-mono text-[0.95em] text-ink font-semibold">PM2230</span> three-phase power meters and EmbSys <span className="font-mono text-[0.95em] text-ink font-semibold">MG111-N01</span> air-quality transmitters over <span className="font-mono text-[0.95em] text-ink font-semibold">RS-485</span> / Modbus RTU, converging Modbus, BACnet and OCPP <span className="font-mono text-[0.95em] text-ink font-semibold">1.6J/2.0.1</span> telemetry onto a single MQTT topic namespace.
-      </>,
-      <>
-        Engineered a vendor-agnostic Excel-to-JSON device profiling engine that replaced hardcoded register maps, scaling device onboarding from <span className="font-mono text-[0.95em] text-ink font-semibold">38</span> to <span className="font-mono text-[0.95em] text-ink font-semibold">241+</span> registers with zero code changes per new meter model.
-      </>,
-      <>
-        Optimized <span className="font-mono text-[0.95em] text-ink font-semibold">RS-485</span> bus bandwidth through dynamic register pruning, cutting per-device polling cycle time from <span className="font-mono text-[0.95em] text-ink font-semibold">4.5 s</span> to <span className="font-mono text-[0.95em] text-ink font-semibold">350 ms</span> (<span className="font-mono text-[0.95em] text-ink font-semibold">13x</span>) on a shared multidrop segment.
-      </>,
-      <>
-        Implemented live in-band hardware provisioning: remote write of slave ID, baud rate and parity to device registers (<span className="font-mono text-[0.95em] text-ink font-semibold">FC06</span> with <span className="font-mono text-[0.95em] text-ink font-semibold">FC16</span> fallback, <span className="font-mono text-[0.95em] text-ink font-semibold">CRC-16/MODBUS</span> validation, deterministic UART reconfiguration handshake), removing the need to open switchgear cabinets for commissioning.
-      </>,
-      <>
-        Architected the ingestion and storage pipeline: Django REST Framework, MQTT (Mosquitto), Telegraf, TimescaleDB hypertables and Grafana dashboards, containerized as <span className="font-mono text-[0.95em] text-ink font-semibold">9 services</span> with Docker Compose.
-      </>,
-      <>
-        Validated with a <span className="font-mono text-[0.95em] text-ink font-semibold">43-test</span> automated suite (protocol framing, CRC integrity, REST boundary conditions, bus-collision prevention), all passing, plus validation against physically wired <span className="font-mono text-[0.95em] text-ink font-semibold">PM2230</span> meters.
-      </>,
+    role: "Embedded Systems & Industrial IoT Intern",
+    company: "ESD (Electronic Systems Development) · Vimar Group",
+    period: "Jun 2024 – Aug 2024",
+    location: "Ariana, Tunisia",
+    badge: "IIoT GATEWAY",
+    highlights: [
+      "Built multi-protocol smart edge gateway bridging BACnet MS/TP, Modbus RTU, and OCPP 1.6J over RS-485 to cloud MQTT brokers.",
+      "Engineered containerized edge telemetry pipeline with Docker Compose running 9 microservices (Telegraf, Mosquitto, TimescaleDB, Redis, Grafana, Portainer).",
+      "Streamed high-frequency power analyzer telemetry with deterministic sub-100ms update cycles for EV charger load-shedding algorithms.",
     ],
-    tags: [
-      "Modbus RTU",
-      "RS-485",
-      "MQTT",
-      "OCPP",
-      "BACnet",
-      "Python",
-      "Django REST Framework",
-      "TimescaleDB",
-      "PostgreSQL",
-      "Telegraf",
-      "Grafana",
-      "Docker Compose",
-      "Redis",
-      "Linux",
-    ],
-  },
-  {
-    id: "cybernexus",
-    role: "Co-founder & CTO",
-    company: "CyberNexus",
-    companyUrl: "https://cybernexus.tn",
-    dates: "2024 – Present",
-    location: "Tunisia",
-    badge: "FOUNDING",
-    description:
-      "Co-founded CyberNexus, building digital products at the intersection of sports data and web engineering. Leading all technical strategy, architecture decisions, and product delivery.",
-    bullets: [
-      <>
-        Define and own the complete technical architecture across real-time data engines and client-facing web applications.
-      </>,
-      <>
-        Manage engineering workflows, code review pipelines, and system quality benchmarks across TypeScript and Python services.
-      </>,
-      <>
-        Drive the technical vision for low-latency telemetry ingestion, interactive operator dashboards, and scalable REST/WebSocket APIs.
-      </>,
-    ],
-    tags: ["TypeScript", "Python", "React", "System Architecture", "Leadership", "Product"],
+    skills: ["RS-485", "Modbus RTU", "BACnet", "OCPP", "Docker Compose", "TimescaleDB", "MQTT", "ESP32"],
   },
   {
     id: "lab619",
-    role: "Embedded Systems & IoT Engineering Intern",
-    company: "LAB619",
-    companyUrl: null,
-    dates: "Jul 2025 – Sep 2025",
-    location: "Tunisia · 2 months",
-    badge: "R&D INTERNSHIP",
-    headline: "Industrial IoT Node for Anomaly Detection",
-    description:
-      "Summer internship within LAB619's R&D department, developing an industrial IoT node for environmental anomaly detection and industrial supervision.",
-    bullets: [
-      <>
-        Designed the complete hardware circuit integrating <span className="font-mono text-[0.95em] text-ink font-semibold">ESP32-S3</span> with multi-sensor array (microphone, accelerometer/gyroscope, temperature/humidity/pressure, gas).
-      </>,
-      <>
-        Integrated industrial transceivers: <span className="font-mono text-[0.95em] text-ink font-semibold">RS-485</span>, <span className="font-mono text-[0.95em] text-ink font-semibold">RS-232</span>, <span className="font-mono text-[0.95em] text-ink font-semibold">LoRa</span>, and NB-IoT (<span className="font-mono text-[0.95em] text-ink font-semibold">SIM7022</span>) for long-range telemetry.
-      </>,
-      <>
-        Developed bare-metal firmware in C under <span className="font-mono text-[0.95em] text-ink font-semibold">ESP-IDF</span> for sensor acquisition, protocol handling, and anomaly detection algorithms.
-      </>,
-      <>
-        Performed KiCad PCB routing with RF constraints, power isolation design, and energy optimization.
-      </>,
-      <>
-        Validated prototype end-to-end: power consumption benchmarks, physical bus validation, and industrial signal integrity.
-      </>,
+    role: "Robotics & Embedded Hardware Developer",
+    company: "LAB619 Makerspace",
+    period: "2023 – 2024",
+    location: "Tunis, Tunisia",
+    badge: "ROBOTICS R&D",
+    highlights: [
+      "Engineered autonomous mobile robot platforms integrating quadrature odometry, cascaded PID loops, and ToF distance sensing.",
+      "Designed and fabricated custom 2-layer PCBs in KiCad for regulated power delivery and high-speed sensor integration.",
+      "Modeled multi-tier robot chassis in SolidWorks and 3D-printed rapid structural iterations deployed in international robotics competitions (Eurobot).",
     ],
-    tags: [
-      "ESP32-S3",
-      "ESP-IDF",
-      "C / Bare-metal",
-      "NB-IoT",
-      "RS-485",
-      "LoRa",
-      "KiCad",
-      "PCB Design",
-      "Industrial IoT",
+    skills: ["STM32", "SolidWorks", "KiCad", "Cascaded PID", "Odometry", "3D Printing"],
+  },
+  {
+    id: "cybernexus",
+    role: "Chief Technology Officer (CTO) & Lead Engineer",
+    company: "CyberNexus Junior Enterprise",
+    period: "2023 – 2024",
+    location: "INSAT, Tunis",
+    badge: "LEADERSHIP",
+    highlights: [
+      "Led engineering roadmap and technical execution across multiple client embedded, IoT, and full-stack web projects.",
+      "Enforced rigorous code quality, git workflows, automated testing, and CI/CD pipelines across multidisciplinary developer teams.",
+      "Architected backend APIs, high-throughput database schemas, and real-time WebSocket communication layers.",
     ],
+    skills: ["Team Leadership", "System Architecture", "Python", "TypeScript", "DevOps"],
+  },
+  {
+    id: "stepact",
+    role: "Lead Full-Stack Web Developer",
+    company: "Lions Club STEP'ACT 2026",
+    period: "2023 – 2024",
+    location: "Tunis, Tunisia",
+    badge: "HIGH-SCALE EVENT",
+    highlights: [
+      "Architected and deployed high-throughput registration, timing, and ticket verification platform handling 2,500+ participants with zero downtime.",
+      "Integrated real-time payment gateway webhooks, automated SMS/email race bib confirmations, and dynamic dashboard analytics.",
+      "Optimized query performance and asset caching to withstand high-volume spikes during nationwide event launch.",
+    ],
+    skills: ["TypeScript", "React", "High-Volume Traffic", "REST API", "Database Optimization"],
   },
 ];
 
 export function ExperienceSection() {
-  return (
-    <section id="experience" className="py-16 border-b border-rule">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <SectionHeader
-          title="Professional Experience"
-          subtitle="Engineering contributions across industrial IoT edge gateways, bare-metal firmware, and software systems."
-        />
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [lineHeight, setLineHeight] = useState(0);
 
-        <div className="space-y-8">
-          {experiences.map((exp) => (
-            <div
-              key={exp.id}
-              className="border border-rule bg-panel-raised p-6 rounded-[2px]"
-            >
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pb-3 mb-4 border-b border-rule">
-                <div>
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] bg-panel-sunk border border-rule text-signal">
-                      {exp.badge}
-                    </span>
-                    <span className="font-mono text-xs text-ink-soft">
-                      {exp.dates}
-                    </span>
-                  </div>
-                  <h3 className="font-heading font-bold text-xl text-ink">
-                    {exp.role}
-                  </h3>
-                  <div className="flex items-center gap-2 text-sm text-ink-soft font-sans mt-0.5">
-                    {exp.companyUrl ? (
-                      <a
-                        href={exp.companyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium text-ink hover:text-signal transition-colors inline-flex items-center gap-1 underline underline-offset-2"
-                      >
-                        <span>{exp.company}</span>
-                        <ExternalLink className="w-3 h-3 text-ink-soft" />
-                      </a>
-                    ) : (
-                      <span className="font-medium text-ink">{exp.company}</span>
-                    )}
-                    <span className="text-rule">·</span>
-                    <span>{exp.location}</span>
-                  </div>
-                </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const top = rect.top;
+      const total = rect.height;
+
+      if (top < windowHeight && top + total > 0) {
+        const scrolled = (windowHeight - top) / (windowHeight + total * 0.7);
+        setLineHeight(Math.min(100, Math.max(0, scrolled * 100)));
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <section id="experience" className="py-20 border-b border-hairline relative">
+      {/* Background oversized numeral 05 */}
+      <div className="absolute right-4 top-10 text-[18vw] font-heading font-extrabold numeral-outlined opacity-15 select-none pointer-events-none">
+        05
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 pb-4 border-b border-hairline">
+          <div>
+            <div className="flex items-center gap-2 font-mono text-xs text-accent mb-1">
+              <span>05 // TRACK RECORD</span>
+              <span className="text-soft">·</span>
+              <span>CHRONOLOGICAL TIMELINE</span>
+            </div>
+            <h2 className="font-heading font-black text-4xl sm:text-5xl text-ink tracking-tight uppercase">
+              Engineering Experience
+            </h2>
+          </div>
+          <p className="font-mono text-[11px] text-soft max-w-xs text-left md:text-right">
+            Practical deployments in industrial IoT, edge computing, robotics fabrication, and high-scale software.
+          </p>
+        </div>
+
+        {/* Timeline with line-draw on scroll */}
+        <div ref={containerRef} className="relative pl-6 sm:pl-10 space-y-10 sm:space-y-12">
+          {/* Base background line */}
+          <div className="absolute left-2.5 sm:left-4 top-2 bottom-4 w-[1px] bg-hairline" />
+
+          {/* Dynamic drawing accent line */}
+          <div
+            className="absolute left-2.5 sm:left-4 top-2 w-[1px] bg-accent transition-all duration-150 origin-top"
+            style={{ height: `${lineHeight}%` }}
+          />
+
+          {EXPERIENCES.map((exp, idx) => (
+            <div key={exp.id} className="relative group">
+              {/* Timeline Node Indicator */}
+              <div className="absolute -left-[27px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-[2px] bg-surface border border-hairline group-hover:border-accent flex items-center justify-center transition-colors">
+                <div className="w-1.5 h-1.5 rounded-[1px] bg-accent" />
               </div>
 
-              {/* Headline */}
-              {exp.headline && (
-                <div className="mb-2.5 font-sans text-sm font-semibold text-ink flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-signal rounded-[1px]" />
-                  <span>{exp.headline}</span>
+              {/* Card Container */}
+              <div className="border border-hairline bg-surface p-5 sm:p-7 rounded-[2px] hover:border-accent/80 transition-colors space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-hairline">
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-heading font-bold text-xl sm:text-2xl text-ink">
+                        {exp.role}
+                      </h3>
+                      <span className="font-mono text-[9px] px-1.5 py-0.2 rounded-[1px] bg-surface2 border border-hairline text-accent font-semibold">
+                        {exp.badge}
+                      </span>
+                    </div>
+                    <p className="font-sans text-sm text-accent font-medium mt-0.5">
+                      {exp.company}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col sm:items-end font-mono text-xs text-soft">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-accent" />
+                      <span>{exp.period}</span>
+                    </span>
+                    <span className="flex items-center gap-1 text-[11px]">
+                      <MapPin className="w-3 h-3 text-soft" />
+                      <span>{exp.location}</span>
+                    </span>
+                  </div>
                 </div>
-              )}
 
-              {/* Description */}
-              <p className="font-sans text-sm text-ink-soft leading-relaxed mb-4">
-                {exp.description}
-              </p>
+                {/* Highlights */}
+                <ul className="space-y-2 pt-1">
+                  {exp.highlights.map((h, i) => (
+                    <li key={i} className="flex items-start gap-2.5 font-sans text-xs sm:text-sm text-soft leading-relaxed">
+                      <span className="w-1.5 h-1.5 rounded-[1px] bg-accent shrink-0 mt-2" />
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
 
-              {/* Bullets */}
-              <ul className="space-y-2 mb-5">
-                {exp.bullets.map((b, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start text-xs sm:text-sm text-ink font-sans leading-relaxed"
-                  >
-                    <span
-                      className="w-1.5 h-1.5 bg-rule shrink-0 mt-2 mr-2.5 rounded-[1px]"
-                      aria-hidden="true"
-                    />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1 pt-3 border-t border-rule">
-                {exp.tags.map((tag) => (
-                  <span key={tag} className="tech-chip text-[11px] py-0.5 px-2">
-                    {tag}
-                  </span>
-                ))}
+                {/* Skill Chips */}
+                <div className="pt-2 flex flex-wrap gap-1.5">
+                  {exp.skills.map((s) => (
+                    <span key={s} className="font-mono text-[10px] px-2 py-0.5 rounded-[2px] bg-surface2 border border-hairline text-soft">
+                      {s}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}

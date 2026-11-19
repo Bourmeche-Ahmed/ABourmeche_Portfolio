@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Send, Github, Linkedin, Mail, AlertCircle, Download, Copy, Check, Loader2 } from "lucide-react";
+import { Send, Mail, Download, Copy, Check, AlertCircle, Loader2, Linkedin, Github } from "lucide-react";
 import emailjs from "emailjs-com";
-import { SectionHeader } from "./SectionHeader";
 import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
 import { copyToClipboard } from "@/lib/utils";
+import { store } from "@/store";
 
 const TARGET_EMAIL = "ahmed.bourmeche@insat.ucar.tn";
 
@@ -35,14 +35,14 @@ export function ContactSection() {
   const validate = () => {
     const errs: { name?: string; email?: string; message?: string } = {};
     if (!form.name.trim() || form.name.trim().length < 2) {
-      errs.name = "Please enter your name (min 2 characters).";
+      errs.name = "Please provide your name (minimum 2 characters).";
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!form.email.trim() || !emailRegex.test(form.email.trim())) {
-      errs.email = "Please enter a valid email address.";
+      errs.email = "Please provide a valid email address.";
     }
     if (!form.message.trim() || form.message.trim().length < 10) {
-      errs.message = "Please write a brief message (min 10 characters).";
+      errs.message = "Please enter a descriptive message (minimum 10 characters).";
     }
     setValidationErrors(errs);
     return Object.keys(errs).length === 0;
@@ -60,9 +60,8 @@ export function ContactSection() {
       `From: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
     );
 
-    // If EmailJS credentials exist, transmit via EmailJS service
-    if (EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
-      try {
+    try {
+      if (EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
         await emailjs.send(
           EMAILJS_SERVICE_ID,
           EMAILJS_TEMPLATE_ID,
@@ -79,94 +78,91 @@ export function ContactSection() {
           },
           EMAILJS_PUBLIC_KEY
         );
-
-        setSubmitted(true);
-        setForm({ name: "", email: "", message: "" });
-        setValidationErrors({});
-      } catch (err: any) {
-        console.error("EmailJS Error:", err);
-        const errDetail = err?.text || err?.message || "";
-        setError(
-          `Email service notification: ${errDetail ? `"${errDetail}"` : "Service unreachable"}. Opening direct email to ${TARGET_EMAIL}...`
-        );
+      } else {
         window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
-      } finally {
-        setLoading(false);
       }
-    } else {
-      // Direct mailto transmission fallback
-      window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
+
       setSubmitted(true);
       setForm({ name: "", email: "", message: "" });
       setValidationErrors({});
+
+      // Trigger 3D robot nod and green LED
+      store.setState({
+        formSuccessCount: store.getState().formSuccessCount + 1,
+        robotBalanceImpulse: 0.15,
+      });
+    } catch (err: any) {
+      console.error("EmailJS Error:", err);
+      const detail = err?.text || err?.message || "";
+      setError(
+        `Email service notification: ${detail ? `"${detail}"` : "Service unreachable"}. Opening direct mailto client...`
+      );
+      window.location.href = `mailto:${TARGET_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
+    } finally {
       setLoading(false);
     }
   };
 
-  const socials = [
-    {
-      icon: Mail,
-      label: TARGET_EMAIL,
-      href: `mailto:${TARGET_EMAIL}`,
-      title: "Direct Academic & Professional Email",
-    },
-    {
-      icon: Linkedin,
-      label: "linkedin.com/in/ahmed-bourmeche",
-      href: "https://linkedin.com/in/ahmed-bourmeche",
-      title: "LinkedIn Profile",
-    },
-    {
-      icon: Github,
-      label: "github.com/Bourmeche-Ahmed",
-      href: "https://github.com/Bourmeche-Ahmed",
-      title: "GitHub Repositories",
-    },
-  ];
-
   return (
-    <section id="contact" className="py-16">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <SectionHeader
-          title="Contact & Internship Inquiry"
-          subtitle="Seeking a Final-Year Engineering Internship (PFE) starting February 2027 · Open to relocation and international opportunities."
-        />
+    <section id="contact" className="py-20 border-b border-hairline relative">
+      {/* Background oversized numeral 06 */}
+      <div className="absolute right-4 top-10 text-[18vw] font-heading font-extrabold numeral-outlined opacity-15 select-none pointer-events-none">
+        06
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Direct Inquiries & Channels */}
-          <div className="md:col-span-5 space-y-6">
-            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-4 shadow-sm">
-              <h3 className="font-heading font-bold text-lg text-ink">
-                Internship & Engineering Inquiries
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-hairline">
+          <div>
+            <div className="flex items-center gap-2 font-mono text-xs text-accent mb-1">
+              <span>06 // TRANSMISSION CHANNEL</span>
+              <span className="text-soft">·</span>
+              <span>LET'S BUILD SOMETHING</span>
+            </div>
+            <h2 className="font-heading font-black text-4xl sm:text-5xl text-ink tracking-tight uppercase">
+              Contact & Inquiry
+            </h2>
+          </div>
+          <p className="font-mono text-[11px] text-soft max-w-xs text-left md:text-right">
+            Open for Final-Year Engineering Projects (PFE), embedded firmware development, and international relocation.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Direct Info & CTA */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="border border-hairline bg-surface p-6 sm:p-7 rounded-[2px] space-y-4">
+              <h3 className="font-heading font-bold text-2xl text-ink">
+                Let's Build Something
               </h3>
-              <p className="font-sans text-sm text-ink-soft leading-relaxed">
-                Currently open to discussing final-year engineering projects (PFE) in industrial IoT, embedded firmware development, PLC & automation systems, or hardware-in-the-loop control.
+              <p className="font-sans text-sm text-soft leading-relaxed">
+                Whether you need a dedicated engineer for automotive electronics, multi-protocol edge gateways, bare-metal robotics, or closed-loop digital twin systems, my inbox is open.
               </p>
-              
-              <div className="pt-2 flex flex-col gap-2">
+
+              <div className="pt-2 flex flex-col gap-2.5">
                 <a
                   href={ASSET_PATHS.cv()}
                   download="Ahmed_Bourmeche_RESUME.pdf"
                   onClick={triggerResumeDownload}
-                  className="btn-primary w-full text-center inline-flex items-center justify-center gap-2 cursor-pointer"
+                  className="btn-primary w-full text-center inline-flex items-center justify-center gap-2"
                 >
-                  <Download className="w-4 h-4 text-signal" />
+                  <Download className="w-4 h-4" />
                   <span>Download Resume (PDF)</span>
                 </a>
 
                 <button
                   onClick={handleCopyEmail}
-                  className="btn-secondary w-full text-xs inline-flex items-center justify-center gap-1.5"
+                  className="btn-secondary w-full text-xs inline-flex items-center justify-center gap-2 min-h-[44px]"
                 >
                   {copiedEmail ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-signal" />
+                      <Check className="w-4 h-4 text-accent" />
                       <span>Copied: {TARGET_EMAIL}</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy Email Address</span>
+                      <Copy className="w-4 h-4 text-soft" />
+                      <span>Copy Direct Email Address</span>
                     </>
                   )}
                 </button>
@@ -174,83 +170,88 @@ export function ContactSection() {
             </div>
 
             {/* Direct Communication Channels */}
-            <div className="border border-rule bg-panel-raised p-6 rounded-[2px] space-y-3.5 shadow-sm">
-              <h3 className="font-heading font-bold text-base text-ink mb-3">
-                Direct Communication Channels
-              </h3>
-              <div className="space-y-3.5">
-                {socials.map((s) => (
-                  <div key={s.title} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-[2px] bg-panel-sunk border border-rule flex items-center justify-center text-ink shrink-0">
-                      <s.icon className="w-4 h-4 text-signal" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-mono text-ink-soft leading-tight">{s.title}</p>
-                      <a
-                        href={s.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="panel-link font-sans text-xs sm:text-sm text-ink font-medium truncate block"
-                      >
-                        {s.label}
-                      </a>
-                    </div>
-                  </div>
-                ))}
+            <div className="border border-hairline bg-surface p-6 rounded-[2px] space-y-3 font-mono text-xs">
+              <div className="text-soft uppercase tracking-wider text-[10px] pb-1 border-b border-hairline">
+                Direct Engineering Channels
+              </div>
+              <div className="space-y-2.5">
+                <div className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-accent" />
+                  <a href={`mailto:${TARGET_EMAIL}`} className="text-ink hover:text-accent truncate">
+                    {TARGET_EMAIL}
+                  </a>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Linkedin className="w-4 h-4 text-accent" />
+                  <a
+                    href="https://linkedin.com/in/ahmed-bourmeche"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-accent truncate"
+                  >
+                    linkedin.com/in/ahmed-bourmeche
+                  </a>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Github className="w-4 h-4 text-accent" />
+                  <a
+                    href="https://github.com/Bourmeche-Ahmed"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-accent truncate"
+                  >
+                    github.com/Bourmeche-Ahmed
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Column: Contact Transmission Form */}
-          <div className="md:col-span-7">
-            <div className="border border-rule bg-panel-raised p-6 sm:p-8 rounded-[2px] shadow-sm">
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
+          <div className="lg:col-span-7">
+            <div className="border border-hairline bg-surface p-6 sm:p-8 rounded-[2px]">
+              <div className="flex items-center justify-between pb-3 mb-5 border-b border-hairline">
                 <div>
                   <h3 className="font-heading font-bold text-xl text-ink">
-                    Send Direct Message
+                    Dispatch Message
                   </h3>
-                  <p className="font-sans text-xs text-ink-soft mt-0.5">
-                    Transmits directly to <span className="text-ink font-medium">{TARGET_EMAIL}</span>
+                  <p className="font-sans text-xs text-soft mt-0.5">
+                    Direct transmission to <span className="text-ink font-medium">{TARGET_EMAIL}</span>
                   </p>
                 </div>
-                <span className="text-[10px] font-mono text-signal bg-signal/10 border border-signal/30 px-2 py-0.5 rounded-[2px]">
-                  SECURE FORM
+                <span className="font-mono text-[9px] uppercase px-2 py-0.5 rounded-[1px] bg-surface2 border border-hairline text-accent font-semibold">
+                  ENCRYPTED TLS
                 </span>
               </div>
 
               {submitted ? (
-                <div className="p-6 border border-rule bg-panel-sunk rounded-[2px] flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-[2px] bg-signal/15 border border-signal/30 flex items-center justify-center text-signal shrink-0">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <motion.path
-                        d="M5 13l4 4L19 7"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                      />
-                    </svg>
+                <div className="p-6 border border-hairline bg-surface2 rounded-[2px] flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-[2px] bg-accent/15 border border-accent/40 flex items-center justify-center text-accent shrink-0">
+                    <Check className="w-5 h-5 text-accent" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-sans font-semibold text-sm text-ink">Message Transmitted Successfully</p>
-                    <p className="font-sans text-xs text-ink-soft mt-0.5">
-                      Your inquiry has been dispatched to {TARGET_EMAIL}. I will reply promptly.
+                    <p className="font-heading font-bold text-lg text-ink">
+                      Message Dispatched Successfully
+                    </p>
+                    <p className="font-sans text-xs text-soft mt-0.5">
+                      Your inquiry has been received. The 3D robot acknowledged your transmission.
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="mt-3 text-xs font-mono text-signal underline underline-offset-2 hover:text-ink transition-colors"
+                      className="mt-3 text-xs font-mono text-accent underline underline-offset-2 hover:text-ink transition-colors"
                     >
-                      Send Another Message
+                      Send Another Transmission
                     </button>
                   </div>
                 </div>
               ) : error ? (
-                <div className="p-4 border border-rule bg-panel-sunk rounded-[2px] mb-4 flex items-start gap-3">
-                  <AlertCircle className="w-4 h-4 text-signal shrink-0 mt-0.5" />
+                <div className="p-4 border border-hairline bg-surface2 rounded-[2px] mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                   <div>
                     <p className="font-sans text-xs text-ink">{error}</p>
                     <button
                       onClick={() => setError(null)}
-                      className="font-sans text-[11px] text-ink-soft underline mt-1"
+                      className="font-sans text-[11px] text-soft underline mt-1"
                     >
                       Dismiss
                     </button>
@@ -259,8 +260,8 @@ export function ContactSection() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="name" className="block text-xs font-mono text-ink-soft mb-1">
-                      NAME / SENDER
+                    <label htmlFor="name" className="block text-xs font-mono text-soft mb-1 uppercase">
+                      Name / Identification
                     </label>
                     <input
                       id="name"
@@ -271,19 +272,19 @@ export function ContactSection() {
                         setForm((f) => ({ ...f, name: e.target.value }));
                         if (validationErrors.name) setValidationErrors((v) => ({ ...v, name: undefined }));
                       }}
-                      placeholder="e.g. Lead Engineer / Hiring Manager"
-                      className={`w-full px-3 py-2 rounded-[2px] bg-panel-sunk border text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none ${
-                        validationErrors.name ? "border-rose-500" : "border-rule"
+                      placeholder="Lead Engineer / Hiring Manager"
+                      className={`w-full px-3 py-2.5 rounded-[2px] bg-surface2 border text-sm text-ink placeholder:text-soft focus-visible:outline-none min-h-[44px] ${
+                        validationErrors.name ? "border-red-500" : "border-hairline"
                       }`}
                     />
                     {validationErrors.name && (
-                      <p className="text-[11px] font-sans text-rose-500 mt-1">{validationErrors.name}</p>
+                      <p className="text-[11px] font-mono text-red-500 mt-1">{validationErrors.name}</p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-xs font-mono text-ink-soft mb-1">
-                      YOUR EMAIL ADDRESS (FOR REPLY)
+                    <label htmlFor="email" className="block text-xs font-mono text-soft mb-1 uppercase">
+                      Email Address (For Reply)
                     </label>
                     <input
                       id="email"
@@ -294,19 +295,19 @@ export function ContactSection() {
                         setForm((f) => ({ ...f, email: e.target.value }));
                         if (validationErrors.email) setValidationErrors((v) => ({ ...v, email: undefined }));
                       }}
-                      placeholder="e.g. yourname@company.com"
-                      className={`w-full px-3 py-2 rounded-[2px] bg-panel-sunk border text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none ${
-                        validationErrors.email ? "border-rose-500" : "border-rule"
+                      placeholder="engineer@company.com"
+                      className={`w-full px-3 py-2.5 rounded-[2px] bg-surface2 border text-sm text-ink placeholder:text-soft focus-visible:outline-none min-h-[44px] ${
+                        validationErrors.email ? "border-red-500" : "border-hairline"
                       }`}
                     />
                     {validationErrors.email && (
-                      <p className="text-[11px] font-sans text-rose-500 mt-1">{validationErrors.email}</p>
+                      <p className="text-[11px] font-mono text-red-500 mt-1">{validationErrors.email}</p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-xs font-mono text-ink-soft mb-1">
-                      MESSAGE CONTENT
+                    <label htmlFor="message" className="block text-xs font-mono text-soft mb-1 uppercase">
+                      Project Scope & Message
                     </label>
                     <textarea
                       id="message"
@@ -317,36 +318,30 @@ export function ContactSection() {
                         setForm((f) => ({ ...f, message: e.target.value }));
                         if (validationErrors.message) setValidationErrors((v) => ({ ...v, message: undefined }));
                       }}
-                      placeholder="Describe the opportunity, technical scope, or discussion topic..."
-                      className={`w-full px-3 py-2 rounded-[2px] bg-panel-sunk border text-sm text-ink placeholder:text-ink-soft focus-visible:outline-none resize-none ${
-                        validationErrors.message ? "border-rose-500" : "border-rule"
+                      placeholder="Describe the technical scope, timeline, or opportunity..."
+                      className={`w-full px-3 py-2 rounded-[2px] bg-surface2 border text-sm text-ink placeholder:text-soft focus-visible:outline-none resize-none ${
+                        validationErrors.message ? "border-red-500" : "border-hairline"
                       }`}
                     />
                     {validationErrors.message && (
-                      <p className="text-[11px] font-sans text-rose-500 mt-1">{validationErrors.message}</p>
+                      <p className="text-[11px] font-mono text-red-500 mt-1">{validationErrors.message}</p>
                     )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary w-full py-2.5 flex flex-col items-center justify-center gap-1.5 relative overflow-hidden"
+                    className="btn-primary w-full min-h-[44px] flex items-center justify-center gap-2"
                   >
                     {loading ? (
-                      <div className="w-full flex flex-col items-center gap-1.5 py-0.5">
-                        <div className="flex items-center gap-2">
-                          <Loader2 className="w-3.5 h-3.5 animate-spin text-signal" />
-                          <span>Transmitting Packet Across Wire...</span>
-                        </div>
-                        {/* Signal pulse wire animation */}
-                        <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden relative">
-                          <div className="h-full bg-signal w-1/3 rounded-full animate-pulse" />
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-accent-ink" />
+                        <span>Transmitting Packet...</span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <Send className="w-3.5 h-3.5" />
-                        <span>Send Message to {TARGET_EMAIL}</span>
+                        <Send className="w-4 h-4" />
+                        <span>Transmit Message</span>
                       </div>
                     )}
                   </button>
@@ -359,3 +354,5 @@ export function ContactSection() {
     </section>
   );
 }
+
+export default ContactSection;

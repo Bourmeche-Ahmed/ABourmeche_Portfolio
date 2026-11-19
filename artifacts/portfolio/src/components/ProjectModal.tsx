@@ -25,7 +25,7 @@ import { categoryStyles } from "./ProjectCard";
 import { ArchitectureFlow } from "./ArchitectureFlow";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
-const CANDIDATE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp"];
+const CANDIDATE_EXTENSIONS = [".webp", ".png", ".jpg", ".jpeg"];
 
 function LightboxImage({
   src,
