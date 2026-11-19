@@ -26,7 +26,7 @@ const categoryIconMap: Record<ProjectCategory, LucideIcon> = {
   "Experimental": FlaskConical,
 };
 
-const CANDIDATE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp"];
+const CANDIDATE_EXTENSIONS = [".webp", ".png", ".jpg", ".jpeg"];
 
 export interface ProjectImageProps {
   src?: string;

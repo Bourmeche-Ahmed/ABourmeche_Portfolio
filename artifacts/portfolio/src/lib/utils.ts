@@ -9,9 +9,8 @@ export function copyToClipboard(text: string): Promise<void> {
   return navigator.clipboard.writeText(text);
 }
 
+import { scrollToTarget } from "@/hooks/useLenisScroll";
+
 export function smoothScrollTo(id: string) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  scrollToTarget(id);
 }

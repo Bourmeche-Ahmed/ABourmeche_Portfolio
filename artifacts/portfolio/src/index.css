@@ -3,38 +3,56 @@
 @tailwind utilities;
 
 @layer base {
+  /* Default Vermilion Preset - Dark by default */
   :root {
-    --panel: #ECF8F6;
-    --panel-sunk: #DCEFEC;
-    --panel-raised: #F6FBFA;
-    --ink: #18534F;
-    --ink-soft: #3F6B66;
-    --rule: #C5E0DC;
-    --signal: #226D68;
-    --signal-tint: #D5ECE8;
-    --telemetry: #226D68;
-    --hardware: #D6955B;
-    --hardware-text: #9A5A1F;
-    --highlight: #FEEAA1;
+    --bg: #F4F1EA;
+    --surface: #FFFFFF;
+    --surface2: #ECE8DF;
+    --hairline: #DAD5CA;
+    --ink: #111114;
+    --soft: #5B5A62;
+    --accent: #D63A0A;
+    --accent-text: #C93509;
+    --accent-ink: #FFFFFF;
+    --cold: #1B3B6F;
+
+    /* Backward compatibility tokens */
+    --panel: var(--bg);
+    --panel-sunk: var(--surface2);
+    --panel-raised: var(--surface);
+    --rule: var(--hairline);
+    --signal: var(--accent);
+    --signal-tint: var(--surface2);
+    --telemetry: var(--accent);
+    --hardware: var(--accent);
+    --hardware-text: var(--accent-text);
+    --highlight: var(--accent);
     --radius: 2px;
-    --hair: 1px solid var(--rule);
   }
 
   .dark {
-    --panel: #0B2321;
-    --panel-sunk: #081B1A;
-    --panel-raised: #11302D;
-    --ink: #ECF8F6;
-    --ink-soft: #8FB8B3;
-    --rule: #1F4743;
-    --signal: #5FB3AB;
-    --signal-tint: #123A36;
-    --telemetry: #5FB3AB;
-    --hardware: #D6955B;
-    --hardware-text: #D6955B;
-    --highlight: #FEEAA1;
-    --radius: 2px;
-    --hair: 1px solid var(--rule);
+    --bg: #0A0A0C;
+    --surface: #131316;
+    --surface2: #1B1B20;
+    --hairline: #2A2A31;
+    --ink: #F3F1EC;
+    --soft: #A3A1AB;
+    --accent: #FF5A2B;
+    --accent-text: #FF5A2B;
+    --accent-ink: #0A0A0C;
+    --cold: #CFE8FF;
+
+    /* Backward compatibility tokens */
+    --panel: var(--bg);
+    --panel-sunk: var(--surface2);
+    --panel-raised: var(--surface);
+    --rule: var(--hairline);
+    --signal: var(--accent);
+    --signal-tint: var(--surface2);
+    --telemetry: var(--accent);
+    --hardware: var(--accent);
+    --hardware-text: var(--accent-text);
+    --highlight: var(--accent);
   }
 
   *, *::before, *::after {
@@ -42,24 +60,25 @@
   }
 
   ::selection {
-    background-color: var(--highlight);
-    color: var(--ink);
+    background-color: var(--accent);
+    color: var(--accent-ink);
   }
 
   html {
     scroll-behavior: smooth;
-    background-color: var(--panel);
+    background-color: var(--bg);
     color: var(--ink);
-    font-family: "IBM Plex Sans", sans-serif;
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   body {
-    background-color: var(--panel);
+    background-color: var(--bg);
     color: var(--ink);
-    font-family: "IBM Plex Sans", sans-serif;
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -70,7 +89,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--signal) !important;
+    outline: 2px solid var(--accent) !important;
     outline-offset: 2px !important;
   }
 
@@ -84,21 +103,54 @@
   }
 }
 
+/* Lenis smooth scrolling rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 @layer components {
-  /* Instrument panel link styling */
-  .panel-link {
-    color: var(--ink);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  /* Precision hairline borders and tokens */
+  .hairline-b {
+    border-bottom: 1px solid var(--hairline);
   }
-  .panel-link:hover {
-    color: var(--signal);
-    text-decoration-color: var(--signal);
+  .hairline-t {
+    border-top: 1px solid var(--hairline);
+  }
+  .hairline-l {
+    border-left: 1px solid var(--hairline);
+  }
+  .hairline-r {
+    border-right: 1px solid var(--hairline);
   }
 
-  /* Clean Flat Primary Button — 2px radius, hairline border, active scale */
+  /* Editorial Outlined Numerals */
+  .numeral-outlined {
+    font-family: "Saira Condensed", sans-serif;
+    font-weight: 800;
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--hairline);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Brutalist Clean Primary Button */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -106,15 +158,15 @@
     gap: 0.5rem;
     min-height: 44px;
     padding: 0.5rem 1.25rem;
-    background-color: var(--signal);
-    color: #ffffff;
+    background-color: var(--accent);
+    color: var(--accent-ink);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: var(--radius);
-    border: 1px solid var(--signal);
+    border: 1px solid var(--accent);
     cursor: pointer;
-    transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
+    transition: transform 0.1s ease, opacity 0.15s ease;
   }
   .btn-primary:hover {
     opacity: 0.92;
@@ -123,7 +175,7 @@
     transform: scale(0.98);
   }
 
-  /* Clean Flat Secondary Button — 2px radius, hairline border, active scale */
+  /* Brutalist Clean Secondary Button */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
@@ -131,19 +183,19 @@
     gap: 0.5rem;
     min-height: 44px;
     padding: 0.5rem 1.25rem;
-    background-color: var(--panel-raised);
+    background-color: var(--surface);
     color: var(--ink);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius);
-    border: 1px solid var(--rule);
+    border: 1px solid var(--hairline);
     cursor: pointer;
-    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
   }
   .btn-secondary:hover {
-    background-color: var(--panel-sunk);
-    border-color: var(--signal);
+    border-color: var(--accent);
+    background-color: var(--surface2);
   }
   .btn-secondary:active {
     transform: scale(0.98);
@@ -157,24 +209,12 @@
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.8125rem;
     color: var(--ink);
-    background-color: var(--panel-sunk);
-    border: var(--hair);
+    background-color: var(--surface2);
+    border: 1px solid var(--hairline);
     border-radius: var(--radius);
     transition: border-color 0.15s ease;
   }
   .tech-chip:hover {
-    border-color: var(--signal);
-  }
-
-  /* Single draw SVG trace line */
-  .hero-trace-line {
-    stroke-dashoffset: 600;
-    animation: drawTrace 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  @keyframes drawTrace {
-    to {
-      stroke-dashoffset: 0;
-    }
+    border-color: var(--accent);
   }
 }
