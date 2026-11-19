@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
+import { LineFollowerMascot } from "./LineFollowerMascot";
 import { smoothScrollTo } from "@/lib/utils";
 import { Menu, X, Linkedin, Github, Command } from "lucide-react";
 
@@ -141,12 +142,13 @@ export function NavBar({ onOpenCommandPalette, onThemeChanged }: NavBarProps) {
         </div>
       </nav>
 
-      {/* Signal trace scroll progress bar under navbar */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-transparent overflow-hidden">
+      {/* Signal trace scroll progress bar under navbar with Line-Follower Robot Mascot */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-transparent pointer-events-none">
         <div
           className="h-full bg-signal transition-all duration-75 origin-left"
           style={{ width: `${scrollProgress}%` }}
         />
+        <LineFollowerMascot progress={scrollProgress} activeSection={active} />
       </div>
 
       {mobileOpen && (
