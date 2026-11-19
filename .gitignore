@@ -45,3 +45,6 @@ Thumbs.db
 .github/instructions/nx.instructions.md
 # Local files
 .local/
+test-results/
+playwright-report/
+*.log

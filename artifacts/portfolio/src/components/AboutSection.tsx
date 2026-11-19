@@ -100,18 +100,17 @@ export function AboutSection() {
 
           {/* Right: Framed Profile Card with Pointer Tilt & Click-Flip Back Face */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="w-full max-w-[300px] select-none" style={{ perspective: 1000 }}>
-              <button
-                type="button"
+            <div
+              className="w-full max-w-[300px] select-none"
+              style={{ perspective: 1000 }}
+              role="region"
+              aria-label="Ahmed Bourmeche profile ID card"
+            >
+              <motion.div
+                ref={cardRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
                 onClick={toggleFlip}
-                aria-pressed={isFlipped}
-                aria-label="Ahmed Bourmeche engineering ID card. Click to flip for technical specifications."
-                className="w-full text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[2px] cursor-pointer"
-              >
-                <motion.div
-                  ref={cardRef}
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={handleMouseLeave}
                   animate={{
                     rotateY: isFlipped ? 180 : tilt.ry,
                     rotateX: isFlipped ? 0 : tilt.rx,
@@ -154,10 +153,17 @@ export function AboutSection() {
                       <p className="font-mono text-xs text-accent font-medium">
                         INSAT · University of Carthage
                       </p>
-                      <div className="mt-2.5 pt-2 border-t border-hairline flex items-center justify-center gap-1 text-[10px] font-mono text-soft hover:text-accent transition-colors">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFlip();
+                        }}
+                        className="mt-2.5 pt-2 border-t border-hairline w-full flex items-center justify-center gap-1 text-[10px] font-mono text-soft hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[2px] cursor-pointer"
+                      >
                         <RefreshCw className="w-2.5 h-2.5 text-accent" />
                         <span>Click to flip for verified specs</span>
-                      </div>
+                      </button>
                     </div>
                   </div>
 
@@ -207,14 +213,20 @@ export function AboutSection() {
 
                     <div className="pt-2 border-t border-hairline font-mono text-[9px] text-soft flex items-center justify-between">
                       <span>CRC32: 0x7E3A9F1B</span>
-                      <span className="text-accent flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFlip();
+                        }}
+                        className="text-accent flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded-[2px] cursor-pointer"
+                      >
                         <RefreshCw className="w-2.5 h-2.5" />
                         <span>FLIP PHOTO</span>
-                      </span>
+                      </button>
                     </div>
                   </div>
                 </motion.div>
-              </button>
             </div>
           </div>
         </div>
