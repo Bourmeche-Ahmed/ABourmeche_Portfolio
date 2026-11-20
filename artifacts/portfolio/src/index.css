@@ -119,10 +119,6 @@
     }
   }
 }
-      scroll-behavior: auto !important;
-    }
-  }
-}
 
 /* Lenis smooth scrolling rules */
 html.lenis, html.lenis body {

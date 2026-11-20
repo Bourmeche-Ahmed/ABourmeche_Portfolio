@@ -1,20 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { smoothScrollTo } from "@/lib/utils";
-import { PresetSwitcher } from "./PresetSwitcher";
 import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
 import { Menu, X, Github, Linkedin, Download } from "lucide-react";
 
 const NAV_ITEMS = [
-  { href: "hero", label: "HERO" },
-  { href: "projects", label: "PROJECTS" },
-  { href: "skills", label: "SKILLS" },
   { href: "about", label: "ABOUT" },
-  { href: "experience", label: "TIMELINE" },
+  { href: "projects", label: "PROJECTS" },
+  { href: "journey", label: "JOURNEY" },
+  { href: "skills", label: "SKILLS" },
   { href: "contact", label: "CONTACT" },
 ];
 
 export function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["hero", "about", "projects", "journey", "skills", "contact"];
+      const scrollY = window.scrollY + 180;
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollY >= top && scrollY < top + height) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleNavClick = (id: string) => {
     smoothScrollTo(id);
@@ -22,48 +43,54 @@ export function NavBar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-bg/90 backdrop-blur-md border-b border-hairline transition-colors">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-bg/95 backdrop-blur-md border-b border-hairline transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-        {/* Brand / Monogram */}
+        {/* Monogram / Brand */}
         <button
           onClick={() => handleNavClick("hero")}
-          className="flex items-center gap-2.5 text-left group focus-visible:outline-none"
+          className="flex items-center gap-3 text-left group focus-visible:outline-none"
+          aria-label="Ahmed Bourmeche - Back to top"
         >
-          <div className="w-7 h-7 rounded-[2px] bg-surface2 border border-hairline flex items-center justify-center font-mono font-bold text-xs text-accent group-hover:border-accent transition-colors">
+          <div className="w-7 h-7 bg-surface border border-hairline flex items-center justify-center font-mono font-bold text-xs text-accent group-hover:border-accent transition-colors">
             AB
           </div>
-          <div className="flex flex-col">
-            <span className="font-heading font-bold text-base sm:text-lg tracking-wider text-ink leading-none">
+          <div className="flex items-center gap-2 font-mono text-xs">
+            <span className="font-heading font-black text-sm text-ink tracking-wider group-hover:text-accent transition-colors">
               AHMED BOURMECHE
             </span>
-            <span className="font-mono text-[9px] text-soft tracking-widest hidden sm:inline">
-              THE BUILD // ROBOTICS & IIoT
+            <span className="hidden sm:inline text-soft/50">·</span>
+            <span className="hidden sm:inline text-accent text-[11px] font-semibold tracking-wide">
+              PFE FEB 2027
             </span>
           </div>
         </button>
 
         {/* Center Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-6 font-mono text-xs text-soft">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.href}
-              onClick={() => handleNavClick(item.href)}
-              className="hover:text-accent transition-colors py-1 focus-visible:outline-none tracking-wider"
-            >
-              {item.label}
-            </button>
-          ))}
+        <nav className="hidden md:flex items-center gap-6 font-mono text-xs text-soft">
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.href;
+            return (
+              <button
+                key={item.href}
+                onClick={() => handleNavClick(item.href)}
+                className={`transition-colors py-1 focus-visible:outline-none tracking-wider ${
+                  isActive ? "text-accent font-semibold" : "hover:text-ink"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Right Tools & Presets */}
+        {/* Right Tools: Socials & Resume PDF */}
         <div className="flex items-center gap-2">
-          {/* Socials & Resume (Desktop) */}
-          <div className="hidden sm:flex items-center gap-1.5 border-r border-hairline pr-2 mr-1">
+          <div className="hidden sm:flex items-center gap-2">
             <a
               href="https://github.com/Bourmeche-Ahmed"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center rounded-[2px]"
+              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
               aria-label="GitHub Profile"
             >
               <Github className="w-4 h-4" />
@@ -72,7 +99,7 @@ export function NavBar() {
               href="https://www.linkedin.com/in/ahmed-bourmeche/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center rounded-[2px]"
+              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
               aria-label="LinkedIn Profile"
             >
               <Linkedin className="w-4 h-4" />
@@ -81,20 +108,18 @@ export function NavBar() {
               href={ASSET_PATHS.cv()}
               download="Ahmed_Bourmeche_RESUME.pdf"
               onClick={triggerResumeDownload}
-              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center rounded-[2px]"
-              aria-label="Download Resume"
-              title="Download Resume PDF"
+              className="px-2.5 py-1 text-soft hover:text-accent border border-hairline hover:border-accent text-xs font-mono transition-colors flex items-center gap-1.5"
+              aria-label="Download CV"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-3.5 h-3.5 text-accent" />
+              <span>CV</span>
             </a>
           </div>
 
-          <PresetSwitcher />
-
-          {/* Mobile hamburger button */}
+          {/* Mobile hamburger menu */}
           <button
             onClick={() => setMobileMenuOpen((o) => !o)}
-            className="lg:hidden p-2 text-soft hover:text-ink min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] border border-hairline bg-surface"
+            className="md:hidden p-2 text-soft hover:text-ink min-w-[40px] min-h-[40px] flex items-center justify-center border border-hairline bg-surface"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -102,31 +127,44 @@ export function NavBar() {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-bg border-b border-hairline px-4 py-4 space-y-3 font-mono text-sm animate-in fade-in duration-150">
-          <div className="flex flex-col gap-2">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
-                className="text-left px-3 py-2 rounded-[2px] bg-surface2 text-ink hover:text-accent transition-colors flex items-center justify-between"
-              >
-                <span>{item.label}</span>
-                <span className="text-[10px] text-soft">→</span>
-              </button>
-            ))}
-          </div>
+        <div className="md:hidden border-b border-hairline bg-bg p-6 space-y-4 font-mono text-sm">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.href}
+              onClick={() => handleNavClick(item.href)}
+              className="block w-full text-left py-2 text-soft hover:text-accent transition-colors"
+            >
+              {item.label}
+            </button>
+          ))}
 
-          <div className="pt-2 border-t border-hairline flex items-center justify-between">
-            <span className="text-xs text-soft">Download CV / Resume</span>
+          <div className="pt-4 border-t border-hairline flex items-center gap-4">
+            <a
+              href="https://github.com/Bourmeche-Ahmed"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-soft hover:text-accent flex items-center gap-1.5 text-xs"
+            >
+              <Github className="w-4 h-4" />
+              <span>GitHub</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ahmed-bourmeche/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-soft hover:text-accent flex items-center gap-1.5 text-xs"
+            >
+              <Linkedin className="w-4 h-4" />
+              <span>LinkedIn</span>
+            </a>
             <a
               href={ASSET_PATHS.cv()}
               download="Ahmed_Bourmeche_RESUME.pdf"
-              onClick={triggerResumeDownload}
-              className="btn-secondary text-xs py-1.5 px-3 inline-flex items-center gap-1.5"
+              className="text-accent flex items-center gap-1.5 text-xs font-semibold"
             >
-              <Download className="w-3.5 h-3.5 text-accent" />
+              <Download className="w-4 h-4" />
               <span>Resume PDF</span>
             </a>
           </div>
@@ -135,5 +173,3 @@ export function NavBar() {
     </header>
   );
 }
-
-export default NavBar;

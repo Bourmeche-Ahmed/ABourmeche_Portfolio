@@ -1,122 +1,100 @@
-import { useState, useEffect, useCallback, Suspense, lazy } from "react";
+import { useState, useEffect } from "react";
 import { NavBar } from "@/components/NavBar";
-import { SectionRail } from "@/components/SectionRail";
 import { HeroSection } from "@/components/HeroSection";
-import { ProjectsContactSheet } from "@/components/ProjectsContactSheet";
-import { SkillsSection } from "@/components/SkillsSection";
 import { AboutSection } from "@/components/AboutSection";
-import { ExperienceSection } from "@/components/ExperienceSection";
+import { SelectedProjects } from "@/components/SelectedProjects";
+import { JourneySection } from "@/components/JourneySection";
+import { SkillsSection } from "@/components/SkillsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { NotFoundPage } from "@/components/NotFoundPage";
 import { ProjectModal } from "@/components/ProjectModal";
 import { Switch, Route } from "wouter";
 import { useLenisScroll } from "@/hooks/useLenisScroll";
-import { detectTier } from "@/lib/tier";
-import { store, useAppState } from "@/store";
-import { applyPreset, PresetName } from "@/theme/presets";
-import type { Project } from "@/data/projects";
+import { projects, Project } from "@/data/projects";
+import { store } from "@/store";
+import { applyPreset } from "@/theme/presets";
 
-// Lazy-load 3D Robot canvas for P2/P3/P4
-const RobotCanvas = lazy(() => import("@/components/three/RobotCanvas"));
+const SECTION_IDS = ["hero", "about", "projects", "journey", "skills", "contact"];
 
 function AppContent() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   useLenisScroll();
 
-  const tier = useAppState((s) => s.tier);
-  const debug = useAppState((s) => s.debug);
-
-  // Initialize tier, preset, theme, and query flags on mount
+  // Initialize theme tokens and parse URL query presets on mount
   useEffect(() => {
-    // 1. Detect tier
-    const detectedTier = detectTier();
-
-    // 2. Detect preset & theme from URL or storage
     const params = new URLSearchParams(window.location.search);
-    const queryPreset = params.get("preset") as PresetName | null;
-    const validPreset: PresetName =
+    const queryPreset = params.get("preset") as "vermilion" | "lime" | "ultraviolet" | null;
+    const validPreset =
       queryPreset === "vermilion" || queryPreset === "lime" || queryPreset === "ultraviolet"
         ? queryPreset
         : "lime";
 
-    const hasDebug = params.get("debug") !== null;
-
-    const storedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = storedTheme ? storedTheme === "dark" : prefersDark;
-
     store.setState({
-      tier: detectedTier,
       preset: validPreset,
-      isDark,
-      debug: hasDebug,
+      isDark: true,
+      tier: "lite",
     });
 
-    applyPreset(validPreset, isDark);
+    applyPreset(validPreset, true);
   }, []);
 
-  // Listen for open-project-modal events dispatched from cards/strips
+  // Hash-based modal routing (e.g. #vroom, #rl-navigation)
   useEffect(() => {
-    const handleOpenModal = (e: CustomEvent<Project>) => {
-      setSelectedProject(e.detail);
+    const handleHashSync = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash && !SECTION_IDS.includes(hash)) {
+        const found = projects.find((p) => p.id === hash);
+        if (found) {
+          setSelectedProject(found);
+        }
+      }
     };
-    window.addEventListener("open-project-modal" as any, handleOpenModal);
-    return () => window.removeEventListener("open-project-modal" as any, handleOpenModal);
+
+    handleHashSync();
+    window.addEventListener("hashchange", handleHashSync);
+    return () => window.removeEventListener("hashchange", handleHashSync);
   }, []);
+
+  const handleCloseModal = () => {
+    setSelectedProject(null);
+    const currentHash = window.location.hash.replace("#", "");
+    if (currentHash && !SECTION_IDS.includes(currentHash)) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-bg text-ink antialiased relative selection:bg-accent selection:text-accent-ink">
       {/* Accessible Skip Link */}
       <a
-        href="#hero"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-ink font-mono text-xs rounded-[2px]"
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-ink font-mono text-xs"
       >
         Skip to main content
       </a>
 
-      {/* 3D WebGL Background Canvas (Progressive Enhancement) */}
-      {tier !== "static" && (
-        <Suspense fallback={null}>
-          <RobotCanvas />
-        </Suspense>
-      )}
-
-      {/* Left Desktop Rail */}
-      <SectionRail />
-
-      {/* Top Navbar */}
+      {/* Top Navigation */}
       <NavBar />
 
-      {/* Main Content Sections (DOM as Source of Truth) */}
+      {/* Main Content Sections (Single-Page Story) */}
       <main id="main-content" className="relative z-10">
         <HeroSection />
-        <ProjectsContactSheet onSelectProject={(p) => setSelectedProject(p)} />
-        <SkillsSection />
         <AboutSection />
-        <ExperienceSection />
+        <SelectedProjects onSelectProject={(p) => setSelectedProject(p)} />
+        <JourneySection />
+        <SkillsSection />
         <ContactSection />
       </main>
 
       {/* Footer */}
       <Footer />
 
-      {/* Project Detail Modal with Gallery & Lightbox */}
+      {/* Project Detail Modal */}
       <ProjectModal
         project={selectedProject}
-        onClose={() => setSelectedProject(null)}
+        onClose={handleCloseModal}
       />
-
-      {/* Dev Debug Overlay (?debug) */}
-      {debug && (
-        <div className="fixed bottom-4 left-4 z-50 p-2.5 bg-surface/90 border border-hairline font-mono text-[10px] text-ink backdrop-blur-md rounded-[2px] shadow-lg pointer-events-none">
-          <div className="text-accent font-bold">DEV // DEBUG OVERLAY</div>
-          <div>TIER: {tier}</div>
-          <div>SCROLL: {(store.getState().scroll * 100).toFixed(1)}%</div>
-          <div>SUBSYSTEM: {store.getState().activeSubsystem || "none"}</div>
-          <div>SKILL_GROUP: {store.getState().hoveredSkillGroup || "none"}</div>
-        </div>
-      )}
     </div>
   );
 }
