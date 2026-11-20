@@ -3,18 +3,34 @@
 @tailwind utilities;
 
 @layer base {
-  /* Default Vermilion Preset - Dark by default */
   :root {
-    --bg: #F4F1EA;
-    --surface: #FFFFFF;
-    --surface2: #ECE8DF;
-    --hairline: #DAD5CA;
-    --ink: #111114;
-    --soft: #5B5A62;
-    --accent: #D63A0A;
-    --accent-text: #C93509;
-    --accent-ink: #FFFFFF;
-    --cold: #1B3B6F;
+    /* Editorial Minimal Design System - Deep Charcoal + High-Contrast Lime */
+    --bg: #0A0B0D;
+    --surface: #121316;
+    --surface2: #18191E;
+    --hairline: #1F2127;
+    --hairline-strong: #2F333E;
+    --ink: #EDEDED;
+    --soft: #9496A1;
+    --ink-muted: #5C5E6B;
+    --accent: #C6F432;
+    --accent-text: #C6F432;
+    --accent-ink: #0A0B0D;
+    --cold: #8BB2E8;
+
+    /* Motion Tokens */
+    --duration-fast: 180ms;
+    --duration-mid: 420ms;
+    --duration-slow: 750ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* Typography Fluid Clamps */
+    --font-display: clamp(2.75rem, 8vw, 6.25rem);
+    --font-h1: clamp(2rem, 5vw, 3.75rem);
+    --font-h2: clamp(1.5rem, 3.5vw, 2.5rem);
+    --font-h3: clamp(1.2rem, 2.2vw, 1.75rem);
+    --font-body: clamp(0.9375rem, 1.1vw, 1.0625rem);
 
     /* Backward compatibility tokens */
     --panel: var(--bg);
@@ -27,22 +43,23 @@
     --hardware: var(--accent);
     --hardware-text: var(--accent-text);
     --highlight: var(--accent);
-    --radius: 2px;
+    --radius: 0px;
   }
 
   .dark {
-    --bg: #0A0A0C;
-    --surface: #131316;
-    --surface2: #1B1B20;
-    --hairline: #2A2A31;
-    --ink: #F3F1EC;
-    --soft: #A3A1AB;
-    --accent: #FF5A2B;
-    --accent-text: #FF5A2B;
-    --accent-ink: #0A0A0C;
-    --cold: #CFE8FF;
+    --bg: #0A0B0D;
+    --surface: #121316;
+    --surface2: #18191E;
+    --hairline: #1F2127;
+    --hairline-strong: #2F333E;
+    --ink: #EDEDED;
+    --soft: #9496A1;
+    --ink-muted: #5C5E6B;
+    --accent: #C6F432;
+    --accent-text: #C6F432;
+    --accent-ink: #0A0B0D;
+    --cold: #8BB2E8;
 
-    /* Backward compatibility tokens */
     --panel: var(--bg);
     --panel-sunk: var(--surface2);
     --panel-raised: var(--surface);
@@ -98,6 +115,10 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
       scroll-behavior: auto !important;
     }
   }

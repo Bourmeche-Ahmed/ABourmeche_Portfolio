@@ -38,7 +38,7 @@ function AppContent() {
     const validPreset: PresetName =
       queryPreset === "vermilion" || queryPreset === "lime" || queryPreset === "ultraviolet"
         ? queryPreset
-        : "vermilion";
+        : "lime";
 
     const hasDebug = params.get("debug") !== null;
 
