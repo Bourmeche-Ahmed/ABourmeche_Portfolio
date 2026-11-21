@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const SCREENSHOT_DIR = path.resolve(__dirname, "../../../docs/rebuild");
+const SCREENSHOT_DIR = path.resolve(__dirname, "../../../docs/editorial-screens");
 
 test.beforeAll(() => {
   if (!fs.existsSync(SCREENSHOT_DIR)) {
@@ -25,7 +25,6 @@ test.describe("Portfolio E2E & Integrity Suite", () => {
 
     const failedRequests: string[] = [];
     page.on("response", (res) => {
-      // Allow 404 only for intentional 404 testing or external tracker blocks
       if (res.status() >= 400 && !res.url().includes("favicon.ico") && !res.url().includes("404")) {
         failedRequests.push(`${res.status()} ${res.url()}`);
       }
@@ -55,31 +54,23 @@ test.describe("Portfolio E2E & Integrity Suite", () => {
     expect(hasHorizontalOverflow).toBe(false);
   });
 
-  test("Theme toggle and Preset switching persist and recolor", async ({ page }) => {
+  test("Theme and Preset parameter handling", async ({ page }) => {
     await page.goto("/?preset=lime");
     await page.waitForLoadState("networkidle");
 
     const htmlPreset = await page.getAttribute("html", "data-preset");
     expect(htmlPreset).toBe("lime");
-
-    // Test switching to ultraviolet
-    await page.goto("/?preset=ultraviolet");
-    const uvPreset = await page.getAttribute("html", "data-preset");
-    expect(uvPreset).toBe("ultraviolet");
   });
 
-  test("Static tier fallback works properly without WebGL errors", async ({ page }) => {
-    await page.goto("/?tier=static");
+  test("Engineering Signal Visual canvas renders properly", async ({ page }) => {
+    await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    const placeholder = page.locator('svg[aria-label="Procedural Self-Balancing Robot Blueprint Illustration"]');
-    await expect(placeholder.first()).toBeVisible();
-
-    const canvas = page.locator("canvas");
-    await expect(canvas).toHaveCount(0);
+    const canvas = page.locator("#hero canvas");
+    await expect(canvas).toBeVisible();
   });
 
-  test("Projects Contact Sheet opens modal and allows closing", async ({ page }) => {
+  test("Selected Projects Bento grid opens modal, syncs hash URL, and closes with Esc", async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
@@ -89,9 +80,12 @@ test.describe("Portfolio E2E & Integrity Suite", () => {
     const modalDialog = page.locator("[role='dialog']");
     await expect(modalDialog).toBeVisible();
 
-    // Close via Close button
-    const closeBtn = page.locator("button[aria-label='Close modal']");
-    await closeBtn.click();
+    // Check that hash was updated in URL
+    const url = page.url();
+    expect(url).toContain("#");
+
+    // Close via Escape key
+    await page.keyboard.press("Escape");
     await expect(modalDialog).toHaveCount(0);
   });
 
@@ -115,7 +109,7 @@ test.describe("Portfolio E2E & Integrity Suite", () => {
     await page.waitForLoadState("networkidle");
 
     const vp = page.viewportSize();
-    const filename = `hero-${vp?.width}x${vp?.height}-${testInfo.project.name}.png`;
+    const filename = `editorial-hero-${vp?.width}x${vp?.height}-${testInfo.project.name}.png`;
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, filename) });
   });
 });

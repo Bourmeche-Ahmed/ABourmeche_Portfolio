@@ -48,8 +48,7 @@ export function NavBar() {
         {/* Monogram / Brand */}
         <button
           onClick={() => handleNavClick("hero")}
-          className="flex items-center gap-3 text-left group focus-visible:outline-none"
-          aria-label="Ahmed Bourmeche - Back to top"
+          className="flex items-center gap-3 text-left group focus-visible:outline-none cursor-pointer"
         >
           <div className="w-7 h-7 bg-surface border border-hairline flex items-center justify-center font-mono font-bold text-xs text-accent group-hover:border-accent transition-colors">
             AB

@@ -64,7 +64,6 @@ export function SelectedProjects({ onSelectProject }: SelectedProjectsProps) {
               }}
               tabIndex={0}
               role="button"
-              aria-label={`Open details for ${featuredProjects[0].title}`}
               className="md:col-span-7 group border border-hairline bg-surface flex flex-col justify-between overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-surface2 border-b border-hairline">
@@ -124,7 +123,6 @@ export function SelectedProjects({ onSelectProject }: SelectedProjectsProps) {
               }}
               tabIndex={0}
               role="button"
-              aria-label={`Open details for ${featuredProjects[1].title}`}
               className="md:col-span-5 group border border-hairline bg-surface flex flex-col justify-between overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-surface2 border-b border-hairline">
@@ -182,7 +180,6 @@ export function SelectedProjects({ onSelectProject }: SelectedProjectsProps) {
               }}
               tabIndex={0}
               role="button"
-              aria-label={`Open details for ${featuredProjects[2].title}`}
               className="md:col-span-12 group border border-hairline bg-surface grid grid-cols-1 lg:grid-cols-12 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               <div className="lg:col-span-7 relative aspect-[16/10] lg:aspect-auto overflow-hidden bg-surface2 border-b lg:border-b-0 lg:border-r border-hairline">
@@ -245,7 +242,6 @@ export function SelectedProjects({ onSelectProject }: SelectedProjectsProps) {
               }}
               tabIndex={0}
               role="button"
-              aria-label={`Open details for ${featuredProjects[3].title}`}
               className="md:col-span-6 group border border-hairline bg-surface flex flex-col justify-between overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-surface2 border-b border-hairline">
@@ -305,7 +301,6 @@ export function SelectedProjects({ onSelectProject }: SelectedProjectsProps) {
               }}
               tabIndex={0}
               role="button"
-              aria-label={`Open details for ${featuredProjects[4].title}`}
               className="md:col-span-6 group border border-hairline bg-surface flex flex-col justify-between overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-surface2 border-b border-hairline">
@@ -370,7 +365,6 @@ export function SelectedProjects({ onSelectProject }: SelectedProjectsProps) {
                 }}
                 tabIndex={0}
                 role="button"
-                aria-label={`Open details for ${p.title}`}
                 className="p-5 border border-hairline bg-surface/40 hover:bg-surface hover:border-hairline-strong transition-all flex flex-col justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent group"
               >
                 <div className="space-y-2">

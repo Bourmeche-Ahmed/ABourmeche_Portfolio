@@ -50,20 +50,12 @@ export function ContactSection() {
         {/* 4 Big Link Blocks Side by Side (12-Column Grid: 4 x 3 Columns) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Block 1: Email Copy-to-Clipboard */}
-          <div
+          <button
+            type="button"
             onClick={handleCopyEmail}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleCopyEmail();
-              }
-            }}
-            tabIndex={0}
-            role="button"
-            aria-label="Copy email address to clipboard"
-            className="p-6 md:p-8 border border-hairline bg-surface hover:border-accent group flex flex-col justify-between min-h-[180px] cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            className="p-6 md:p-8 border border-hairline bg-surface hover:border-accent group flex flex-col justify-between min-h-[180px] text-left cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
-            <div className="flex items-center justify-between font-mono text-xs text-soft">
+            <div className="flex items-center justify-between font-mono text-xs text-soft w-full">
               <span className="text-accent flex items-center gap-1.5">
                 <Mail className="w-4 h-4" />
                 <span>DIRECT EMAIL</span>
@@ -86,7 +78,7 @@ export function ContactSection() {
                 {copied ? "Address copied to clipboard" : "Click to copy address"}
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Block 2: LinkedIn */}
           <a
