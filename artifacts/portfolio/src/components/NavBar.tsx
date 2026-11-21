@@ -1,172 +1,123 @@
 import { useState, useEffect } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 import { smoothScrollTo } from "@/lib/utils";
-import { ASSET_PATHS, triggerResumeDownload } from "@/lib/paths";
-import { Menu, X, Github, Linkedin, Download } from "lucide-react";
+import { Menu, X, Linkedin, Github } from "lucide-react";
 
-const NAV_ITEMS = [
-  { href: "about", label: "ABOUT" },
-  { href: "projects", label: "PROJECTS" },
-  { href: "journey", label: "JOURNEY" },
-  { href: "skills", label: "SKILLS" },
-  { href: "contact", label: "CONTACT" },
+const navLinks = [
+  { href: "home", label: "Home" },
+  { href: "about", label: "About" },
+  { href: "experience", label: "Experience" },
+  { href: "projects", label: "Projects" },
+  { href: "skills", label: "Skills" },
+  { href: "contact", label: "Contact" },
 ];
 
 export function NavBar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const [active, setActive] = useState("home");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "about", "projects", "journey", "skills", "contact"];
-      const scrollY = window.scrollY + 180;
-
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollY >= top && scrollY < top + height) {
-            setActiveSection(sectionId);
-            break;
-          }
+      const sections = navLinks.map((l) => document.getElementById(l.href));
+      let current = "home";
+      for (const section of sections) {
+        if (section && section.getBoundingClientRect().top <= 140) {
+          current = section.id;
         }
       }
+      setActive(current);
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (id: string) => {
+  const handleNav = (id: string) => {
     smoothScrollTo(id);
-    setMobileMenuOpen(false);
+    setMobileOpen(false);
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-bg/95 backdrop-blur-md border-b border-hairline transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-        {/* Monogram / Brand */}
+    <header className="fixed top-0 left-0 right-0 z-50 bg-panel/95 border-b border-rule transition-colors">
+      <nav className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <button
-          onClick={() => handleNavClick("hero")}
-          className="flex items-center gap-3 text-left group focus-visible:outline-none cursor-pointer"
+          onClick={() => handleNav("home")}
+          className="font-heading font-bold text-xl tracking-tight text-ink hover:text-signal transition-colors flex items-center gap-2.5 focus-visible:outline-none group"
         >
-          <div className="w-7 h-7 bg-surface border border-hairline flex items-center justify-center font-mono font-bold text-xs text-accent group-hover:border-accent transition-colors">
-            AB
+          <div className="w-7 h-7 rounded-[3px] bg-panel-sunk border border-rule flex items-center justify-center p-0.5 group-hover:border-signal transition-colors">
+            <svg viewBox="0 0 256 256" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="12" y="12" width="232" height="232" rx="16" fill="#121820" stroke="#f57c00" strokeWidth="6" />
+              <path d="M 28 44 L 28 28 L 44 28" stroke="#f57c00" strokeWidth="6" fill="none" />
+              <path d="M 228 44 L 228 28 L 212 28" stroke="#f57c00" strokeWidth="6" fill="none" />
+              <path d="M 28 212 L 28 228 L 44 228" stroke="#f57c00" strokeWidth="6" fill="none" />
+              <path d="M 228 212 L 228 228 L 212 228" stroke="#f57c00" strokeWidth="6" fill="none" />
+              <circle cx="128" cy="128" r="64" stroke="#38bdf8" strokeWidth="4" strokeDasharray="6 6" fill="none" />
+              <text x="128" y="152" fontFamily="'IBM Plex Sans', sans-serif" fontSize="88" fontWeight="900" fill="#f57c00" textAnchor="middle">AB</text>
+            </svg>
           </div>
-          <div className="flex items-center gap-2 font-mono text-xs">
-            <span className="font-heading font-black text-sm text-ink tracking-wider group-hover:text-accent transition-colors">
-              AHMED BOURMECHE
-            </span>
-            <span className="hidden sm:inline text-soft/50">·</span>
-            <span className="hidden sm:inline text-accent text-[11px] font-semibold tracking-wide">
-              PFE FEB 2027
-            </span>
-          </div>
+          <span>AHMED BOURMECHE</span>
         </button>
 
-        {/* Center Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6 font-mono text-xs text-soft">
-          {NAV_ITEMS.map((item) => {
-            const isActive = activeSection === item.href;
-            return (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
-                className={`transition-colors py-1 focus-visible:outline-none tracking-wider ${
-                  isActive ? "text-accent font-semibold" : "hover:text-ink"
-                }`}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Right Tools: Socials & Resume PDF */}
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-2">
-            <a
-              href="https://github.com/Bourmeche-Ahmed"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
-              aria-label="GitHub Profile"
-            >
-              <Github className="w-4 h-4" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/ahmed-bourmeche/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 text-soft hover:text-accent transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
-              aria-label="LinkedIn Profile"
-            >
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a
-              href={ASSET_PATHS.cv()}
-              download="Ahmed_Bourmeche_RESUME.pdf"
-              onClick={triggerResumeDownload}
-              className="px-2.5 py-1 text-soft hover:text-accent border border-hairline hover:border-accent text-xs font-mono transition-colors flex items-center gap-1.5"
-              aria-label="Download CV"
-            >
-              <Download className="w-3.5 h-3.5 text-accent" />
-              <span>CV</span>
-            </a>
-          </div>
-
-          {/* Mobile hamburger menu */}
-          <button
-            onClick={() => setMobileMenuOpen((o) => !o)}
-            className="md:hidden p-2 text-soft hover:text-ink min-w-[40px] min-h-[40px] flex items-center justify-center border border-hairline bg-surface"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer Navigation */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-b border-hairline bg-bg p-6 space-y-4 font-mono text-sm">
-          {NAV_ITEMS.map((item) => (
+        <div className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => (
             <button
-              key={item.href}
-              onClick={() => handleNavClick(item.href)}
-              className="block w-full text-left py-2 text-soft hover:text-accent transition-colors"
+              key={link.href}
+              onClick={() => handleNav(link.href)}
+              className={`font-heading text-lg tracking-wide transition-colors relative py-1 ${
+                active === link.href
+                  ? "text-ink font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-signal"
+                  : "text-ink-soft hover:text-ink"
+              }`}
             >
-              {item.label}
+              {link.label}
             </button>
           ))}
+        </div>
 
-          <div className="pt-4 border-t border-hairline flex items-center gap-4">
-            <a
-              href="https://github.com/Bourmeche-Ahmed"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-soft hover:text-accent flex items-center gap-1.5 text-xs"
+        <div className="flex items-center gap-2">
+          <a
+            href="https://github.com/Bourmeche-Ahmed"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 text-ink-soft hover:text-ink transition-colors no-custom-link"
+            aria-label="GitHub profile"
+          >
+            <Github className="w-4 h-4" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/ahmed-bourmeche/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 text-ink-soft hover:text-ink transition-colors no-custom-link"
+            aria-label="LinkedIn profile"
+          >
+            <Linkedin className="w-4 h-4" />
+          </a>
+          <ThemeToggle />
+          <button
+            className="md:hidden p-1.5 text-ink-soft hover:text-ink transition-colors"
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </nav>
+
+      {mobileOpen && (
+        <div className="md:hidden border-t border-rule bg-panel px-4 py-3 space-y-1">
+          {navLinks.map((link) => (
+            <button
+              key={link.href}
+              onClick={() => handleNav(link.href)}
+              className={`w-full text-left px-3 py-2 font-heading text-lg transition-colors ${
+                active === link.href
+                  ? "text-ink font-bold bg-panel-sunk border-l-2 border-signal"
+                  : "text-ink-soft hover:text-ink hover:bg-panel-sunk"
+              }`}
             >
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/ahmed-bourmeche/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-soft hover:text-accent flex items-center gap-1.5 text-xs"
-            >
-              <Linkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </a>
-            <a
-              href={ASSET_PATHS.cv()}
-              download="Ahmed_Bourmeche_RESUME.pdf"
-              className="text-accent flex items-center gap-1.5 text-xs font-semibold"
-            >
-              <Download className="w-4 h-4" />
-              <span>Resume PDF</span>
-            </a>
-          </div>
+              {link.label}
+            </button>
+          ))}
         </div>
       )}
     </header>

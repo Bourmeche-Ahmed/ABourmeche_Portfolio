@@ -4,98 +4,53 @@
 
 @layer base {
   :root {
-    /* Editorial Minimal Design System - Deep Charcoal + High-Contrast Lime */
-    --bg: #0A0B0D;
-    --surface: #121316;
-    --surface2: #18191E;
-    --hairline: #1F2127;
-    --hairline-strong: #2F333E;
-    --ink: #EDEDED;
-    --soft: #9496A1;
-    --ink-muted: #5C5E6B;
-    --accent: #C6F432;
-    --accent-text: #C6F432;
-    --accent-ink: #0A0B0D;
-    --cold: #8BB2E8;
-
-    /* Motion Tokens */
-    --duration-fast: 180ms;
-    --duration-mid: 420ms;
-    --duration-slow: 750ms;
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-
-    /* Typography Fluid Clamps */
-    --font-display: clamp(2.75rem, 8vw, 6.25rem);
-    --font-h1: clamp(2rem, 5vw, 3.75rem);
-    --font-h2: clamp(1.5rem, 3.5vw, 2.5rem);
-    --font-h3: clamp(1.2rem, 2.2vw, 1.75rem);
-    --font-body: clamp(0.9375rem, 1.1vw, 1.0625rem);
-
-    /* Backward compatibility tokens */
-    --panel: var(--bg);
-    --panel-sunk: var(--surface2);
-    --panel-raised: var(--surface);
-    --rule: var(--hairline);
-    --signal: var(--accent);
-    --signal-tint: var(--surface2);
-    --telemetry: var(--accent);
-    --hardware: var(--accent);
-    --hardware-text: var(--accent-text);
-    --highlight: var(--accent);
-    --radius: 0px;
+    --panel: #f4f6f8;
+    --panel-sunk: #e5e9f0;
+    --panel-raised: #ffffff;
+    --ink: #0f172a;
+    --ink-soft: #475569;
+    --rule: #cbd5e1;
+    --signal: #d97706;
+    --signal-tint: #fef3c7;
+    --telemetry: #0284c7;
+    --hardware: #ea580c;
+    --radius: 2px;
+    --hair: 1px solid var(--rule);
   }
 
   .dark {
-    --bg: #0A0B0D;
-    --surface: #121316;
-    --surface2: #18191E;
-    --hairline: #1F2127;
-    --hairline-strong: #2F333E;
-    --ink: #EDEDED;
-    --soft: #9496A1;
-    --ink-muted: #5C5E6B;
-    --accent: #C6F432;
-    --accent-text: #C6F432;
-    --accent-ink: #0A0B0D;
-    --cold: #8BB2E8;
-
-    --panel: var(--bg);
-    --panel-sunk: var(--surface2);
-    --panel-raised: var(--surface);
-    --rule: var(--hairline);
-    --signal: var(--accent);
-    --signal-tint: var(--surface2);
-    --telemetry: var(--accent);
-    --hardware: var(--accent);
-    --hardware-text: var(--accent-text);
-    --highlight: var(--accent);
+    --panel: #0b0f17;
+    --panel-sunk: #151d2a;
+    --panel-raised: #111827;
+    --ink: #f8fafc;
+    --ink-soft: #94a3b8;
+    --rule: #1e293b;
+    --signal: #f59e0b;
+    --signal-tint: #451a03;
+    --telemetry: #38bdf8;
+    --hardware: #f97316;
+    --radius: 2px;
+    --hair: 1px solid var(--rule);
   }
 
   *, *::before, *::after {
     box-shadow: none !important;
   }
 
-  ::selection {
-    background-color: var(--accent);
-    color: var(--accent-ink);
-  }
-
   html {
     scroll-behavior: smooth;
-    background-color: var(--bg);
+    background-color: var(--panel);
     color: var(--ink);
-    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
   }
 
   body {
-    background-color: var(--bg);
+    background-color: var(--panel);
     color: var(--ink);
-    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -106,7 +61,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent) !important;
+    outline: 2px solid var(--signal) !important;
     outline-offset: 2px !important;
   }
 
@@ -120,102 +75,65 @@
   }
 }
 
-/* Lenis smooth scrolling rules */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
-
 @layer components {
-  /* Precision hairline borders and tokens */
-  .hairline-b {
-    border-bottom: 1px solid var(--hairline);
+  /* Instrument panel link styling */
+  .panel-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
   }
-  .hairline-t {
-    border-top: 1px solid var(--hairline);
-  }
-  .hairline-l {
-    border-left: 1px solid var(--hairline);
-  }
-  .hairline-r {
-    border-right: 1px solid var(--hairline);
-  }
-
-  /* Editorial Outlined Numerals */
-  .numeral-outlined {
-    font-family: "Saira Condensed", sans-serif;
-    font-weight: 800;
-    line-height: 0.8;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--hairline);
-    user-select: none;
-    pointer-events: none;
+  .panel-link:hover {
+    color: var(--signal);
+    text-decoration-color: var(--signal);
   }
 
-  /* Brutalist Clean Primary Button */
+  /* Primary CTA */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 44px;
-    padding: 0.5rem 1.25rem;
-    background-color: var(--accent);
-    color: var(--accent-ink);
+    padding: 0.625rem 1.25rem;
+    background-color: var(--ink);
+    color: var(--panel);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: var(--radius);
-    border: 1px solid var(--accent);
+    border: none;
     cursor: pointer;
-    transition: transform 0.1s ease, opacity 0.15s ease;
+    transition: all 0.15s ease;
   }
   .btn-primary:hover {
     opacity: 0.92;
+    transform: translateY(-1px);
   }
   .btn-primary:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
 
-  /* Brutalist Clean Secondary Button */
+  /* Secondary Button */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 44px;
-    padding: 0.5rem 1.25rem;
-    background-color: var(--surface);
+    padding: 0.625rem 1.25rem;
+    background-color: var(--panel-raised);
     color: var(--ink);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius);
-    border: 1px solid var(--hairline);
+    border: var(--hair);
     cursor: pointer;
-    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+    transition: all 0.15s ease;
   }
   .btn-secondary:hover {
-    border-color: var(--accent);
-    background-color: var(--surface2);
-  }
-  .btn-secondary:active {
-    transform: scale(0.98);
+    background-color: var(--panel-sunk);
+    border-color: var(--ink-soft);
   }
 
   /* Rectangular Tag Chip */
@@ -226,12 +144,12 @@ html.lenis, html.lenis body {
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.8125rem;
     color: var(--ink);
-    background-color: var(--surface2);
-    border: 1px solid var(--hairline);
+    background-color: var(--panel-sunk);
+    border: var(--hair);
     border-radius: var(--radius);
     transition: border-color 0.15s ease;
   }
   .tech-chip:hover {
-    border-color: var(--accent);
+    border-color: var(--ink-soft);
   }
 }

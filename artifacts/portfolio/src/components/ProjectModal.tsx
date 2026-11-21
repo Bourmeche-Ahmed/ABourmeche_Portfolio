@@ -1,9 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, Suspense, lazy } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
-const ExplodedPcb = lazy(() => import("./widgets/ExplodedPcb"));
-const PidPlayground = lazy(() => import("./PidPlayground"));
-
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   X,
   Github,
@@ -22,10 +17,10 @@ import { copyToClipboard } from "@/lib/utils";
 import { getAssetPath } from "@/lib/paths";
 import { ProjectImage, BlueprintPlaceholder } from "./ProjectImage";
 import { categoryStyles } from "./ProjectCard";
-import { ArchitectureFlow } from "./ArchitectureFlow";
 
 const WEBSITE_PROJECTS = ["stepact-2026-marathon", "testcybernexus3", "ieeeweb"];
-const CANDIDATE_EXTENSIONS = [".webp", ".png", ".jpg", ".jpeg"];
+
+const CANDIDATE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp"];
 
 function LightboxImage({
   src,
@@ -70,7 +65,7 @@ function LightboxImage({
 
   if (hasError) {
     return (
-      <div className="w-[320px] sm:w-[500px] aspect-[16/10] rounded-[2px] overflow-hidden border border-rule">
+      <div className="w-[320px] sm:w-[500px] aspect-[16/10] rounded-[2px] overflow-hidden border border-zinc-700">
         <BlueprintPlaceholder
           category={category}
           expectedPath={expectedPath}
@@ -79,9 +74,6 @@ function LightboxImage({
       </div>
     );
   }
-
-  // Never upscale farzit.jpg beyond native dimensions (760x597)
-  const isFarzit = currentSrc.includes("farzit.jpg");
 
   return (
     <img
@@ -92,11 +84,7 @@ function LightboxImage({
       className={`max-h-[75vh] max-w-[92vw] sm:max-w-[85vw] object-contain rounded-[2px] ${
         fit === "contain" ? "bg-panel-sunk p-2" : ""
       }`}
-      style={{
-        touchAction: "pinch-zoom",
-        maxWidth: isFarzit ? "760px" : undefined,
-        maxHeight: isFarzit ? "597px" : undefined,
-      }}
+      style={{ touchAction: "pinch-zoom" }}
     />
   );
 }
@@ -117,15 +105,18 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lastFocusedElement = useRef<HTMLElement | null>(null);
 
+  // Touch tracking for swipe navigation in lightbox
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
+  // Reset state on project change
   useEffect(() => {
     setActiveSlideIndex(0);
     setLightboxIndex(null);
     setFailedImages({});
   }, [project?.id]);
 
+  // Handle ESC key for modal and lightbox
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -141,6 +132,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose, lightboxIndex]);
 
+  // Lock body scroll when modal or lightbox is active
   useEffect(() => {
     if (project) {
       document.body.style.overflow = "hidden";
@@ -152,6 +144,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     };
   }, [project]);
 
+  // Manage focus trap and restoration for lightbox
   useEffect(() => {
     if (lightboxIndex !== null) {
       lastFocusedElement.current = document.activeElement as HTMLElement;
@@ -159,6 +152,38 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     } else if (lastFocusedElement.current) {
       lastFocusedElement.current.focus();
     }
+  }, [lightboxIndex]);
+
+  // Handle Tab key trapping inside lightbox
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !lightboxRef.current) return;
+
+      const focusable = lightboxRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+
+      const firstElement = focusable[0];
+      const lastElement = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleTabKey);
+    return () => document.removeEventListener("keydown", handleTabKey);
   }, [lightboxIndex]);
 
   const handleCopy = async () => {
@@ -180,11 +205,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     accent: "bg-signal",
   };
 
+  // Filter gallery items: In production, missing files are excluded
   const galleryItems: GalleryItem[] = (project.gallery || []).filter(
     (item) => import.meta.env.DEV || !failedImages[item.file]
   );
   const hasGallery = galleryItems.length > 0;
 
+  // Carousel scroll listener on mobile
   const handleCarouselScroll = () => {
     if (!carouselRef.current) return;
     const scrollLeft = carouselRef.current.scrollLeft;
@@ -204,6 +231,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     setActiveSlideIndex(idx);
   };
 
+  // Lightbox keyboard navigation
   const prevLightboxImage = () => {
     if (lightboxIndex === null || galleryItems.length <= 1) return;
     setLightboxIndex((prev) => ((prev ?? 0) - 1 + galleryItems.length) % galleryItems.length);
@@ -214,6 +242,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     setLightboxIndex((prev) => ((prev ?? 0) + 1) % galleryItems.length);
   };
 
+  // Lightbox touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
@@ -223,6 +252,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
 
+    // Horizontal swipe threshold of 45px, prioritizing horizontal over vertical
     if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
         nextLightboxImage();
@@ -237,25 +267,29 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   return (
     <>
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-6 overflow-hidden">
-        {/* Backdrop */}
+        {/* Opaque dark backdrop */}
         <div
-          className="fixed inset-0 bg-black/60 dark:bg-black/75 transition-opacity"
+          className="fixed inset-0 bg-black/75 dark:bg-black/85 backdrop-blur-sm transition-opacity"
           onClick={onClose}
           aria-hidden="true"
         />
 
-        {/* Modal Dialog */}
+        {/* Solid Modal Dialog */}
         <div
-          className="relative w-full max-w-2xl max-h-[100dvh] sm:max-h-[88vh] overflow-y-auto rounded-[2px] border border-rule bg-panel-raised z-10 text-ink overscroll-contain pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]"
+          className="relative w-full max-w-2xl max-h-[100dvh] sm:max-h-[88vh] overflow-y-auto rounded-[2px] border border-rule bg-panel-raised shadow-2xl z-10 text-ink overscroll-contain pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]"
           role="dialog"
           aria-modal="true"
           aria-label={project.title}
+          style={{ backgroundColor: "var(--panel-raised)" }}
         >
-          {/* Top Accent Line */}
+          {/* Category Top Hairline */}
           <div className={`h-0.5 w-full ${catStyle.accent}`} />
 
           {/* Sticky Header */}
-          <div className="sticky top-0 z-20 flex items-start justify-between gap-3 p-4 sm:p-6 border-b border-rule bg-panel-raised">
+          <div
+            className="sticky top-0 z-20 flex items-start justify-between gap-3 p-4 sm:p-6 border-b border-rule bg-panel-raised"
+            style={{ backgroundColor: "var(--panel-raised)" }}
+          >
             <div>
               <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                 <span className={`text-[10px] sm:text-xs font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${catStyle.badge}`}>
@@ -265,33 +299,15 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   {project.repo}
                 </span>
               </div>
-              <motion.h2
-                layoutId={`project-title-${project.id}`}
-                className="font-heading font-bold text-xl sm:text-2xl lg:text-3xl text-ink leading-tight"
-              >
+              <h2 className="font-heading font-bold text-xl sm:text-2xl lg:text-3xl text-ink leading-tight">
                 {project.title}
-              </motion.h2>
-
-              {/* Static Metric Chips */}
-              {project.metrics && project.metrics.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-2.5">
-                  {project.metrics.map((m, idx) => (
-                    <div
-                      key={idx}
-                      className="px-2 py-0.5 bg-panel-sunk border border-rule rounded-[2px] font-mono text-xs flex items-center gap-1.5"
-                    >
-                      <span className="text-ink-soft">{m.label}:</span>
-                      <span className="font-semibold text-ink">{m.value}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              </h2>
             </div>
 
             <button
               onClick={onClose}
               aria-label="Close modal"
-              className="min-w-[44px] min-h-[44px] p-2 rounded-[2px] border border-rule bg-panel-sunk hover:bg-panel text-ink-soft hover:text-ink transition-colors shrink-0 flex items-center justify-center focus-visible:outline-none"
+              className="min-w-[44px] min-h-[44px] p-2 rounded-[2px] border border-rule bg-panel-sunk hover:bg-panel text-ink-soft hover:text-ink transition-colors shrink-0 flex items-center justify-center"
             >
               <X className="w-4 h-4" />
             </button>
@@ -310,15 +326,6 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               </p>
             </div>
 
-            {/* VROOM Exploded PCB: Placed ABOVE the gallery as the signature 3D moment */}
-            {project.id === "vroom" && (
-              <div>
-                <Suspense fallback={<div className="h-40 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading 3D layer stack...</div>}>
-                  <ExplodedPcb />
-                </Suspense>
-              </div>
-            )}
-
             {/* Gallery Section */}
             {hasGallery && (
               <div>
@@ -328,7 +335,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <span className="font-mono text-xs text-ink-soft">({galleryItems.length})</span>
                 </h3>
 
-                {/* Mobile View: Horizontal scroll-snap */}
+                {/* Mobile View (<640px): Horizontal scroll-snap carousel */}
                 <div className="block sm:hidden">
                   <div
                     ref={carouselRef}
@@ -362,7 +369,6 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                               alt={item.alt}
                               category={project.category}
                               fit={item.fit || "cover"}
-                              focus={item.focus}
                               expectedPath={expectedPath}
                               onError={() => handleImageError(item.file)}
                             />
@@ -377,18 +383,21 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     })}
                   </div>
 
+                  {/* Dot Indicators */}
                   {galleryItems.length > 1 && (
                     <div className="flex justify-center items-center gap-1.5 mt-2.5">
                       {galleryItems.map((item, idx) => (
                         <button
                           key={item.file}
                           onClick={() => scrollToSlide(idx)}
-                          className="min-w-[24px] min-h-[24px] flex items-center justify-center p-1"
+                          className={`min-w-[24px] min-h-[24px] flex items-center justify-center p-1`}
                           aria-label={`Go to slide ${idx + 1}`}
                         >
                           <span
                             className={`w-2 h-2 rounded-[1px] transition-colors ${
-                              activeSlideIndex === idx ? "bg-signal" : "bg-rule"
+                              activeSlideIndex === idx
+                                ? "bg-signal"
+                                : "bg-rule hover:bg-ink-soft"
                             }`}
                           />
                         </button>
@@ -397,7 +406,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   )}
                 </div>
 
-                {/* Desktop View: Clean 2-Column Grid */}
+                {/* Desktop View (≥640px): 2-Column Grid */}
                 <div className="hidden sm:grid sm:grid-cols-2 gap-3.5">
                   {galleryItems.map((item, idx) => {
                     const itemSrc = getAssetPath(`projects/${project.id}/${item.file}`);
@@ -408,7 +417,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                       <div
                         key={item.file}
                         onClick={() => setLightboxIndex(idx)}
-                        className={`group relative rounded-[2px] border border-rule bg-panel-sunk overflow-hidden cursor-pointer hover:border-ink transition-colors ${
+                        className={`group relative rounded-[2px] border border-rule bg-panel-sunk overflow-hidden cursor-pointer hover:border-ink hover:shadow-xs transition-all ${
                           isFeatured ? "col-span-2 aspect-[21/9]" : "col-span-1 aspect-[16/10]"
                         }`}
                         role="button"
@@ -426,11 +435,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           alt={item.alt}
                           category={project.category}
                           fit={item.fit || "cover"}
-                          focus={item.focus}
                           expectedPath={expectedPath}
                           onError={() => handleImageError(item.file)}
-                          imgClassName="group-hover:scale-[1.01] transition-transform duration-200"
+                          imgClassName="group-hover:scale-[1.02] transition-transform duration-300"
                         />
+                        {/* Hover Caption Overlay */}
                         <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                           <p className="text-[11px] font-mono text-zinc-100 truncate">
                             {item.caption}
@@ -447,21 +456,16 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             {project.architecture && (
               <div>
                 <h3 className="font-heading font-bold text-base text-ink mb-2 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-signal" />
+                  <Layers className="w-4 h-4 text-telemetry" />
                   <span>System Architecture</span>
                 </h3>
-                <ArchitectureFlow architecture={project.architecture} />
+                <div className="p-3.5 rounded-[2px] bg-panel-sunk border border-rule font-mono text-xs text-ink overflow-x-auto leading-relaxed">
+                  {project.architecture}
+                </div>
               </div>
             )}
 
-            {/* PID Interactive Simulation (Restyled) */}
-            {project.id === "pid-control-dashboard" && (
-              <Suspense fallback={<div className="h-32 flex items-center justify-center font-mono text-xs text-ink-soft bg-panel-sunk border border-rule">Loading PID simulation...</div>}>
-                <PidPlayground />
-              </Suspense>
-            )}
-
-            {/* Key Deliverables & Specifications */}
+            {/* Highlights */}
             {project.highlights && project.highlights.length > 0 && (
               <div>
                 <h3 className="font-heading font-bold text-base text-ink mb-2.5 flex items-center gap-2">
@@ -484,7 +488,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               {project.challenges && (
                 <div className="p-4 rounded-[2px] bg-panel-sunk border border-rule">
                   <h4 className="font-heading font-bold text-sm text-ink mb-1.5 flex items-center gap-1.5">
-                    <Terminal className="w-3.5 h-3.5 text-signal" />
+                    <Terminal className="w-3.5 h-3.5 text-hardware" />
                     <span>Engineering Challenge</span>
                   </h4>
                   <p className="font-sans text-xs text-ink-soft leading-relaxed">{project.challenges}</p>
@@ -493,7 +497,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               {project.learned && (
                 <div className="p-4 rounded-[2px] bg-panel-sunk border border-rule">
                   <h4 className="font-heading font-bold text-sm text-ink mb-1.5 flex items-center gap-1.5">
-                    <span className="w-2 h-2 bg-signal rounded-[1px]" />
+                    <span className="w-2 h-2 bg-telemetry rounded-[1px]" />
                     <span>Insights & Results</span>
                   </h4>
                   <p className="font-sans text-xs text-ink-soft leading-relaxed">{project.learned}</p>
@@ -566,11 +570,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           role="dialog"
           aria-modal="true"
           aria-label={currentLightboxItem.caption || "Image preview"}
-          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex flex-col justify-between select-none animate-in fade-in duration-200"
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-md flex flex-col justify-between select-none animate-in fade-in duration-200"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Top Bar */}
+          {/* Lightbox Top Bar */}
           <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 border-b border-zinc-800 z-10 bg-black/50">
             <div className="font-mono text-xs sm:text-sm text-zinc-400">
               {lightboxIndex + 1} / {galleryItems.length}
@@ -579,28 +583,30 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             <button
               ref={closeBtnRef}
               onClick={() => setLightboxIndex(null)}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] bg-zinc-800 hover:bg-zinc-700 text-white transition-colors border border-zinc-700 focus-visible:outline-none"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] bg-zinc-800/80 hover:bg-zinc-700 text-white transition-colors border border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
               aria-label="Close lightbox"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Center */}
+          {/* Lightbox Center: Image Container with Pinch-Zoom support */}
           <div
             className="relative flex-1 flex items-center justify-center p-2 sm:p-6 overflow-hidden"
             style={{ touchAction: "pinch-zoom" }}
           >
+            {/* Prev Button */}
             {galleryItems.length > 1 && (
               <button
                 onClick={prevLightboxImage}
-                className="absolute left-2 sm:left-4 z-20 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] bg-black/70 hover:bg-zinc-800 text-white border border-zinc-700 transition-colors focus-visible:outline-none"
+                className="absolute left-2 sm:left-4 z-20 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] bg-black/70 hover:bg-zinc-800 text-white border border-zinc-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 aria-label="Previous image"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
             )}
 
+            {/* Main Lightbox Image */}
             <div className="relative max-h-[75vh] max-w-[92vw] sm:max-w-[85vw] flex items-center justify-center">
               <LightboxImage
                 src={getAssetPath(`projects/${project.id}/${currentLightboxItem.file}`)}
@@ -612,10 +618,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               />
             </div>
 
+            {/* Next Button */}
             {galleryItems.length > 1 && (
               <button
                 onClick={nextLightboxImage}
-                className="absolute right-2 sm:right-4 z-20 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] bg-black/70 hover:bg-zinc-800 text-white border border-zinc-700 transition-colors focus-visible:outline-none"
+                className="absolute right-2 sm:right-4 z-20 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-[2px] bg-black/70 hover:bg-zinc-800 text-white border border-zinc-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 aria-label="Next image"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -623,7 +630,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             )}
           </div>
 
-          {/* Caption */}
+          {/* Lightbox Bottom Caption Bar */}
           <div className="px-4 py-3 sm:py-4 bg-black/70 border-t border-zinc-800 text-center">
             <p className="font-mono text-xs sm:text-sm text-zinc-200 max-w-2xl mx-auto">
               {currentLightboxItem.caption}
@@ -634,5 +641,3 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     </>
   );
 }
-
-export default ProjectModal;

@@ -1,118 +1,134 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { MapPin, Globe, GraduationCap, Clock } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
+import { Code2, Cpu, LineChart, Zap, CircuitBoard, CheckCircle2 } from "lucide-react";
+
+const cards = [
+  {
+    icon: CircuitBoard,
+    title: "Embedded Systems",
+    desc: "Bare-metal firmware in C under ESP-IDF & STM32, RS-485 / Modbus RTU, NB-IoT, LoRa, and custom KiCad PCB design.",
+    color: "text-orange-600 dark:text-orange-400",
+    bg: "bg-orange-500/10",
+    border: "border-orange-500/30",
+  },
+  {
+    icon: Cpu,
+    title: "Industrial IoT & Edge",
+    desc: "Multi-protocol edge gateway architectures, device register profiling, and MQTT/Telegraf/TimescaleDB ingestion.",
+    color: "text-teal-600 dark:text-teal-400",
+    bg: "bg-teal-500/10",
+    border: "border-teal-500/30",
+  },
+  {
+    icon: LineChart,
+    title: "Control & Simulation",
+    desc: "MATLAB Simulink digital twins, closed-loop PID control platforms, hardware-in-the-loop (HIL) simulation.",
+    color: "text-sky-600 dark:text-sky-400",
+    bg: "bg-sky-500/10",
+    border: "border-sky-500/30",
+  },
+  {
+    icon: Zap,
+    title: "Backend & Telemetry APIs",
+    desc: "Python/Django REST Framework & Flask microservices, Mosquitto MQTT brokers, Redis caching, Docker Compose stacks.",
+    color: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/30",
+  },
+  {
+    icon: Code2,
+    title: "Operator Dashboards",
+    desc: "Real-time engineering dashboards, high-frequency telemetry visualization, and responsive operator tooling.",
+    color: "text-indigo-600 dark:text-indigo-400",
+    bg: "bg-indigo-500/10",
+    border: "border-indigo-500/30",
+  },
+];
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-24 border-b border-hairline relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-hairline pb-4 mb-16 font-mono text-xs text-soft">
-          <div className="flex items-center gap-2">
-            <span className="text-accent font-semibold">01 // PROFILE</span>
-            <span>·</span>
-            <span>IDENTITY & CREDENTIALS</span>
-          </div>
-          <div className="text-soft sm:text-right">
-            INSAT · UNIVERSITY OF CARTHAGE
+    <section id="about" className="py-16 border-b border-rule">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <SectionHeader
+          title="About & Engineering Profile"
+          subtitle="Operating across the vertical: from field buses and bare-metal firmware to containerized ingestion and operator dashboards."
+        />
+
+        {/* PFE Highlight Banner */}
+        <div className="bg-panel-raised border-l-4 border-signal border border-rule p-5 rounded-[2px] mb-8 text-ink shadow-sm">
+          <div className="flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-signal shrink-0 mt-0.5" />
+            <div className="text-sm sm:text-base leading-relaxed font-sans">
+              <span className="font-semibold text-ink">Final-year Industrial IT and Automation engineering student</span> at{" "}
+              <span className="font-semibold text-ink">INSAT, University of Carthage</span>, currently seeking a{" "}
+              <span className="font-semibold text-signal">final-year engineering internship (PFE)</span> in embedded systems, industrial IoT, or automation starting February 2027. Open to relocation and international opportunities.
+            </div>
           </div>
         </div>
 
-        {/* Asymmetric 12-Column Editorial Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Editorial Narrative (7 Columns) */}
-          <div className="lg:col-span-7 space-y-8">
-            <motion.h2
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="font-heading font-black text-ink uppercase tracking-tight leading-[0.95]"
-              style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)" }}
-            >
-              Bridging Physical Hardware
-              <br />
-              <span className="text-soft">&amp; Real-Time Intelligence</span>
-            </motion.h2>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.45, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-6 font-sans text-base sm:text-lg text-soft leading-relaxed"
-            >
-              <p>
-                I am an Industrial Automation and Embedded Systems engineer at INSAT (University of
-                Carthage), specializing in the tight co-design of bare-metal firmware, industrial
-                telemetry fieldbuses, and closed-loop robotic control.
-              </p>
-
-              <p>
-                From routing 2-layer automotive PCBs in KiCad and tuning cascaded PID loops with
-                quadrature odometry on STM32 to scaling containerized edge microservices in Docker,
-                my work focuses on deterministic real-world reliability over theoretical simulation.
-              </p>
-            </motion.div>
+        {/* Engineering Narrative Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-sm text-ink-soft leading-relaxed font-sans">
+          <div className="border border-rule bg-panel-raised p-5 rounded-[2px] space-y-2">
+            <h3 className="font-heading font-bold text-lg text-ink flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-orange-500 rounded-[1px]" />
+              <span>Full-Stack Vertical</span>
+            </h3>
+            <p>
+              I operate across the vertical — from bare-metal <span className="font-mono text-xs text-ink font-semibold">ESP32 & STM32</span> firmware and KiCad PCB design, up through Python APIs, all the way to React/TypeScript dashboards. As a hands-on complement to my electronics and firmware work, I actively use CAD design (<span className="font-mono text-xs text-ink font-semibold">Onshape</span>) and rapid 3D printing to prototype custom mechanical enclosures and robotic structures.
+            </p>
           </div>
 
-          {/* Right Column: Verified Credentials Matrix (5 Columns) */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 font-mono">
-            {/* Degree Block */}
-            <div className="p-5 border border-hairline bg-surface/60 space-y-2">
-              <div className="flex items-center gap-2 text-accent text-xs uppercase font-semibold">
-                <GraduationCap className="w-4 h-4 text-accent" />
-                <span>State Engineering Degree</span>
-              </div>
-              <p className="text-sm text-ink font-sans font-medium">
-                Industrial Automation &amp; Real-Time IoT
-              </p>
-              <p className="text-xs text-soft">
-                National Institute of Applied Science and Technology (INSAT) · 2022–2027
-              </p>
-            </div>
+          <div className="border border-rule bg-panel-raised p-5 rounded-[2px] space-y-2">
+            <h3 className="font-heading font-bold text-lg text-ink flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-teal-500 rounded-[1px]" />
+              <span>Protocols & Edge Gateways</span>
+            </h3>
+            <p>
+              Engineered industrial IoT nodes and multi-protocol edge gateways integrating <span className="font-mono text-xs text-ink font-semibold">Modbus RTU, RS-485, BACnet, OCPP, NB-IoT</span>, and <span className="font-mono text-xs text-ink font-semibold">LoRa</span> with zero code changes for new meter models.
+            </p>
+          </div>
 
-            {/* PFE Availability Block */}
-            <div className="p-5 border border-hairline bg-surface/60 space-y-2">
-              <div className="flex items-center gap-2 text-accent text-xs uppercase font-semibold">
-                <Clock className="w-4 h-4 text-accent" />
-                <span>PFE Internship</span>
-              </div>
-              <p className="text-sm text-ink font-sans font-medium">
-                Available from February 2027 (6 Months)
-              </p>
-              <p className="text-xs text-soft">
-                Seeking graduation internship focused on robotics, IIoT, or embedded firmware.
-              </p>
-            </div>
+          <div className="border border-rule bg-panel-raised p-5 rounded-[2px] space-y-2">
+            <h3 className="font-heading font-bold text-lg text-ink flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-sky-500 rounded-[1px]" />
+              <span>Leadership & Control</span>
+            </h3>
+            <p>
+              Co-founder and CTO at{" "}
+              <a
+                href="https://cybernexus.tn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="panel-link font-medium text-ink"
+              >
+                CyberNexus
+              </a>
+              . Also built PID control dashboards synchronized live with <span className="font-mono text-xs text-ink font-semibold">MATLAB Simulink digital twins</span>.
+            </p>
+          </div>
+        </div>
 
-            {/* Mobility & Relocation Block */}
-            <div className="p-5 border border-hairline bg-surface/60 space-y-2">
-              <div className="flex items-center gap-2 text-accent text-xs uppercase font-semibold">
-                <MapPin className="w-4 h-4 text-accent" />
-                <span>Mobility &amp; Relocation</span>
+        {/* Domain capability cards */}
+        <div>
+          <h3 className="font-heading font-bold text-xl text-ink mb-4">
+            Technical Domains & Expertise
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {cards.map((card) => (
+              <div
+                key={card.title}
+                className="border border-rule bg-panel-raised p-4 rounded-[2px] transition-all hover:border-ink-soft hover:shadow-sm"
+              >
+                <div className={`w-8 h-8 rounded-[2px] ${card.bg} ${card.border} border flex items-center justify-center mb-3 ${card.color}`}>
+                  <card.icon className="w-4 h-4" />
+                </div>
+                <h4 className="font-heading font-bold text-base text-ink mb-1.5 leading-tight">
+                  {card.title}
+                </h4>
+                <p className="font-sans text-xs text-ink-soft leading-relaxed">
+                  {card.desc}
+                </p>
               </div>
-              <p className="text-sm text-ink font-sans font-medium">
-                Tunis, Tunisia · Open to Worldwide Relocation
-              </p>
-              <p className="text-xs text-soft">
-                Immediate availability for international mobility, including Paris and Europe.
-              </p>
-            </div>
-
-            {/* Languages Block */}
-            <div className="p-5 border border-hairline bg-surface/60 space-y-2">
-              <div className="flex items-center gap-2 text-accent text-xs uppercase font-semibold">
-                <Globe className="w-4 h-4 text-accent" />
-                <span>Trilingual Communication</span>
-              </div>
-              <p className="text-sm text-ink font-sans font-medium">
-                English (Fluent) · French (Fluent) · Arabic (Native)
-              </p>
-              <p className="text-xs text-soft">
-                Experienced collaborating in international technical workflows.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
