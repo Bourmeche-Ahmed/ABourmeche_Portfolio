@@ -21,31 +21,31 @@ export function CircuitHero() {
         @keyframes nodeGlow {
           0%, 100% {
             opacity: 0.6;
-            filter: drop-shadow(0 0 2px rgba(0, 200, 255, 0.4));
+            filter: drop-shadow(0 0 2px rgba(241, 137, 92, 0.4));
           }
           50% {
             opacity: 1;
-            filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.8));
+            filter: drop-shadow(0 0 8px rgba(241, 137, 92, 0.8));
           }
         }
 
         @keyframes chipPulse {
           0%, 100% {
             opacity: 0.7;
-            filter: drop-shadow(0 0 4px rgba(0, 200, 255, 0.3));
+            filter: drop-shadow(0 0 4px rgba(241, 137, 92, 0.3));
           }
           50% {
             opacity: 1;
-            filter: drop-shadow(0 0 12px rgba(0, 200, 255, 0.6));
+            filter: drop-shadow(0 0 12px rgba(241, 137, 92, 0.6));
           }
         }
 
         @keyframes ambientGlow {
           0%, 100% {
-            filter: drop-shadow(0 0 30px rgba(0, 200, 255, 0.06));
+            filter: drop-shadow(0 0 30px rgba(241, 137, 92, 0.06));
           }
           50% {
-            filter: drop-shadow(0 0 50px rgba(0, 200, 255, 0.12));
+            filter: drop-shadow(0 0 50px rgba(241, 137, 92, 0.12));
           }
         }
 
@@ -66,7 +66,7 @@ export function CircuitHero() {
         .circuit-hero-svg {
           width: 100%;
           height: auto;
-          filter: drop-shadow(0 0 40px rgba(0, 200, 255, 0.08));
+          filter: drop-shadow(0 0 40px rgba(241, 137, 92, 0.08));
           animation: ambientGlow 4s ease-in-out infinite;
         }
 
@@ -75,7 +75,8 @@ export function CircuitHero() {
         }
 
         .dot-grid-pattern {
-          fill: #0a2035;
+          fill: #516079;
+          opacity: 0.4;
         }
 
         .chip-group {
@@ -83,15 +84,16 @@ export function CircuitHero() {
         }
 
         .trace-inactive {
-          stroke: #0e4d6e;
+          stroke: #516079;
           stroke-width: 2;
           fill: none;
           stroke-linecap: round;
           stroke-linejoin: round;
+          opacity: 0.5;
         }
 
         .trace-pulse {
-          stroke: #00c8ff;
+          stroke: #F1895C;
           stroke-width: 2.5;
           fill: none;
           stroke-dasharray: 16 999;
@@ -142,32 +144,32 @@ export function CircuitHero() {
         }
 
         .via-pad {
-          fill: #00c8ff;
+          fill: #F1895C;
           opacity: 0.7;
           animation: chipPulse 3s ease-in-out infinite;
         }
 
         .ic-pin {
-          stroke: #00c8ff;
+          stroke: #F1895C;
           stroke-width: 1.5;
           fill: none;
         }
 
         .chip-rect {
-          fill: #0a1f35;
-          stroke: #00c8ff;
+          fill: #2E3244;
+          stroke: #F1895C;
           stroke-width: 1.5;
         }
 
         .pin-dot {
-          fill: #00c8ff;
+          fill: #F1895C;
         }
 
         .chip-text-title {
           font-family: monospace;
           font-size: 18px;
           font-weight: bold;
-          fill: #00c8ff;
+          fill: #F1895C;
           text-anchor: middle;
           dominant-baseline: middle;
         }
@@ -175,14 +177,14 @@ export function CircuitHero() {
         .chip-text-sub {
           font-family: monospace;
           font-size: 8px;
-          fill: #0e7490;
+          fill: #C5C6C6;
           text-anchor: middle;
           dominant-baseline: middle;
         }
 
         .node-rect {
-          fill: #040d18;
-          stroke: #00c8ff;
+          fill: #2E3244;
+          stroke: #516079;
           stroke-width: 1;
         }
 
@@ -190,7 +192,7 @@ export function CircuitHero() {
           font-family: monospace;
           font-size: 9px;
           font-weight: bold;
-          fill: #00c8ff;
+          fill: #FFFFFF;
           text-anchor: middle;
           dominant-baseline: middle;
         }
@@ -198,14 +200,14 @@ export function CircuitHero() {
         .node-subtitle {
           font-family: monospace;
           font-size: 7px;
-          fill: #0e7490;
+          fill: #C5C6C6;
           text-anchor: middle;
           dominant-baseline: middle;
         }
 
         .node-pad {
-          fill: #00c8ff;
-          opacity: 0.6;
+          fill: #F1895C;
+          opacity: 0.7;
         }
       `}</style>
 

@@ -19,6 +19,12 @@ export default {
         "accent-ink": "var(--accent-ink)",
         cold: "var(--cold)",
 
+        // Palette custom tokens
+        navy: "var(--color-navy)",
+        slate: "var(--color-slate)",
+        gray: "var(--color-gray)",
+        orange: "var(--color-orange)",
+
         // Backward compatibility mappings
         panel: "var(--bg)",
         "panel-sunk": "var(--surface2)",

@@ -8,7 +8,7 @@ const timelineItems = [
     description:
       "Built a PID control system with React, Flask, and MATLAB Simulink digital twin — enabling live parameter tuning and signal visualization for engineering applications.",
     tags: ["React", "Flask", "MATLAB", "WebSocket"],
-    dot: "bg-cyan-400",
+    dot: "bg-orange",
   },
   {
     period: "2024",
@@ -16,7 +16,7 @@ const timelineItems = [
     description:
       "Designed and developed an industrial IoT analytics dashboard aggregating sensor telemetry, ML predictions, and anomaly alerts for equipment health monitoring.",
     tags: ["JavaScript", "Python", "ML", "IIoT"],
-    dot: "bg-blue-400",
+    dot: "bg-orange",
   },
   {
     period: "2024",
@@ -24,7 +24,7 @@ const timelineItems = [
     description:
       "Developed a privacy-friendly Chrome extension providing real-time AI writing assistance within LinkedIn, using Manifest V3 and content script injection patterns.",
     tags: ["Chrome Extension", "JavaScript", "AI", "MV3"],
-    dot: "bg-violet-400",
+    dot: "bg-slate",
   },
 
   {
@@ -33,7 +33,7 @@ const timelineItems = [
     description:
       "Designed and built a fully responsive organizational website with SCSS component architecture and PHP backend — managing events, members, and publications.",
     tags: ["HTML", "SCSS", "PHP", "Responsive"],
-    dot: "bg-orange-400",
+    dot: "bg-slate",
   },
   {
     period: "2023",
@@ -41,7 +41,7 @@ const timelineItems = [
     description:
       "Ongoing experimentation with advanced UI patterns, TypeScript generics for components, animation systems, and browser-native API capabilities through prototyping projects.",
     tags: ["TypeScript", "Experiments", "Animation", "Browser APIs"],
-    dot: "bg-pink-400",
+    dot: "bg-slate",
   },
 ];
 
@@ -54,7 +54,7 @@ export function TimelineSection() {
       />
 
       <div className="relative">
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/50 via-blue-500/30 to-transparent -translate-x-px" />
+        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-orange/50 via-slate/30 to-transparent -translate-x-px" />
 
         <div className="space-y-10">
           {timelineItems.map((item, i) => (
@@ -71,9 +71,9 @@ export function TimelineSection() {
               }`}
             >
               <div className="md:flex-1 md:px-8">
-                <div className="rounded-xl border border-white/8 bg-card/60 backdrop-blur-sm p-5 hover:border-cyan-500/25 transition-colors group">
-                  <p className="text-xs font-mono text-cyan-400 mb-1">{item.period}</p>
-                  <h3 className="font-bold text-sm text-foreground mb-2 group-hover:text-cyan-400 transition-colors">
+                <div className="rounded-xl border border-white/8 bg-card/60 backdrop-blur-sm p-5 hover:border-orange/25 transition-colors group">
+                  <p className="text-xs font-mono text-orange mb-1">{item.period}</p>
+                  <h3 className="font-bold text-sm text-foreground mb-2 group-hover:text-orange transition-colors">
                     {item.title}
                   </h3>
                   <p className="text-xs text-muted-foreground leading-relaxed mb-3">

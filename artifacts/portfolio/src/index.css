@@ -4,49 +4,114 @@
 
 @layer base {
   :root {
-    --panel: #f4f6f8;
-    --panel-sunk: #e5e9f0;
-    --panel-raised: #ffffff;
-    --ink: #0f172a;
-    --ink-soft: #475569;
-    --rule: #cbd5e1;
-    --signal: #d97706;
-    --signal-tint: #fef3c7;
-    --telemetry: #0284c7;
-    --hardware: #ea580c;
+    /* Step 2 Palette Definition (Single Source of Truth) */
+    --color-navy: #2E3244;
+    --color-slate: #516079;
+    --color-gray: #C5C6C6;
+    --color-white: #FFFFFF;
+    --color-orange: #F1895C;
+
+    /* Derived Tonal Tokens */
+    --color-orange-hover: color-mix(in srgb, var(--color-orange) 92%, var(--color-navy));
+    --color-navy-surface: rgba(81, 96, 121, 0.22);
+    --color-navy-surface2: rgba(81, 96, 121, 0.38);
+    --color-border: rgba(81, 96, 121, 0.28);
+    --color-border-subtle: rgba(197, 198, 198, 0.18);
+    --color-border-active: rgba(241, 137, 92, 0.55);
+
+    /* Semantic Application Tokens */
+    --bg: var(--color-navy);
+    --surface: var(--color-navy-surface);
+    --surface2: var(--color-navy-surface2);
+    --hairline: var(--color-border);
+    --ink: var(--color-white);
+    --soft: var(--color-gray);
+    --accent: var(--color-orange);
+    --accent-hover: var(--color-orange-hover);
+    --accent-text: var(--color-orange);
+    --accent-ink: var(--color-navy);
+    --cold: #8CA0BA;
+
+    /* Backward Compatibility Tokens */
+    --panel: var(--color-navy);
+    --panel-sunk: var(--color-navy-surface);
+    --panel-raised: var(--color-navy-surface2);
+    --ink-soft: var(--color-gray);
+    --rule: var(--color-border);
+    --signal: var(--color-orange);
+    --signal-tint: rgba(241, 137, 92, 0.15);
+    --telemetry: var(--color-orange);
+    --hardware: var(--color-orange);
+    --hardware-text: var(--color-orange);
+    --highlight: var(--color-orange);
     --radius: 2px;
     --hair: 1px solid var(--rule);
   }
 
   .dark {
-    --panel: #0b0f17;
-    --panel-sunk: #151d2a;
-    --panel-raised: #111827;
-    --ink: #f8fafc;
-    --ink-soft: #94a3b8;
-    --rule: #1e293b;
-    --signal: #f59e0b;
-    --signal-tint: #451a03;
-    --telemetry: #38bdf8;
-    --hardware: #f97316;
-    --radius: 2px;
-    --hair: 1px solid var(--rule);
+    --bg: var(--color-navy);
+    --panel: var(--color-navy);
+    --panel-sunk: var(--color-navy-surface);
+    --panel-raised: var(--color-navy-surface2);
+    --surface: var(--color-navy-surface);
+    --surface2: var(--color-navy-surface2);
+    --ink: var(--color-white);
+    --ink-soft: var(--color-gray);
+    --rule: var(--color-border);
+    --hairline: var(--color-border);
+    --signal: var(--color-orange);
+    --signal-tint: rgba(241, 137, 92, 0.15);
+    --telemetry: var(--color-orange);
+    --hardware: var(--color-orange);
+    --accent: var(--color-orange);
   }
 
   *, *::before, *::after {
     box-shadow: none !important;
   }
 
+  /* Selection Color */
+  ::selection {
+    background-color: var(--color-orange);
+    color: var(--color-navy);
+  }
+  ::-moz-selection {
+    background-color: var(--color-orange);
+    color: var(--color-navy);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-navy);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-slate);
+    border-radius: 2px;
+    border: 2px solid var(--color-navy);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-orange);
+  }
+  * {
+    scrollbar-color: var(--color-slate) var(--color-navy);
+    scrollbar-width: thin;
+  }
+
   html {
     scroll-behavior: smooth;
-    background-color: var(--panel);
-    color: var(--ink);
+    background-color: var(--color-navy);
+    color: var(--color-white);
     font-family: "IBM Plex Sans", sans-serif;
+    color-scheme: dark;
   }
 
   body {
-    background-color: var(--panel);
-    color: var(--ink);
+    background-color: var(--color-navy);
+    color: var(--color-white);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 16px;
     line-height: 1.6;
@@ -57,11 +122,11 @@
     font-family: "Saira Condensed", sans-serif;
     font-weight: 700;
     letter-spacing: -0.01em;
-    color: var(--ink);
+    color: var(--color-white);
   }
 
   :focus-visible {
-    outline: 2px solid var(--signal) !important;
+    outline: 2px solid var(--color-orange) !important;
     outline-offset: 2px !important;
   }
 
@@ -78,15 +143,15 @@
 @layer components {
   /* Instrument panel link styling */
   .panel-link {
-    color: var(--ink);
+    color: var(--color-white);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
     transition: color 0.15s ease, text-decoration-color 0.15s ease;
   }
   .panel-link:hover {
-    color: var(--signal);
-    text-decoration-color: var(--signal);
+    color: var(--color-orange);
+    text-decoration-color: var(--color-orange);
   }
 
   /* Primary CTA */
@@ -96,18 +161,18 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
-    background-color: var(--ink);
-    color: var(--panel);
+    background-color: var(--color-orange);
+    color: var(--color-navy);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: var(--radius);
     border: none;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background-color 0.15s ease, transform 0.15s ease;
   }
   .btn-primary:hover {
-    opacity: 0.92;
+    background-color: var(--color-orange-hover);
     transform: translateY(-1px);
   }
   .btn-primary:active {
@@ -121,19 +186,20 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
-    background-color: var(--panel-raised);
-    color: var(--ink);
+    background-color: var(--color-navy-surface);
+    color: var(--color-white);
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius);
-    border: var(--hair);
+    border: 1px solid var(--color-border);
     cursor: pointer;
     transition: all 0.15s ease;
   }
   .btn-secondary:hover {
-    background-color: var(--panel-sunk);
-    border-color: var(--ink-soft);
+    background-color: var(--color-navy-surface2);
+    border-color: var(--color-slate);
+    color: var(--color-white);
   }
 
   /* Rectangular Tag Chip */
@@ -143,13 +209,14 @@
     padding: 0.25rem 0.625rem;
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.8125rem;
-    color: var(--ink);
-    background-color: var(--panel-sunk);
-    border: var(--hair);
+    color: var(--color-gray);
+    background-color: var(--color-navy-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    transition: border-color 0.15s ease;
+    transition: border-color 0.15s ease, color 0.15s ease;
   }
   .tech-chip:hover {
-    border-color: var(--ink-soft);
+    border-color: var(--color-slate);
+    color: var(--color-white);
   }
 }

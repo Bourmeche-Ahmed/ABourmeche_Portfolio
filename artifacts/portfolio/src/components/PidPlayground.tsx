@@ -45,12 +45,11 @@ export function PidPlayground() {
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
 
-      const isDark = document.documentElement.classList.contains("dark");
-      const gridColor = isDark ? "rgba(99,179,237,0.07)" : "rgba(0,100,200,0.06)";
-      const axisColor = isDark ? "rgba(99,179,237,0.25)" : "rgba(0,100,200,0.2)";
-      const setpointColor = isDark ? "rgba(99,179,237,0.4)" : "rgba(0,100,200,0.35)";
-      const curveColor = isDark ? "#22d3ee" : "#0891b2";
-      const glowColor = isDark ? "rgba(34,211,238,0.3)" : "rgba(8,145,178,0.2)";
+      const gridColor = "rgba(81, 96, 121, 0.18)";
+      const axisColor = "rgba(81, 96, 121, 0.4)";
+      const setpointColor = "rgba(197, 198, 198, 0.45)";
+      const curveColor = "#F1895C";
+      const glowColor = "rgba(241, 137, 92, 0.35)";
 
       for (let x = 0; x <= W; x += 20) {
         ctx.strokeStyle = gridColor;
@@ -135,7 +134,7 @@ export function PidPlayground() {
     step: number;
   }) => (
     <div className="flex items-center gap-3">
-      <span className="w-6 text-xs font-mono text-cyan-400 font-bold">{label}</span>
+      <span className="w-6 text-xs font-mono text-orange font-bold">{label}</span>
       <input
         type="range"
         min={min}
@@ -143,10 +142,10 @@ export function PidPlayground() {
         step={step}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="flex-1 h-1.5 rounded-full accent-cyan-400 cursor-pointer"
+        className="flex-1 h-1.5 rounded-full accent-orange cursor-pointer"
         aria-label={`${label} parameter`}
       />
-      <span className="w-10 text-right text-xs font-mono text-cyan-300">
+      <span className="w-10 text-right text-xs font-mono text-gray">
         {value.toFixed(1)}
       </span>
     </div>
@@ -157,22 +156,22 @@ export function PidPlayground() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.4 }}
-      className="relative rounded-2xl border border-cyan-500/20 bg-black/30 dark:bg-black/40 backdrop-blur-md p-5 w-full max-w-sm shadow-xl shadow-cyan-900/10"
+      className="relative rounded-2xl border border-slate/30 bg-navy/60 backdrop-blur-md p-5 w-full max-w-sm shadow-xl shadow-navy/20"
     >
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent rounded-t-2xl" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange/40 to-transparent rounded-t-2xl" />
 
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-xs font-semibold text-cyan-400 tracking-wider uppercase">
+          <p className="text-xs font-semibold text-orange tracking-wider uppercase">
             PID Response Playground
           </p>
-          <p className="text-[10px] text-muted-foreground mt-0.5">
+          <p className="text-[10px] text-gray mt-0.5">
             Closed-loop simulation · MATLAB/Simulink digital twin
           </p>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-[10px] text-green-400 font-mono">LIVE</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-orange animate-pulse" />
+          <span className="text-[10px] text-orange font-mono">LIVE</span>
         </div>
       </div>
 
@@ -180,7 +179,7 @@ export function PidPlayground() {
         ref={canvasRef}
         width={280}
         height={100}
-        className="w-full h-24 rounded-lg mb-4 bg-black/20"
+        className="w-full h-24 rounded-lg mb-4 bg-navy/40"
       />
 
       <div className="space-y-2.5">
@@ -189,11 +188,11 @@ export function PidPlayground() {
         <SliderControl label="Kd" value={kd} onChange={setKd} min={0} max={3} step={0.1} />
       </div>
 
-      <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-white/5">
+      <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-slate/20">
         {["MATLAB/Simulink", "Control Systems", "Real-time UI"].map((tag) => (
           <span
             key={tag}
-            className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
+            className="text-[10px] px-2 py-0.5 rounded-full bg-slate/20 text-orange border border-slate/30"
           >
             {tag}
           </span>

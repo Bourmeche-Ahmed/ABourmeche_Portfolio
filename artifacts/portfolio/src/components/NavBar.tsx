@@ -45,13 +45,8 @@ export function NavBar() {
         >
           <div className="w-7 h-7 rounded-[3px] bg-panel-sunk border border-rule flex items-center justify-center p-0.5 group-hover:border-signal transition-colors">
             <svg viewBox="0 0 256 256" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="12" y="12" width="232" height="232" rx="16" fill="#121820" stroke="#f57c00" strokeWidth="6" />
-              <path d="M 28 44 L 28 28 L 44 28" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <path d="M 228 44 L 228 28 L 212 28" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <path d="M 28 212 L 28 228 L 44 228" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <path d="M 228 212 L 228 228 L 212 228" stroke="#f57c00" strokeWidth="6" fill="none" />
-              <circle cx="128" cy="128" r="64" stroke="#38bdf8" strokeWidth="4" strokeDasharray="6 6" fill="none" />
-              <text x="128" y="152" fontFamily="'IBM Plex Sans', sans-serif" fontSize="88" fontWeight="900" fill="#f57c00" textAnchor="middle">AB</text>
+              <rect x="8" y="8" width="240" height="240" rx="52" fill="#2E3244" stroke="#516079" strokeWidth="8" />
+              <text x="128" y="162" fontFamily="'IBM Plex Sans', sans-serif" fontSize="104" fontWeight="900" fill="#F1895C" textAnchor="middle">AB</text>
             </svg>
           </div>
           <span>AHMED BOURMECHE</span>

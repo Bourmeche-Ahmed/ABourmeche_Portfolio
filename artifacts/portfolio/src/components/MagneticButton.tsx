@@ -35,11 +35,11 @@ export function MagneticButton({
   const handleMouseLeave = () => setPosition({ x: 0, y: 0 });
 
   const baseClass = cn(
-    "relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 cursor-pointer select-none",
+    "relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange cursor-pointer select-none",
     {
-      "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:brightness-110":
+      "bg-orange text-navy hover:bg-orange/90 font-bold shadow-md shadow-orange/20":
         variant === "primary",
-      "border border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400":
+      "border border-slate/50 text-white hover:bg-slate/20 hover:border-orange":
         variant === "outline",
       "text-muted-foreground hover:text-foreground hover:bg-white/5": variant === "ghost",
     },

@@ -15,32 +15,32 @@ import {
 const skillGroups = [
   {
     category: "Embedded Systems & Hardware",
-    color: "bg-orange-500",
-    badge: "border-orange-500/30 text-orange-600 dark:text-orange-400",
+    color: "bg-orange",
+    badge: "border-orange/30 text-orange",
     skills: ["ESP32 / ESP-IDF", "Bare-metal C", "RS-485 / Modbus RTU", "BACnet", "OCPP 1.6J/2.0.1", "NB-IoT", "LoRa", "KiCad PCB Design", "STM32"],
   },
   {
     category: "Industrial Ingestion & Backend",
-    color: "bg-sky-500",
-    badge: "border-sky-500/30 text-sky-600 dark:text-sky-400",
+    color: "bg-slate",
+    badge: "border-slate/40 text-gray",
     skills: ["Python", "Django REST Framework", "Flask", "MQTT (Mosquitto)", "Telegraf", "TimescaleDB", "PostgreSQL", "Redis", "Docker Compose"],
   },
   {
     category: "Control Systems & Digital Twins",
-    color: "bg-teal-500",
-    badge: "border-teal-500/30 text-teal-600 dark:text-teal-400",
+    color: "bg-orange",
+    badge: "border-orange/30 text-orange",
     skills: ["MATLAB", "Simulink", "Digital Twins", "Closed-loop PID Control", "Hardware-in-the-loop (HIL)", "Signal Processing"],
   },
   {
     category: "Real-Time Dashboards & Frontend",
-    color: "bg-indigo-500",
-    badge: "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
+    color: "bg-slate",
+    badge: "border-slate/40 text-gray",
     skills: ["React", "TypeScript", "Tailwind CSS", "High-frequency Telemetry Charts", "WebSockets", "Vite"],
   },
   {
     category: "CAD & Fabrication",
-    color: "bg-amber-600",
-    badge: "border-amber-600/30 text-amber-700 dark:text-amber-400",
+    color: "bg-gray",
+    badge: "border-gray/30 text-gray",
     skills: ["Onshape (primary CAD tool)", "SolidWorks", "3D printing", "mechanical design for robots"],
   },
 ];
@@ -55,10 +55,10 @@ const radarData = [
 ];
 
 const languageData = [
-  { name: "C (Embedded)", value: 40, color: "#ea580c" },
-  { name: "Python", value: 30, color: "#0284c7" },
-  { name: "TypeScript", value: 20, color: "#3b82f6" },
-  { name: "MATLAB/C++", value: 10, color: "#7c3aed" },
+  { name: "C (Embedded)", value: 40, color: "#F1895C" },
+  { name: "Python", value: 30, color: "#8CA0BA" },
+  { name: "TypeScript", value: 20, color: "#516079" },
+  { name: "MATLAB/C++", value: 10, color: "#C5C6C6" },
 ];
 
 export function SkillCharts() {
