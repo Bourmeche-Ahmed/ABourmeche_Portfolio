@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Plus } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { projects, Project } from "@/data/projects";
 import { ProjectImage } from "./ProjectImage";
 

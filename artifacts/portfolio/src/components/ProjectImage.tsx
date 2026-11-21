@@ -11,7 +11,8 @@ import {
   FlaskConical,
   LucideIcon,
 } from "lucide-react";
-import type { ProjectCategory } from "@/data/projects";
+import type { Project, ProjectCategory } from "@/data/projects";
+import { getAssetPath } from "@/lib/paths";
 
 const categoryIconMap: Record<ProjectCategory, LucideIcon> = {
   "Hardware / PCB Design": Cpu,
@@ -29,9 +30,11 @@ const categoryIconMap: Record<ProjectCategory, LucideIcon> = {
 const CANDIDATE_EXTENSIONS = [".webp", ".png", ".jpg", ".jpeg"];
 
 export interface ProjectImageProps {
+  project?: Project;
+  slot?: "cover" | "gallery" | "schematic" | string;
   src?: string;
-  alt: string;
-  category: ProjectCategory;
+  alt?: string;
+  category?: ProjectCategory;
   fit?: "cover" | "contain";
   focus?: string; // CSS object-position, e.g. "center top"
   isCover?: boolean;
@@ -94,10 +97,12 @@ export function BlueprintPlaceholder({
 }
 
 export function ProjectImage({
+  project,
+  slot,
   src,
   alt,
   category,
-  fit = "cover",
+  fit,
   focus,
   isCover = false,
   expectedPath,
@@ -106,17 +111,29 @@ export function ProjectImage({
   onError,
   onLoad,
 }: ProjectImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src);
+  // If a project is provided, resolve cover/gallery info automatically
+  const coverFile = project ? (project.cover || project.gallery?.[0]?.file) : undefined;
+  const coverGalleryItem = project?.gallery?.find((g) => g.file === coverFile);
+
+  const resolvedSrc = src || (coverFile && project ? getAssetPath(`projects/${project.id}/${coverFile}`) : undefined);
+  const resolvedAlt = alt || project?.title || "Project image";
+  const resolvedCategory = (category || project?.category || "Hardware / PCB Design") as ProjectCategory;
+  const resolvedFit = fit || coverGalleryItem?.fit || "cover";
+  const resolvedFocus = focus || coverGalleryItem?.focus;
+  const resolvedIsCover = isCover || slot === "cover" || Boolean(project);
+  const resolvedExpected = expectedPath || (coverFile && project ? `public/projects/${project.id}/${coverFile}` : undefined);
+
+  const [currentSrc, setCurrentSrc] = useState(resolvedSrc);
   const [attemptIndex, setAttemptIndex] = useState(0);
-  const [hasError, setHasError] = useState(!src);
+  const [hasError, setHasError] = useState(!resolvedSrc);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setCurrentSrc(src);
+    setCurrentSrc(resolvedSrc);
     setAttemptIndex(0);
-    setHasError(!src);
+    setHasError(!resolvedSrc);
     setIsLoaded(false);
-  }, [src]);
+  }, [resolvedSrc]);
 
   const handleError = () => {
     if (currentSrc) {
@@ -143,7 +160,7 @@ export function ProjectImage({
   };
 
   // Missing gallery item in production: render nothing so no empty boxes appear
-  if (!isCover && hasError && !import.meta.env.DEV) {
+  if (!resolvedIsCover && hasError && !import.meta.env.DEV) {
     return null;
   }
 
@@ -151,8 +168,8 @@ export function ProjectImage({
   if (hasError || !currentSrc) {
     return (
       <BlueprintPlaceholder
-        category={category}
-        expectedPath={expectedPath}
+        category={resolvedCategory}
+        expectedPath={resolvedExpected}
         className={className}
       />
     );
@@ -161,28 +178,28 @@ export function ProjectImage({
   return (
     <div
       className={`relative w-full h-full overflow-hidden ${
-        fit === "contain" ? "bg-panel-sunk flex items-center justify-center" : ""
+        resolvedFit === "contain" ? "bg-panel-sunk flex items-center justify-center" : ""
       } ${className}`}
     >
       {/* Background blueprint placeholder while loading */}
       {!isLoaded && (
         <BlueprintPlaceholder
-          category={category}
-          expectedPath={expectedPath}
+          category={resolvedCategory}
+          expectedPath={resolvedExpected}
           className="absolute inset-0"
         />
       )}
 
       <img
         src={currentSrc}
-        alt={alt}
+        alt={resolvedAlt}
         loading="lazy"
         decoding="async"
         onError={handleError}
         onLoad={handleLoad}
-        style={focus ? { objectPosition: focus } : undefined}
+        style={resolvedFocus ? { objectPosition: resolvedFocus } : undefined}
         className={`w-full h-full transition-opacity duration-300 ${
-          fit === "contain" ? "object-contain p-2" : "object-cover"
+          resolvedFit === "contain" ? "object-contain p-2" : "object-cover"
         } ${isLoaded ? "opacity-100" : "opacity-0"} ${imgClassName}`}
       />
     </div>
