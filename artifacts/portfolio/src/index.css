@@ -4,80 +4,109 @@
 
 @layer base {
   :root {
-    /* Step 2 Palette Definition (Single Source of Truth) */
-    --color-navy: #2E3244;
-    --color-slate: #516079;
-    --color-gray: #C5C6C6;
-    --color-white: #FFFFFF;
-    --color-orange: #F1895C;
+    /* Base Palette (Circuit Teal - Single Source of Truth) */
+    --color-ink: #0B1A21;
+    --color-deep-teal: #0F766E;
+    --color-mint: #2DD4BF;
+    --color-amber: #F5A524;
+    --color-amber-dark: #B45309;
+    --color-mist: #F3F7F7;
 
-    /* Derived Tonal Tokens */
-    --color-orange-hover: color-mix(in srgb, var(--color-orange) 92%, var(--color-navy));
-    --color-navy-surface: rgba(81, 96, 121, 0.22);
-    --color-navy-surface2: rgba(81, 96, 121, 0.38);
-    --color-border: rgba(81, 96, 121, 0.28);
-    --color-border-subtle: rgba(197, 198, 198, 0.18);
-    --color-border-active: rgba(241, 137, 92, 0.55);
+    /* Light Mode Semantic Tokens */
+    --bg: #F3F7F7;
+    --bg-alt: #E8F0F0;
+    --surface: #FFFFFF;
+    --surface-hover: #EBF2F2;
+    --border: color-mix(in srgb, #0B1A21 12%, transparent);
+    --border-subtle: color-mix(in srgb, #0B1A21 7%, transparent);
+    --text: #0B1A21;
+    --text-muted: #4B6470;
+    --accent: #0F766E;
+    --accent-hover: color-mix(in srgb, #0F766E 85%, #0B1A21);
+    --accent-soft: color-mix(in srgb, #0F766E 10%, transparent);
+    --highlight: #F5A524;
+    --highlight-text: #B45309;
+    --on-accent: #F3F7F7;
 
-    /* Semantic Application Tokens */
-    --bg: var(--color-navy);
-    --surface: var(--color-navy-surface);
-    --surface2: var(--color-navy-surface2);
-    --hairline: var(--color-border);
-    --ink: var(--color-white);
-    --soft: var(--color-gray);
-    --accent: var(--color-orange);
-    --accent-hover: var(--color-orange-hover);
-    --accent-text: var(--color-orange);
-    --accent-ink: var(--color-navy);
-    --cold: #8CA0BA;
+    /* Card shadow for light mode: soft shadow tinted with ink at 8% */
+    --card-shadow: 0 4px 16px -2px rgba(11, 26, 33, 0.08), 0 1px 3px rgba(11, 26, 33, 0.04);
 
-    /* Backward Compatibility Tokens */
-    --panel: var(--color-navy);
-    --panel-sunk: var(--color-navy-surface);
-    --panel-raised: var(--color-navy-surface2);
-    --ink-soft: var(--color-gray);
-    --rule: var(--color-border);
-    --signal: var(--color-orange);
-    --signal-tint: rgba(241, 137, 92, 0.15);
-    --telemetry: var(--color-orange);
-    --hardware: var(--color-orange);
-    --hardware-text: var(--color-orange);
-    --highlight: var(--color-orange);
-    --radius: 2px;
-    --hair: 1px solid var(--rule);
+    /* Backward compatibility mappings */
+    --panel: var(--bg);
+    --panel-sunk: var(--bg-alt);
+    --panel-raised: var(--surface);
+    --surface2: var(--bg-alt);
+    --hairline: var(--border);
+    --ink: var(--text);
+    --ink-soft: var(--text-muted);
+    --soft: var(--text-muted);
+    --rule: var(--border);
+    --signal: var(--accent);
+    --signal-tint: var(--accent-soft);
+    --telemetry: var(--accent);
+    --hardware: var(--accent);
+    --hardware-text: var(--accent);
+    --highlight-color: var(--highlight);
+    --radius: 4px;
+    --hair: 1px solid var(--border);
   }
 
+  [data-theme="dark"],
   .dark {
-    --bg: var(--color-navy);
-    --panel: var(--color-navy);
-    --panel-sunk: var(--color-navy-surface);
-    --panel-raised: var(--color-navy-surface2);
-    --surface: var(--color-navy-surface);
-    --surface2: var(--color-navy-surface2);
-    --ink: var(--color-white);
-    --ink-soft: var(--color-gray);
-    --rule: var(--color-border);
-    --hairline: var(--color-border);
-    --signal: var(--color-orange);
-    --signal-tint: rgba(241, 137, 92, 0.15);
-    --telemetry: var(--color-orange);
-    --hardware: var(--color-orange);
-    --accent: var(--color-orange);
+    /* Dark Mode Semantic Tokens */
+    --bg: #0B1A21;
+    --bg-alt: #0F222B;
+    --surface: #12262F;
+    --surface-hover: #1A3440;
+    --border: color-mix(in srgb, #2DD4BF 14%, transparent);
+    --border-subtle: color-mix(in srgb, #2DD4BF 8%, transparent);
+    --text: #E6F2F2;
+    --text-muted: #8FA9B3;
+    --accent: #2DD4BF;
+    --accent-hover: color-mix(in srgb, #2DD4BF 85%, #E6F2F2);
+    --accent-soft: color-mix(in srgb, #2DD4BF 12%, transparent);
+    --highlight: #F5A524;
+    --highlight-text: #F5A524;
+    --on-accent: #0B1A21;
+
+    --card-shadow: none;
+
+    /* Backward compatibility mappings */
+    --panel: var(--bg);
+    --panel-sunk: var(--bg-alt);
+    --panel-raised: var(--surface);
+    --surface2: var(--surface-hover);
+    --hairline: var(--border);
+    --ink: var(--text);
+    --ink-soft: var(--text-muted);
+    --soft: var(--text-muted);
+    --rule: var(--border);
+    --signal: var(--accent);
+    --signal-tint: var(--accent-soft);
+    --telemetry: var(--accent);
+    --hardware: var(--accent);
+    --hardware-text: var(--accent);
+    --highlight-color: var(--highlight);
+    --hair: 1px solid var(--border);
   }
 
-  *, *::before, *::after {
-    box-shadow: none !important;
+  /* Smooth 200ms transition on background-color, color, border-color only */
+  @media (prefers-reduced-motion: no-preference) {
+    body, header, nav, section, footer, main, div, a, button, input, textarea, span {
+      transition-property: background-color, color, border-color;
+      transition-duration: 200ms;
+      transition-timing-function: ease-in-out;
+    }
   }
 
-  /* Selection Color */
+  /* Selection Color (accent bg, on-accent text) */
   ::selection {
-    background-color: var(--color-orange);
-    color: var(--color-navy);
+    background-color: var(--accent);
+    color: var(--on-accent);
   }
   ::-moz-selection {
-    background-color: var(--color-orange);
-    color: var(--color-navy);
+    background-color: var(--accent);
+    color: var(--on-accent);
   }
 
   /* Scrollbar */
@@ -86,47 +115,53 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-navy);
+    background: var(--bg);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-slate);
-    border-radius: 2px;
-    border: 2px solid var(--color-navy);
+    background: var(--border);
+    border-radius: 4px;
+    border: 2px solid var(--bg);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-orange);
+    background: var(--accent);
   }
   * {
-    scrollbar-color: var(--color-slate) var(--color-navy);
+    scrollbar-color: var(--border) var(--bg);
     scrollbar-width: thin;
   }
 
   html {
     scroll-behavior: smooth;
-    background-color: var(--color-navy);
-    color: var(--color-white);
-    font-family: "IBM Plex Sans", sans-serif;
-    color-scheme: dark;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light dark;
   }
 
   body {
-    background-color: var(--color-navy);
-    color: var(--color-white);
-    font-family: "IBM Plex Sans", sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  p {
+    max-width: 65ch;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Saira Condensed", sans-serif;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--color-white);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--text);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-orange) !important;
+    outline: 2px solid var(--accent) !important;
     outline-offset: 2px !important;
   }
 
@@ -143,15 +178,15 @@
 @layer components {
   /* Instrument panel link styling */
   .panel-link {
-    color: var(--color-white);
+    color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
     transition: color 0.15s ease, text-decoration-color 0.15s ease;
   }
   .panel-link:hover {
-    color: var(--color-orange);
-    text-decoration-color: var(--color-orange);
+    color: var(--accent-hover);
+    text-decoration-color: var(--accent-hover);
   }
 
   /* Primary CTA */
@@ -161,18 +196,19 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
-    background-color: var(--color-orange);
-    color: var(--color-navy);
-    font-family: "IBM Plex Sans", sans-serif;
+    background-color: var(--accent);
+    color: var(--on-accent);
+    font-family: "Inter", system-ui, sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: var(--radius);
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     transition: background-color 0.15s ease, transform 0.15s ease;
   }
   .btn-primary:hover {
-    background-color: var(--color-orange-hover);
+    background-color: var(--accent-hover);
     transform: translateY(-1px);
   }
   .btn-primary:active {
@@ -186,20 +222,21 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
-    background-color: var(--color-navy-surface);
-    color: var(--color-white);
-    font-family: "IBM Plex Sans", sans-serif;
+    background-color: var(--surface);
+    color: var(--text);
+    font-family: "Inter", system-ui, sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
+    box-shadow: var(--card-shadow);
     cursor: pointer;
     transition: all 0.15s ease;
   }
   .btn-secondary:hover {
-    background-color: var(--color-navy-surface2);
-    border-color: var(--color-slate);
-    color: var(--color-white);
+    background-color: var(--surface-hover);
+    border-color: var(--accent);
+    color: var(--text);
   }
 
   /* Rectangular Tag Chip */
@@ -207,16 +244,17 @@
     display: inline-flex;
     align-items: center;
     padding: 0.25rem 0.625rem;
-    font-family: "IBM Plex Sans", sans-serif;
-    font-size: 0.8125rem;
-    color: var(--color-gray);
-    background-color: var(--color-navy-surface);
-    border: 1px solid var(--color-border);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background-color: var(--accent-soft);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     transition: border-color 0.15s ease, color 0.15s ease;
   }
   .tech-chip:hover {
-    border-color: var(--color-slate);
-    color: var(--color-white);
+    border-color: var(--accent);
+    color: var(--text);
   }
 }

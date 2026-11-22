@@ -3,7 +3,7 @@ import { SkillCharts } from "./SkillCharts";
 
 export function SkillsSection() {
   return (
-    <section id="skills" className="py-16 border-b border-rule">
+    <section id="skills" className="py-16 border-b border-border bg-bg-alt">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <SectionHeader
           title="Technical Competencies & Matrix"

@@ -144,7 +144,7 @@ const experiences: ExperienceItem[] = [
 
 export function ExperienceSection() {
   return (
-    <section id="experience" className="py-16 border-b border-rule">
+    <section id="experience" className="py-16 border-b border-border">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <SectionHeader
           title="Professional Experience"
@@ -155,7 +155,7 @@ export function ExperienceSection() {
         <div className="relative pl-6 sm:pl-36">
           {/* Vertical Multidrop Bus Rail */}
           <div
-            className="absolute left-[7px] sm:left-[118px] top-4 bottom-4 w-px bg-rule pointer-events-none"
+            className="absolute left-[7px] sm:left-[118px] top-4 bottom-4 w-px bg-border pointer-events-none"
             aria-hidden="true"
           />
 
@@ -164,60 +164,60 @@ export function ExperienceSection() {
               <div key={exp.id} className="relative">
                 {/* Desktop Date Gutter */}
                 <div className="hidden sm:block absolute -left-36 top-2 w-28 text-right pr-4">
-                  <span className="font-mono text-[13px] text-ink-soft block leading-tight font-medium">
+                  <span className="font-mono text-[13px] text-text-muted block leading-tight font-medium">
                     {exp.dates}
                   </span>
                 </div>
 
                 {/* Node marker: 8px square node on the rail with tap line */}
                 <div
-                  className={`absolute -left-[21px] sm:-left-[31px] top-3.5 w-2 h-2 rounded-[1px] ${
+                  className={`absolute -left-[21px] sm:-left-[31px] top-3.5 w-2.5 h-2.5 rounded-full ${
                     exp.isCurrentOrRecent
-                      ? "bg-signal ring-2 ring-signal/30 ring-offset-2 ring-offset-panel"
-                      : "bg-ink"
+                      ? "bg-highlight ring-2 ring-highlight/30 ring-offset-2 ring-offset-bg"
+                      : "bg-border"
                   }`}
                   aria-hidden="true"
                 />
 
                 {/* Experience Card */}
-                <div className="border border-rule bg-panel-raised rounded-[2px] overflow-hidden transition-all duration-200 hover:border-ink-soft">
+                <div className="border border-border bg-surface rounded-lg overflow-hidden transition-all duration-200 hover:border-accent shadow-card">
                   {/* Top colored accent indicator rail */}
                   <div className={`h-1 w-full ${exp.accentBar}`} />
 
                   <div className="p-5 sm:p-7">
                     {/* Mobile Date Display */}
                     <div className="sm:hidden mb-2">
-                      <span className="font-mono text-[12px] text-ink-soft font-medium">
+                      <span className="font-mono text-[12px] text-text-muted font-medium">
                         {exp.dates}
                       </span>
                     </div>
 
                     {/* Card Header with Role & Meta */}
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3 pb-3 border-b border-rule">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3 pb-3 border-b border-border">
                       <div>
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[2px] border ${exp.badgeColor}`}>
+                          <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md border ${exp.badgeColor}`}>
                             {exp.badge}
                           </span>
                         </div>
-                        <h3 className="font-heading font-bold text-xl sm:text-2xl text-ink leading-tight">
+                        <h3 className="font-heading font-bold text-xl sm:text-2xl text-text leading-tight">
                           {exp.role}
                         </h3>
-                        <div className="font-sans text-sm text-ink-soft mt-1 flex items-center gap-2 flex-wrap">
+                        <div className="font-sans text-sm text-text-muted mt-1 flex items-center gap-2 flex-wrap">
                           {exp.companyUrl ? (
                             <a
                               href={exp.companyUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-medium text-ink hover:text-signal transition-colors inline-flex items-center gap-1 no-custom-link underline underline-offset-2"
+                              className="font-medium text-text hover:text-accent transition-colors inline-flex items-center gap-1 no-custom-link underline underline-offset-2"
                             >
                               <span>{exp.company}</span>
-                              <ExternalLink className="w-3 h-3 text-ink-soft" />
+                              <ExternalLink className="w-3 h-3 text-text-muted" />
                             </a>
                           ) : (
-                            <span className="font-medium text-ink">{exp.company}</span>
+                            <span className="font-medium text-text">{exp.company}</span>
                           )}
-                          <span className="text-rule">|</span>
+                          <span className="text-border">|</span>
                           <span>{exp.location}</span>
                         </div>
                       </div>
@@ -225,30 +225,30 @@ export function ExperienceSection() {
 
                     {/* Headline if present */}
                     {exp.headline && (
-                      <div className="mb-3 font-sans text-sm font-semibold text-ink flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-signal rounded-[1px]" />
+                      <div className="mb-3 font-sans text-sm font-semibold text-text flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 bg-highlight rounded-full" />
                         <span>{exp.headline}</span>
                       </div>
                     )}
 
                     {/* Short Summary */}
-                    <p className="font-sans text-sm text-ink-soft leading-relaxed mb-5">
+                    <p className="font-sans text-sm text-text-muted leading-relaxed mb-5">
                       {exp.description}
                     </p>
 
                     {/* Key Contributions with hairline tick */}
                     <div className="mb-6">
-                      <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-ink-soft mb-2.5">
+                      <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-text-muted mb-2.5">
                         Key Engineering Deliverables
                       </h4>
                       <ul className="space-y-2.5">
                         {exp.bullets.map((bullet, idx) => (
                           <li
                             key={idx}
-                            className="flex items-start text-sm text-ink font-sans leading-relaxed"
+                            className="flex items-start text-sm text-text font-sans leading-relaxed"
                           >
                             <span
-                              className="w-3 h-px bg-rule shrink-0 mt-[10px] mr-2.5"
+                              className="w-3 h-px bg-border shrink-0 mt-[10px] mr-2.5"
                               aria-hidden="true"
                             />
                             <span>{bullet}</span>
@@ -258,7 +258,7 @@ export function ExperienceSection() {
                     </div>
 
                     {/* Tech Tags */}
-                    <div className="pt-3 border-t border-rule">
+                    <div className="pt-3 border-t border-border">
                       <div className="flex flex-wrap gap-1.5">
                         {exp.tags.map((tag) => (
                           <span key={tag} className="tech-chip text-xs">

@@ -8,7 +8,7 @@ const timelineItems = [
     description:
       "Built a PID control system with React, Flask, and MATLAB Simulink digital twin — enabling live parameter tuning and signal visualization for engineering applications.",
     tags: ["React", "Flask", "MATLAB", "WebSocket"],
-    dot: "bg-orange",
+    dot: "bg-highlight",
   },
   {
     period: "2024",
@@ -16,7 +16,7 @@ const timelineItems = [
     description:
       "Designed and developed an industrial IoT analytics dashboard aggregating sensor telemetry, ML predictions, and anomaly alerts for equipment health monitoring.",
     tags: ["JavaScript", "Python", "ML", "IIoT"],
-    dot: "bg-orange",
+    dot: "bg-accent",
   },
   {
     period: "2024",
@@ -24,7 +24,7 @@ const timelineItems = [
     description:
       "Developed a privacy-friendly Chrome extension providing real-time AI writing assistance within LinkedIn, using Manifest V3 and content script injection patterns.",
     tags: ["Chrome Extension", "JavaScript", "AI", "MV3"],
-    dot: "bg-slate",
+    dot: "bg-accent",
   },
 
   {
@@ -33,7 +33,7 @@ const timelineItems = [
     description:
       "Designed and built a fully responsive organizational website with SCSS component architecture and PHP backend — managing events, members, and publications.",
     tags: ["HTML", "SCSS", "PHP", "Responsive"],
-    dot: "bg-slate",
+    dot: "bg-accent",
   },
   {
     period: "2023",
@@ -41,7 +41,7 @@ const timelineItems = [
     description:
       "Ongoing experimentation with advanced UI patterns, TypeScript generics for components, animation systems, and browser-native API capabilities through prototyping projects.",
     tags: ["TypeScript", "Experiments", "Animation", "Browser APIs"],
-    dot: "bg-slate",
+    dot: "bg-accent",
   },
 ];
 
@@ -54,7 +54,7 @@ export function TimelineSection() {
       />
 
       <div className="relative">
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-orange/50 via-slate/30 to-transparent -translate-x-px" />
+        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-accent/50 via-border to-transparent -translate-x-px" />
 
         <div className="space-y-10">
           {timelineItems.map((item, i) => (
@@ -71,19 +71,19 @@ export function TimelineSection() {
               }`}
             >
               <div className="md:flex-1 md:px-8">
-                <div className="rounded-xl border border-white/8 bg-card/60 backdrop-blur-sm p-5 hover:border-orange/25 transition-colors group">
-                  <p className="text-xs font-mono text-orange mb-1">{item.period}</p>
-                  <h3 className="font-bold text-sm text-foreground mb-2 group-hover:text-orange transition-colors">
+                <div className="rounded-md border border-border bg-surface p-5 hover:border-accent/40 transition-colors shadow-card group">
+                  <p className="text-xs font-mono text-accent mb-1">{item.period}</p>
+                  <h3 className="font-bold text-sm text-text mb-2 group-hover:text-accent transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                  <p className="text-xs text-text-muted leading-relaxed mb-3">
                     {item.description}
                   </p>
                   <div className={`flex flex-wrap gap-1.5 ${i % 2 === 0 ? "md:justify-end" : ""}`}>
                     {item.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/8 text-muted-foreground"
+                        className="text-[10px] px-2 py-0.5 rounded-sm bg-accent-soft border border-border text-text-muted"
                       >
                         {tag}
                       </span>
@@ -94,7 +94,7 @@ export function TimelineSection() {
 
               <div className="relative flex items-start pt-5 md:pt-0 md:flex-none md:flex md:items-center md:justify-center md:w-8">
                 <div
-                  className={`w-3 h-3 rounded-full border-2 border-background shadow-lg z-10 ${item.dot}`}
+                  className={`w-3 h-3 rounded-full border-2 border-border shadow-md z-10 ${item.dot}`}
                 />
               </div>
 

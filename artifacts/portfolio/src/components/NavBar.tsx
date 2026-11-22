@@ -43,10 +43,11 @@ export function NavBar() {
           onClick={() => handleNav("home")}
           className="font-heading font-bold text-xl tracking-tight text-ink hover:text-signal transition-colors flex items-center gap-2.5 focus-visible:outline-none group"
         >
-          <div className="w-7 h-7 rounded-[3px] bg-panel-sunk border border-rule flex items-center justify-center p-0.5 group-hover:border-signal transition-colors">
+          <div className="w-8 h-8 rounded-md bg-surface border border-border flex items-center justify-center p-0.5 group-hover:border-accent transition-colors">
             <svg viewBox="0 0 256 256" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="8" y="8" width="240" height="240" rx="52" fill="#2E3244" stroke="#516079" strokeWidth="8" />
-              <text x="128" y="162" fontFamily="'IBM Plex Sans', sans-serif" fontSize="104" fontWeight="900" fill="#F1895C" textAnchor="middle">AB</text>
+              <rect x="8" y="8" width="240" height="240" rx="54" fill="var(--surface)" stroke="var(--border)" strokeWidth="8" />
+              <text x="120" y="162" fontFamily="'Inter', system-ui, sans-serif" fontSize="102" fontWeight="900" fill="var(--accent)" textAnchor="middle">AB</text>
+              <circle cx="204" cy="52" r="14" fill="#F5A524" />
             </svg>
           </div>
           <span>AHMED BOURMECHE</span>

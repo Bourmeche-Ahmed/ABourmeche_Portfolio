@@ -34,11 +34,11 @@ const glowPulse = {
 };
 
 const BADGES = [
-  { label: "React", color: "#F1895C", angle: 0 },
-  { label: "TypeScript", color: "#516079", angle: 72 },
-  { label: "Python", color: "#8CA0BA", angle: 144 },
-  { label: "Embedded", color: "#F1895C", angle: 216 },
-  { label: "Industrial", color: "#C5C6C6", angle: 288 },
+  { label: "React", color: "#2DD4BF", angle: 0 },
+  { label: "TypeScript", color: "#0F766E", angle: 72 },
+  { label: "Python", color: "#F5A524", angle: 144 },
+  { label: "Embedded", color: "#2DD4BF", angle: 216 },
+  { label: "Industrial", color: "#8FA9B3", angle: 288 },
 ];
 
 function polarToXY(angle: number, radius: number) {
@@ -255,7 +255,7 @@ export function HeroVisual() {
           return (
             <div
               key={angle}
-              className="absolute w-1.5 h-1.5 rounded-full bg-orange/60"
+              className="absolute w-1.5 h-1.5 rounded-full bg-accent/60"
               style={{ left: 150 + pos.x - 3, top: 150 + pos.y * 0.36 - 3 }}
             />
           );

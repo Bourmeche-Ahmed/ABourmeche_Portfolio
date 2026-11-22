@@ -19,15 +19,17 @@ async function main() {
     <html>
       <head>
         <meta charset="utf-8" />
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@500;700&family=Saira+Condensed:wght@700;800&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body {
             width: 1200px;
             height: 630px;
-            background-color: #2E3244;
-            color: #FFFFFF;
-            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #0B1A21;
+            color: #E6F2F2;
+            font-family: 'Inter', system-ui, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -35,20 +37,20 @@ async function main() {
             position: relative;
             overflow: hidden;
           }
-          /* Background grid */
+          /* Background circuit grid */
           .grid {
             position: absolute;
             inset: 0;
             background-image:
-              linear-gradient(to right, rgba(81, 96, 121, 0.15) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(81, 96, 121, 0.15) 1px, transparent 1px);
-            background-size: 40px 40px;
+              linear-gradient(to right, rgba(45, 212, 191, 0.08) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(45, 212, 191, 0.08) 1px, transparent 1px);
+            background-size: 32px 32px;
             pointer-events: none;
           }
           .border-frame {
             position: absolute;
             inset: 24px;
-            border: 1px solid rgba(81, 96, 121, 0.4);
+            border: 1px solid rgba(45, 212, 191, 0.2);
             pointer-events: none;
           }
           .header {
@@ -60,66 +62,83 @@ async function main() {
           .monogram {
             width: 68px;
             height: 68px;
-            background: #2E3244;
-            border: 2px solid #516079;
-            border-radius: 16px;
+            background: #12262F;
+            border: 1.5px solid rgba(45, 212, 191, 0.4);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 32px;
-            font-weight: 900;
-            color: #F1895C;
+            font-family: 'Inter', sans-serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: #2DD4BF;
+            position: relative;
+          }
+          .monogram-dot {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #F5A524;
           }
           .status {
-            font-family: 'IBM Plex Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
-            color: #F1895C;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            background: rgba(241, 137, 92, 0.12);
-            border: 1px solid rgba(241, 137, 92, 0.35);
+            color: #2DD4BF;
+            letter-spacing: 0.05em;
+            background: rgba(45, 212, 191, 0.12);
+            border: 1px solid rgba(45, 212, 191, 0.35);
             padding: 6px 14px;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #F5A524;
           }
           .main-content {
             z-index: 10;
           }
           h1 {
-            font-family: 'Saira Condensed', sans-serif;
-            font-size: 82px;
+            font-family: 'Inter', sans-serif;
+            font-size: 68px;
             font-weight: 800;
-            line-height: 0.95;
-            letter-spacing: -0.01em;
-            color: #FFFFFF;
-            text-transform: uppercase;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: #E6F2F2;
             margin-bottom: 12px;
           }
           .title {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 600;
-            color: #F1895C;
+            color: #2DD4BF;
             margin-bottom: 16px;
           }
           .desc {
-            font-size: 18px;
-            color: #C5C6C6;
-            max-width: 820px;
-            line-height: 1.5;
+            font-size: 17px;
+            color: #8FA9B3;
+            max-width: 860px;
+            line-height: 1.6;
           }
           .footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-family: 'IBM Plex Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
-            color: #C5C6C6;
-            border-top: 1px solid rgba(81, 96, 121, 0.4);
+            color: #8FA9B3;
+            border-top: 1px solid rgba(45, 212, 191, 0.15);
             padding-top: 24px;
             z-index: 10;
           }
           .accent-dot {
-            color: #F1895C;
+            color: #2DD4BF;
           }
         </style>
       </head>
@@ -127,8 +146,14 @@ async function main() {
         <div class="grid"></div>
         <div class="border-frame"></div>
         <div class="header">
-          <div class="monogram">AB</div>
-          <div class="status">● Available Feb 2027 · PFE Internship</div>
+          <div class="monogram">
+            AB
+            <div class="monogram-dot"></div>
+          </div>
+          <div class="status">
+            <span class="status-dot"></span>
+            <span>Available Feb 2027 · PFE Internship</span>
+          </div>
         </div>
         <div class="main-content">
           <h1>Ahmed Bourmeche</h1>
@@ -146,11 +171,11 @@ async function main() {
   `;
 
   await page.setContent(html);
-  await page.waitForTimeout(300); // Allow fonts to load
+  await page.waitForTimeout(400);
 
   const dest = path.join(publicDir, "opengraph.jpg");
   await page.screenshot({ path: dest, type: "jpeg", quality: 90 });
-  console.log("✓ Generated updated opengraph.jpg (1200x630) in new palette");
+  console.log("✓ Generated updated opengraph.jpg (1200x630) in Circuit Teal palette");
 
   await browser.close();
 }

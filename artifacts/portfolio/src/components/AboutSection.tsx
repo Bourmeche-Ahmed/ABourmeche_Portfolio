@@ -6,47 +6,47 @@ const cards = [
     icon: CircuitBoard,
     title: "Embedded Systems",
     desc: "Bare-metal firmware in C under ESP-IDF & STM32, RS-485 / Modbus RTU, NB-IoT, LoRa, and custom KiCad PCB design.",
-    color: "text-orange",
-    bg: "bg-slate/20",
-    border: "border-slate/30",
+    color: "text-accent",
+    bg: "bg-accent-soft",
+    border: "border-border",
   },
   {
     icon: Cpu,
     title: "Industrial IoT & Edge",
     desc: "Multi-protocol edge gateway architectures, device register profiling, and MQTT/Telegraf/TimescaleDB ingestion.",
-    color: "text-orange",
-    bg: "bg-slate/20",
-    border: "border-slate/30",
+    color: "text-accent",
+    bg: "bg-accent-soft",
+    border: "border-border",
   },
   {
     icon: LineChart,
     title: "Control & Simulation",
     desc: "MATLAB Simulink digital twins, closed-loop PID control platforms, hardware-in-the-loop (HIL) simulation.",
-    color: "text-orange",
-    bg: "bg-slate/20",
-    border: "border-slate/30",
+    color: "text-accent",
+    bg: "bg-accent-soft",
+    border: "border-border",
   },
   {
     icon: Zap,
     title: "Backend & Telemetry APIs",
     desc: "Python/Django REST Framework & Flask microservices, Mosquitto MQTT brokers, Redis caching, Docker Compose stacks.",
-    color: "text-orange",
-    bg: "bg-slate/20",
-    border: "border-slate/30",
+    color: "text-accent",
+    bg: "bg-accent-soft",
+    border: "border-border",
   },
   {
     icon: Code2,
     title: "Operator Dashboards",
     desc: "Real-time engineering dashboards, high-frequency telemetry visualization, and responsive operator tooling.",
-    color: "text-orange",
-    bg: "bg-slate/20",
-    border: "border-slate/30",
+    color: "text-accent",
+    bg: "bg-accent-soft",
+    border: "border-border",
   },
 ];
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-16 border-b border-rule">
+    <section id="about" className="py-16 border-b border-border bg-bg-alt">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <SectionHeader
           title="About & Engineering Profile"
@@ -54,82 +54,39 @@ export function AboutSection() {
         />
 
         {/* PFE Highlight Banner */}
-        <div className="bg-panel-raised border-l-4 border-signal border border-rule p-5 rounded-[2px] mb-8 text-ink shadow-sm">
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-signal shrink-0 mt-0.5" />
+        <div className="bg-surface border-l-4 border-accent border border-border p-5 rounded-md mb-8 text-text shadow-card">
+          <div className="flex items-start gap-3.5">
+            <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
             <div className="text-sm sm:text-base leading-relaxed font-sans">
-              <span className="font-semibold text-ink">Final-year Industrial IT and Automation engineering student</span> at{" "}
-              <span className="font-semibold text-ink">INSAT, University of Carthage</span>, currently seeking a{" "}
-              <span className="font-semibold text-signal">final-year engineering internship (PFE)</span> in embedded systems, industrial IoT, or automation starting February 2027. Open to relocation and international opportunities.
+              <span className="font-semibold text-text">PFE Availability:</span>{" "}
+              Seeking a 6-month Final-Year Engineering Internship starting{" "}
+              <span className="text-accent font-semibold">February 2027</span>.
+              Specializing in industrial IoT edge gateways, low-level firmware engineering (C / ESP-IDF / STM32), real-time control, and supervisory software stacks. Open to relocation worldwide.
             </div>
           </div>
         </div>
 
-        {/* Engineering Narrative Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-sm text-ink-soft leading-relaxed font-sans">
-          <div className="border border-rule bg-panel-raised p-5 rounded-[2px] space-y-2">
-            <h3 className="font-heading font-bold text-lg text-ink flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-orange-500 rounded-[1px]" />
-              <span>Full-Stack Vertical</span>
-            </h3>
-            <p>
-              I operate across the vertical — from bare-metal <span className="font-mono text-xs text-ink font-semibold">ESP32 & STM32</span> firmware and KiCad PCB design, up through Python APIs, all the way to React/TypeScript dashboards. As a hands-on complement to my electronics and firmware work, I actively use CAD design (<span className="font-mono text-xs text-ink font-semibold">Onshape</span>) and rapid 3D printing to prototype custom mechanical enclosures and robotic structures.
-            </p>
-          </div>
-
-          <div className="border border-rule bg-panel-raised p-5 rounded-[2px] space-y-2">
-            <h3 className="font-heading font-bold text-lg text-ink flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-teal-500 rounded-[1px]" />
-              <span>Protocols & Edge Gateways</span>
-            </h3>
-            <p>
-              Engineered industrial IoT nodes and multi-protocol edge gateways integrating <span className="font-mono text-xs text-ink font-semibold">Modbus RTU, RS-485, BACnet, OCPP, NB-IoT</span>, and <span className="font-mono text-xs text-ink font-semibold">LoRa</span> with zero code changes for new meter models.
-            </p>
-          </div>
-
-          <div className="border border-rule bg-panel-raised p-5 rounded-[2px] space-y-2">
-            <h3 className="font-heading font-bold text-lg text-ink flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-sky-500 rounded-[1px]" />
-              <span>Leadership & Control</span>
-            </h3>
-            <p>
-              Co-founder and CTO at{" "}
-              <a
-                href="https://cybernexus.tn"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="panel-link font-medium text-ink"
-              >
-                CyberNexus
-              </a>
-              . Also built PID control dashboards synchronized live with <span className="font-mono text-xs text-ink font-semibold">MATLAB Simulink digital twins</span>.
-            </p>
-          </div>
-        </div>
-
-        {/* Domain capability cards */}
-        <div>
-          <h3 className="font-heading font-bold text-xl text-ink mb-4">
-            Technical Domains & Expertise
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            {cards.map((card) => (
+        {/* Competency Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {cards.map((c) => {
+            const Icon = c.icon;
+            return (
               <div
-                key={card.title}
-                className="border border-rule bg-panel-raised p-4 rounded-[2px] transition-all hover:border-ink-soft hover:shadow-sm"
+                key={c.title}
+                className="p-5 rounded-md border border-border bg-surface shadow-card hover:border-accent transition-all duration-200"
               >
-                <div className={`w-8 h-8 rounded-[2px] ${card.bg} ${card.border} border flex items-center justify-center mb-3 ${card.color}`}>
-                  <card.icon className="w-4 h-4" />
+                <div className={`w-9 h-9 rounded-md ${c.bg} flex items-center justify-center mb-3 border border-border`}>
+                  <Icon className={`w-4 h-4 ${c.color}`} />
                 </div>
-                <h4 className="font-heading font-bold text-base text-ink mb-1.5 leading-tight">
-                  {card.title}
-                </h4>
-                <p className="font-sans text-xs text-ink-soft leading-relaxed">
-                  {card.desc}
+                <h3 className="font-heading font-bold text-lg text-text mb-2">
+                  {c.title}
+                </h3>
+                <p className="font-sans text-xs sm:text-sm text-text-muted leading-relaxed">
+                  {c.desc}
                 </p>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>

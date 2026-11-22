@@ -4,8 +4,8 @@
   "description": "Embedded Systems & Industrial IoT Engineer Portfolio",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#2E3244",
-  "theme_color": "#2E3244",
+  "background_color": "#0B1A21",
+  "theme_color": "#0B1A21",
   "icons": [
     {
       "src": "./favicon-16x16.png",

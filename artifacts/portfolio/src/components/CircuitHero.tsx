@@ -21,31 +21,31 @@ export function CircuitHero() {
         @keyframes nodeGlow {
           0%, 100% {
             opacity: 0.6;
-            filter: drop-shadow(0 0 2px rgba(241, 137, 92, 0.4));
+            filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.4));
           }
           50% {
             opacity: 1;
-            filter: drop-shadow(0 0 8px rgba(241, 137, 92, 0.8));
+            filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.8));
           }
         }
 
         @keyframes chipPulse {
           0%, 100% {
             opacity: 0.7;
-            filter: drop-shadow(0 0 4px rgba(241, 137, 92, 0.3));
+            filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.3));
           }
           50% {
             opacity: 1;
-            filter: drop-shadow(0 0 12px rgba(241, 137, 92, 0.6));
+            filter: drop-shadow(0 0 12px rgba(45, 212, 191, 0.6));
           }
         }
 
         @keyframes ambientGlow {
           0%, 100% {
-            filter: drop-shadow(0 0 30px rgba(241, 137, 92, 0.06));
+            filter: drop-shadow(0 0 30px rgba(45, 212, 191, 0.06));
           }
           50% {
-            filter: drop-shadow(0 0 50px rgba(241, 137, 92, 0.12));
+            filter: drop-shadow(0 0 50px rgba(45, 212, 191, 0.12));
           }
         }
 
@@ -66,7 +66,7 @@ export function CircuitHero() {
         .circuit-hero-svg {
           width: 100%;
           height: auto;
-          filter: drop-shadow(0 0 40px rgba(241, 137, 92, 0.08));
+          filter: drop-shadow(0 0 40px rgba(45, 212, 191, 0.08));
           animation: ambientGlow 4s ease-in-out infinite;
         }
 
@@ -75,7 +75,7 @@ export function CircuitHero() {
         }
 
         .dot-grid-pattern {
-          fill: #516079;
+          fill: var(--border, #2DD4BF);
           opacity: 0.4;
         }
 
@@ -84,7 +84,7 @@ export function CircuitHero() {
         }
 
         .trace-inactive {
-          stroke: #516079;
+          stroke: var(--border, #1A3440);
           stroke-width: 2;
           fill: none;
           stroke-linecap: round;
@@ -93,7 +93,7 @@ export function CircuitHero() {
         }
 
         .trace-pulse {
-          stroke: #F1895C;
+          stroke: var(--accent, #2DD4BF);
           stroke-width: 2.5;
           fill: none;
           stroke-dasharray: 16 999;
@@ -144,70 +144,70 @@ export function CircuitHero() {
         }
 
         .via-pad {
-          fill: #F1895C;
-          opacity: 0.7;
+          fill: var(--highlight, #F5A524);
+          opacity: 0.8;
           animation: chipPulse 3s ease-in-out infinite;
         }
 
         .ic-pin {
-          stroke: #F1895C;
+          stroke: var(--accent, #2DD4BF);
           stroke-width: 1.5;
           fill: none;
         }
 
         .chip-rect {
-          fill: #2E3244;
-          stroke: #F1895C;
+          fill: var(--surface, #12262F);
+          stroke: var(--accent, #2DD4BF);
           stroke-width: 1.5;
         }
 
         .pin-dot {
-          fill: #F1895C;
+          fill: var(--highlight, #F5A524);
         }
 
         .chip-text-title {
-          font-family: monospace;
+          font-family: 'JetBrains Mono', monospace;
           font-size: 18px;
           font-weight: bold;
-          fill: #F1895C;
+          fill: var(--accent, #2DD4BF);
           text-anchor: middle;
           dominant-baseline: middle;
         }
 
         .chip-text-sub {
-          font-family: monospace;
+          font-family: 'JetBrains Mono', monospace;
           font-size: 8px;
-          fill: #C5C6C6;
+          fill: var(--text-muted, #8FA9B3);
           text-anchor: middle;
           dominant-baseline: middle;
         }
 
         .node-rect {
-          fill: #2E3244;
-          stroke: #516079;
+          fill: var(--surface, #12262F);
+          stroke: var(--border, #2DD4BF);
           stroke-width: 1;
         }
 
         .node-title {
-          font-family: monospace;
+          font-family: 'JetBrains Mono', monospace;
           font-size: 9px;
           font-weight: bold;
-          fill: #FFFFFF;
+          fill: var(--text, #E6F2F2);
           text-anchor: middle;
           dominant-baseline: middle;
         }
 
         .node-subtitle {
-          font-family: monospace;
+          font-family: 'JetBrains Mono', monospace;
           font-size: 7px;
-          fill: #C5C6C6;
+          fill: var(--text-muted, #8FA9B3);
           text-anchor: middle;
           dominant-baseline: middle;
         }
 
         .node-pad {
-          fill: #F1895C;
-          opacity: 0.7;
+          fill: var(--highlight, #F5A524);
+          opacity: 0.8;
         }
       `}</style>
 

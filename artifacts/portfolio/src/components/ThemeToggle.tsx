@@ -1,32 +1,43 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { toggleTheme } from "@/lib/theme";
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const stored = localStorage.getItem("theme");
-    if (stored) return stored === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+  const [theme, setCurrentTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (dark) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [dark]);
+    const updateFromDOM = () => {
+      const current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+      setCurrentTheme(current);
+    };
+
+    updateFromDOM();
+
+    // Observe data-theme changes on html
+    const observer = new MutationObserver(updateFromDOM);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
+  const isDark = theme === "dark";
 
   return (
     <button
-      onClick={() => setDark((d) => !d)}
-      aria-label="Toggle dark mode"
-      className="w-8 h-8 rounded-[2px] flex items-center justify-center border border-rule bg-panel-sunk hover:bg-panel transition-colors text-ink-soft hover:text-ink focus-visible:outline-none"
+      onClick={() => {
+        const next = toggleTheme();
+        setCurrentTheme(next);
+      }}
+      type="button"
+      title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      aria-label={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      className="w-9 h-9 rounded-md flex items-center justify-center border border-border bg-surface hover:bg-surface-hover text-text hover:text-accent transition-colors focus-visible:outline-none cursor-pointer"
     >
-      {dark ? <Sun className="w-3.5 h-3.5 text-signal" /> : <Moon className="w-3.5 h-3.5 text-ink" />}
+      {isDark ? (
+        <Sun className="w-4 h-4 text-highlight" aria-hidden="true" />
+      ) : (
+        <Moon className="w-4 h-4 text-accent" aria-hidden="true" />
+      )}
+      <span className="sr-only">{isDark ? "Enable light theme" : "Enable dark theme"}</span>
     </button>
   );
 }

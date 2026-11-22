@@ -280,7 +280,7 @@ const rawProjects: Project[] = [
     languages: [
       { name: "Python", percentage: 57, color: "#3572A5" },
       { name: "JavaScript", percentage: 38.7, color: "#F1E05A" },
-      { name: "CSS", percentage: 3.4, color: "#516079" },
+      { name: "CSS", percentage: 3.4, color: "#0F766E" },
       { name: "Other", percentage: 0.9, color: "#6e7681" },
     ],
     techBadges: ["React", "Flask", "MATLAB", "Simulink", "Python", "REST API", "WebSocket", "Control Systems"],
@@ -332,7 +332,7 @@ const rawProjects: Project[] = [
       { name: "JavaScript", percentage: 59, color: "#F1E05A" },
       { name: "Python", percentage: 36, color: "#3572A5" },
       { name: "HTML", percentage: 3.2, color: "#E44D26" },
-      { name: "CSS", percentage: 1.8, color: "#516079" },
+      { name: "CSS", percentage: 1.8, color: "#0F766E" },
     ],
     techBadges: ["JavaScript", "Python", "ML Models", "REST API", "Charts", "IIoT"],
     highlights: [
@@ -629,9 +629,9 @@ const rawProjects: Project[] = [
     repo: "linkedin-optimizer",
     githubUrl: "https://github.com/Bourmeche-Ahmed/linkedin-optimizer",
     languages: [
-      { name: "JavaScript", percentage: 66.6, color: "#8CA0BA" },
-      { name: "CSS", percentage: 20.9, color: "#516079" },
-      { name: "HTML", percentage: 12.5, color: "#F1895C" },
+      { name: "JavaScript", percentage: 66.6, color: "#2DD4BF" },
+      { name: "CSS", percentage: 20.9, color: "#0F766E" },
+      { name: "HTML", percentage: 12.5, color: "#F5A524" },
     ],
     techBadges: ["JavaScript", "Chrome Extension API", "CSS", "AI Writing", "NLP"],
     highlights: [
@@ -664,10 +664,10 @@ const rawProjects: Project[] = [
     repo: "stepact-lionsclub",
     githubUrl: "https://stepact.lionsinsat.tn",
     languages: [
-      { name: "TypeScript", percentage: 65, color: "#F1895C" },
-      { name: "React", percentage: 25, color: "#8CA0BA" },
-      { name: "CSS", percentage: 7, color: "#516079" },
-      { name: "Other", percentage: 3, color: "#6e7681" },
+      { name: "TypeScript", percentage: 65, color: "#2DD4BF" },
+      { name: "React", percentage: 25, color: "#0F766E" },
+      { name: "CSS", percentage: 7, color: "#4B6470" },
+      { name: "Other", percentage: 3, color: "#8FA9B3" },
     ],
     techBadges: ["TypeScript", "React", "Vite", "PostgreSQL", "Express", "REST API"],
     highlights: [
@@ -703,10 +703,10 @@ const rawProjects: Project[] = [
     repo: "testcybernexus3",
     githubUrl: "https://cybernexus.tn",
     languages: [
-      { name: "TypeScript", percentage: 93, color: "#F1895C" },
-      { name: "JavaScript", percentage: 4, color: "#8CA0BA" },
-      { name: "CSS", percentage: 2, color: "#516079" },
-      { name: "Other", percentage: 1, color: "#6e7681" },
+      { name: "TypeScript", percentage: 93, color: "#2DD4BF" },
+      { name: "JavaScript", percentage: 4, color: "#0F766E" },
+      { name: "CSS", percentage: 2, color: "#4B6470" },
+      { name: "Other", percentage: 1, color: "#8FA9B3" },
     ],
     techBadges: ["TypeScript", "Experimental", "UI Patterns", "Animation", "Prototyping"],
     highlights: [
@@ -739,9 +739,9 @@ const rawProjects: Project[] = [
     repo: "YTB-VOICE-GESTURE-CONTROL",
     githubUrl: "https://github.com/Bourmeche-Ahmed/YTB-VOICE-GESTURE-CONTROL",
     languages: [
-      { name: "JavaScript", percentage: 70, color: "#8CA0BA" },
-      { name: "HTML", percentage: 20, color: "#F1895C" },
-      { name: "CSS", percentage: 10, color: "#516079" },
+      { name: "JavaScript", percentage: 70, color: "#2DD4BF" },
+      { name: "HTML", percentage: 20, color: "#F5A524" },
+      { name: "CSS", percentage: 10, color: "#0F766E" },
     ],
     techBadges: ["JavaScript", "Web Speech API", "Computer Vision", "Browser APIs", "Accessibility"],
     highlights: [
@@ -774,11 +774,11 @@ const rawProjects: Project[] = [
     repo: "ieeeweb",
     githubUrl: "https://nrtf.ieee.tn",
     languages: [
-      { name: "HTML", percentage: 65, color: "#F1895C" },
-      { name: "SCSS", percentage: 21.5, color: "#8CA0BA" },
-      { name: "PHP", percentage: 7.7, color: "#516079" },
-      { name: "CSS", percentage: 4.1, color: "#516079" },
-      { name: "JS", percentage: 1.7, color: "#C5C6C6" },
+      { name: "HTML", percentage: 65, color: "#F5A524" },
+      { name: "SCSS", percentage: 21.5, color: "#0F766E" },
+      { name: "PHP", percentage: 7.7, color: "#4B6470" },
+      { name: "CSS", percentage: 4.1, color: "#0F766E" },
+      { name: "JS", percentage: 1.7, color: "#2DD4BF" },
     ],
     techBadges: ["HTML", "SCSS", "PHP", "Responsive Design", "BEM Architecture"],
     highlights: [
